@@ -67,3 +67,10 @@ GitHub manifest验证默认每家检查24个候选、最多8个仓库读取累�
 OpenRouter固定canonical app ID，排除同名Pi扩展。按指定UTC窗口回取当前、前周与四周历史；四家齐全才计算四家内部Token份额。另有最多200个已取得公开应用集合的份额图。两者都不是全市场用户份额。聚合数据按CC BY 4.0标注来源与时间。
 
 脚本有互斥文件锁、超时、短暂失败重试、缓存与原始证据保留。GitHub请求预算默认90；未配置token可能触及平台额度，会记录缺失，不自动填零。
+
+
+## Vercel 发布
+
+线上地址：https://harness-market-observer.vercel.app
+
+每周任务先执行 `python3 run_report.py --refresh`，成功后执行 `python3 deploy_report.py`，同步更新固定线上地址。发布脚本只复制报告到独立 `site/` 目录，上传文件白名单为 `index.html` 与 `vercel.json`；Vercel本地登录及项目关联保留在本机。`.env`、原始采集数据与采集脚本不随站点上传。

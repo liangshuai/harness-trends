@@ -1,0 +1,20 @@
+{
+  "created_at": "2026-11-07T00:08:59.922138+00:00",
+  "run_id": "2026-11-05_20261107T000859Z",
+  "method_version": "0.1.0",
+  "disclosure_as_of": "2026-11-04",
+  "accounts": 201,
+  "plugins": 8,
+  "repos": [
+    "sixtysevenlf/dsh-blender-plugin",
+    "c1overzz/dsh-bili-scroll",
+    "bowenliang123/dsh-context",
+    "alchaincyf/nuwa-skill",
+    "HunYiSage/dsh-purge",
+    "xmanrui/dsh-im",
+    "ccch1mneyyy/dsh-TUI",
+    "Ebony-Vinyl/dsh-our-free-model"
+  ],
+  "accounts_per_plugin": 25.125,
+  "note": "当前受限公开样本密度迁移到历史公开插件总量，是未经独立验证的假设。"
+}
