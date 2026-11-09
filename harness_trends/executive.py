@@ -116,11 +116,11 @@ def summary_section(run):
         rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,insight,action])
     body=('<div class="table-scroll summary-table"><table><thead><tr>'
           +''.join(f'<th scope="col">{esc(x)}</th>' for x in
-                   ['Harness','周Token / OpenRouter','周npm下载','官方仓库Contributors','插件数量','洞察（本周新功能）','行动'])
+                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','洞察（本周新功能）','行动'])
           +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
           +'</tbody></table></div>')
-    return (f'<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载为渠道观测；Contributors为官方公开仓库非匿名账号计数；'
-            '插件数量各家目录口径不同，不可横向排名；洞察与行动为编辑观点（data/editorial/）。</p>'+body)
+    return ('<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
+            '插件数量各家目录口径不同，不可横向排名；洞察与行动为编辑观点。</p>'+body)
 
 
 def features_section(run):

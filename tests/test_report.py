@@ -324,7 +324,10 @@ class MarkdownReportTests(unittest.TestCase):
             'pi':{'insight':['扩展changelog通道','渲染提速'],'action':'研究扩展架构'},
             'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察（本周新功能） | 行动 |',page)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 洞察（本周新功能） | 行动 |',page)
+        self.assertNotIn('Markdown 版',page)
+        self.assertNotIn('data/editorial',page)
+        self.assertNotIn('按用户指定',page)
         self.assertIn('529（Claude官方Marketplace）',page)
         self.assertIn('1,265（ChatGPT插件目录（mcptop.com））',page)
         self.assertIn('5,360（pi.dev官方Package Catalog）',page)
@@ -364,14 +367,14 @@ class MarkdownReportTests(unittest.TestCase):
         page=render_markdown(run,config)
         self.assertIn('## 二、用量与生态指标汇总',page)
         self.assertIn('| Harness | 本周Token | 四家内部份额 | Token环比 | 份额周变化 | 本周请求 |',page)
-        self.assertIn('### 公开插件与参与账号样本（GitHub）',page)
         self.assertIn('### DSH 官方披露',page)
         self.assertIn('548.0万',page)
+        self.assertNotIn('公开插件与参与账号样本',page)
         # The feature digest now lives only in the HTML report.
         self.assertNotIn('## 二、本周新功能特性',page)
         self.assertNotIn('窗口内发布：',page)
         self.assertNotIn('网络检索核实（编辑）',page)
-        self.assertIn('见 HTML 完整版',page)
+        self.assertNotIn('HTML 完整版',page)
 
     def test_html_renders_summary_table_and_features_section(self):
         run,config=self.markdown_run()

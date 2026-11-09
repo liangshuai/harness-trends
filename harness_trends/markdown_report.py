@@ -56,7 +56,7 @@ def _insight_cell(run, row):
 
 
 def summary_table(run, editorial):
-    header = ['Harness', '周Token（OpenRouter）', '周npm下载', '官方仓库Contributors', '插件数量', '洞察（本周新功能）', '行动']
+    header = ['Harness', '周Token（OpenRouter）', '周下载量', '开源贡献者', '插件数量', '洞察（本周新功能）', '行动']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
     for row in summary_rows(run):
         lines.append('| ' + ' | '.join([
@@ -118,17 +118,7 @@ def metrics_digest(run, config):
             cells = [NAMES[pid]] + [number(w.get('products', {}).get(pid, {}).get('tokens')) for w in windows]
             lines.append('| ' + ' | '.join(cells) + ' |')
         lines.append('')
-    lines += ['### 公开插件与参与账号样本（GitHub）', '',
-              '| Harness | 已核验发布单元 | 样本参与账号 | 本轮覆盖 |',
-              '|---|---|---|---|']
-    for pid in SUMMARY_ORDER:
-        if pid not in products:
-            continue
-        github = products[pid]['github']
-        lines.append(f'| {NAMES[pid]} | {number(github.get("verified_artifacts"))} | {number(products[pid].get("a_observed"))} | '
-                     f'{github.get("checked_repos", 0)} 个候选 / {github.get("contributor_repos_observed", 0)} 个贡献者仓库 |')
-    lines += ['', '样本为受限公开观测，不是生态总量；一个仓库可能有多个插件，四家发现入口与覆盖不同。',
-              '### DSH 官方披露', '']
+    lines += ['### DSH 官方披露', '']
     disclosure = config['disclosure']
     lines += [f'截至 {disclosure["as_of"]}（媒体转述厂商披露，不同于OpenRouter渠道数据）：'
               f'日活 {number(disclosure["dau"])}；月活 {number(disclosure["mau"])}；'
@@ -140,17 +130,15 @@ def render_markdown(run, config):
     generated = datetime.fromisoformat(run['generated_at']).astimezone(ZoneInfo('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M')
     start, end = run['window']['start'], run['window']['end']
     editorial = run.get('editorial')
-    lines = ['# AI Agent Harness 市场观察周报 · Markdown 版', '']
-    lines.append(f'数据窗口：{start} — {end}（UTC）· 生成于 {generated}（北京时间）· 方法版本 {run["method_version"]}')
-    lines.append(f'HTML 完整版：`reports/latest.html`（含四周趋势图、规模估算、本周新功能特性与数据附录）；结构化快照：`data/latest.json`。')
+    lines = ['# AI Agent Harness 市场观察周报', '']
+    lines.append(f'数据窗口：{start} — {end}（UTC）· 生成于 {generated}（北京时间）')
     lines.append('')
     lines.append('## 一、四家汇总表')
     lines.append('')
     lines.append(summary_table(run, editorial))
     lines.append('')
     if editorial:
-        lines.append(f'> 洞察面向本周新增功能点，与行动均为编辑观点（`data/editorial/{editorial.get("window_end", end)}.json`，'
-                     f'{editorial.get("prepared_at", "")[:10]}整理）；数字均由脚本按当轮快照采集，不手工填写。')
+        lines.append('> 洞察面向本周新增功能点，行动为跟进建议，均为编辑观点；数字均由脚本按当轮快照采集，不手工填写。')
     else:
         lines.append('> 本轮无编辑笔记：洞察列降级为脚本提取的窗口内发布要点，行动列待补；数字均由脚本采集。')
     lines += ['', *metrics_digest(run, config)]
@@ -158,21 +146,20 @@ def render_markdown(run, config):
     lines.append('')
     lines.append(f'- **周Token**：OpenRouter app-rankings 数据集，canonical app ID，窗口 {start} — {end}；'
                  '只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.')
-    lines.append('- **周npm下载**：npm downloads API 逐日加总的主包七天下载，含更新、CI 与重复下载，不等于活跃用户。')
-    lines.append('- **官方仓库Contributors**：GitHub REST contributors（非匿名账号，与官网UI同口径，Link头last页码精确计数）；'
+    lines.append('- **周下载量**：npm downloads API 逐日加总的主包七天下载，含更新、CI 与重复下载，不等于活跃用户。')
+    lines.append('- **开源贡献者**：官方公开仓库的 GitHub contributors（非匿名账号，与官网UI同口径）；'
                  '仅统计公开官方仓库，闭源/内部镜像开发不计入，厂商间口径差异见各行仓库名。')
     lines.append('- **插件数量**：Claude Code 取 claude.com/marketplace/plugins 页面公布总数；Codex 取 mcptop.com 所示 ChatGPT 插件目录'
-                 ' Plugins 分类计数（该目录另有全量口径，见数据快照 directory_total）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数'
+                 ' Plugins 分类计数（该目录另有全量口径，见下注）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数'
                  '（含 extension/skill/theme/prompt 等类型，非纯 extension）；DSH 取 dshmarket.com 公布的社区插件总数。'
                  '四者口径互不相同，不可直接横向排名。')
-    lines.append('- **本周新功能特性**：见 HTML 完整版 `reports/latest.html` 的「本周新功能特性」部分（脚本采集 Releases/CHANGELOG 原文 + 网络检索核实）。')
     lines.append('- **洞察/行动**：面向本周新增功能点的编辑解读与建议，不属于采集数据；无编辑笔记的周次自动降级为脚本提取的发布要点摘要。')
     mcptop = run.get('marketplaces', {}).get('codex', {})
     if mcptop.get('directory_total') is not None and mcptop.get('count') is not None:
-        note = f'- 注：ChatGPT 插件目录全量 {mcptop["directory_total"]:,} 个，本表按用户指定取 Plugins 分类计数 {mcptop["count"]:,}。'
+        note = f'- 注：ChatGPT 插件目录全量 {mcptop["directory_total"]:,} 个，本表取 Plugins 分类计数 {mcptop["count"]:,}'
         if mcptop.get('observed_at'):
-            note += f'（mcptop.com 观测于 {mcptop["observed_at"][:10]}）'
-        lines.append(note)
+            note += f'（mcptop.com，{mcptop["observed_at"][:10]}观测）'
+        lines.append(note + '。')
     lines.append('')
-    lines.append('原始响应与逐项采集状态见 `data/raw/`、`data/runs/` 与 HTML 版附录数据清单。')
+    lines.append('各项指标的逐项采集状态与原始来源详见配套完整报告的数据附录。')
     return '\n'.join(lines) + '\n'
