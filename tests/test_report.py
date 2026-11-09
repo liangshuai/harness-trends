@@ -324,7 +324,7 @@ class MarkdownReportTests(unittest.TestCase):
             'pi':{'insight':['扩展changelog通道','渲染提速'],'action':'研究扩展架构'},
             'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 洞察（本周新功能） | 行动 |',page)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 洞察（本周新功能） | 行动 |',page)
         self.assertNotIn('Markdown 版',page)
         self.assertNotIn('data/editorial',page)
         self.assertNotIn('按用户指定',page)
@@ -369,6 +369,10 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('| Harness | 本周Token | 四家内部份额 | Token环比 | 份额周变化 | 本周请求 |',page)
         self.assertIn('### DSH 官方披露',page)
         self.assertIn('548.0万',page)
+        self.assertIn('### 用户规模公开信息（合计与单品分开）',page)
+        self.assertIn('| Codex（含 ChatGPT Work） | 活跃用户（窗口未明确） | 4,000万 | 2026-10-07；合计口径 · 只计一次；活跃窗口未明示 |',page)
+        self.assertIn('| Codex（历史单品数据） | 历史WAU / 周活 | 超过500万 |',page)
+        self.assertIn('单品历史：超过500万WAU（2026-06-02）',page)
         self.assertNotIn('公开插件与参与账号样本',page)
         # The feature digest now lives only in the HTML report.
         self.assertNotIn('## 二、本周新功能特性',page)
@@ -387,6 +391,9 @@ class MarkdownReportTests(unittest.TestCase):
         page=render(run,config)
         self.assertIn('summary-table',page)
         self.assertIn('洞察（本周新功能）',page)
+        self.assertIn('>活跃用户</th>',page)
+        self.assertIn('4,000万+（Codex（含 ChatGPT Work），2026-10-07）',page)
+        self.assertIn('548万MAU / 154万DAU（官方披露，2026-11-04）',page)
         self.assertIn('1）权限模型转向可审计的自动化运行<br>2）企业网关是迭代重心',page)
         self.assertIn('多Agent统一调度',page)
         self.assertIn('id="features"',page)

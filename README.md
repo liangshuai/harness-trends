@@ -19,8 +19,8 @@ python3 run_report.py --refresh
 
 ## 输出与周更
 
-- `reports/latest.html`：当前汇报版，开头核心数据区即四家汇总表（周Token、周下载量、开源贡献者、插件数量、洞察、行动），随后是份额图、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
-- `reports/latest.md`：Markdown 版周报，正式汇报文案（不带格式标签与实现细节），开篇即同一张四家汇总表，第二节为用量与生态指标汇总（KPI、用量份额表、四周趋势表、DSH披露）；新功能特性不在 Markdown 版中，见 HTML 完整版。
+- `reports/latest.html`：当前汇报版，开头核心数据区即四家汇总表（周Token、周下载量、开源贡献者、插件数量、活跃用户、洞察、行动），随后是份额图、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
+- `reports/latest.md`：Markdown 版周报，正式汇报文案（不带格式标签与实现细节），开篇即同一张四家汇总表，第二节为用量与生态指标汇总（KPI、用量份额表、四周趋势表、用户规模公开信息、DSH披露）；新功能特性不在 Markdown 版中，见 HTML 完整版。
 - `data/latest.json`、`data/runs/`：当前及历史结构化快照。
 - `data/raw/`、`data/cache/`：公开原始响应、请求来源和缓存。
 - `config.json`：产品、来源、采样上限及所有情景参数。
@@ -30,6 +30,8 @@ python3 run_report.py --refresh
 ## Markdown 周报的口径与编辑笔记
 
 汇总表数字全部脚本采集：Token与npm来自既有采集；官方仓库Contributors用 GitHub contributors（非匿名账号、与官网UI同口径，per_page=1 时 Link 头 last 页码即精确总数），只反映公开官方仓库，内部开发不计入；插件数量各家指定来源——Claude Code 取 claude.com/marketplace/plugins 公布总数、Codex 取 mcptop.com 所示 ChatGPT 插件目录 Plugins 分类计数（目录全量另存 directory_total）、Pi 取 pi.dev 官方 Package Catalog、DSH 取 dshmarket.com 公布总数，四者口径互不相同，不做横向排名。新功能特性由脚本按窗口提取官方 GitHub Releases 与 CHANGELOG.md 原文条目（`harness_trends/changelog.py`，只认产品发布线标签，占位式发布说明不算要点）。
+
+活跃用户列只放官方披露，口径与 HTML 报告「用户规模公开信息（合计与单品分开）」一致：Codex 用与 ChatGPT Work 的合计披露（4000万，2026-10-07）并保留单品历史 WAU 锚点，DSH 用 154万DAU/548万MAU（2026-11-04）；合计与单品分开、只计一次，不与 npm 下载等效情景混排；Claude Code 与 Pi 无用户数披露，留空。`user_population_policy` 合并口径为分析约定，非产品架构事实。
 
 洞察列面向本周新增功能点：解读当周 CHANGELOG/Releases 功能主线（策略意图、方向信号），不评述用量份额等汇总数据；行动列给出跟进建议。两者与"网络检索核实"段是编辑内容，存放在 `data/editorial/<窗口结束日>.json`，运行时嵌入快照留档；文件缺失时洞察列自动降级为脚本提取的窗口内发布要点，不阻塞周更。编辑笔记只写定性判断，不复述精确数值，避免与当轮采集数字漂移；数字仍不允许手工填写。
 

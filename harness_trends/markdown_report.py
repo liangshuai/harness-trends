@@ -3,7 +3,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from .executive import NAMES, number
-from .metrics import SUMMARY_ORDER, default_insight, ratio_delta, summary_rows
+from .metrics import SUMMARY_ORDER, cn_number, default_insight, ratio_delta, summary_rows, user_cell, user_disclosure_rows
 
 
 def cell(text):
@@ -55,13 +55,16 @@ def _insight_cell(run, row):
     return cell(value or default_insight(run, row['pid']))
 
 
-def summary_table(run, editorial):
-    header = ['Harness', '周Token（OpenRouter）', '周下载量', '开源贡献者', '插件数量', '洞察（本周新功能）', '行动']
+def summary_table(run, editorial, config):
+    header = ['Harness', '周Token（OpenRouter）', '周下载量', '开源贡献者', '插件数量', '活跃用户', '洞察（本周新功能）', '行动']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
     for row in summary_rows(run):
+        user_lines = user_cell(run, config, row['pid'])
+        users_text = '<br>'.join(cell(line) for line in user_lines) if user_lines else '—'
         lines.append('| ' + ' | '.join([
             cell(row['name']), _token_cell(row), _downloads_cell(row), _contributors_cell(row),
             _plugins_cell(row),
+            users_text,
             _insight_cell(run, row),
             cell(row['action'] or '—')]) + ' |')
     return '\n'.join(lines)
@@ -118,6 +121,14 @@ def metrics_digest(run, config):
             cells = [NAMES[pid]] + [number(w.get('products', {}).get(pid, {}).get('tokens')) for w in windows]
             lines.append('| ' + ' | '.join(cells) + ' |')
         lines.append('')
+    disclosure_rows = user_disclosure_rows(run, config)
+    if disclosure_rows:
+        lines += ['### 用户规模公开信息（合计与单品分开）', '',
+                  '| 产品范围 | 指标 | 公开数值 | 日期与说明 |', '|---|---|---|---|']
+        for item in disclosure_rows:
+            lines.append(f'| {item["scope"]} | {item["metric"]} | {item["display"]} | {item["as_of"]}；{item["note"]} |')
+        lines += ['', '合计口径与单品口径分开列示、只计一次，保留原披露日期，不外推为当期实测；月活不是日活。'
+                  'Claude Code 与 Pi 暂无用户数公开披露（Claude Code 官方口径为收入），汇总表中相应留空。', '']
     lines += ['### DSH 官方披露', '']
     disclosure = config['disclosure']
     lines += [f'截至 {disclosure["as_of"]}（媒体转述厂商披露，不同于OpenRouter渠道数据）：'
@@ -135,7 +146,7 @@ def render_markdown(run, config):
     lines.append('')
     lines.append('## 一、四家汇总表')
     lines.append('')
-    lines.append(summary_table(run, editorial))
+    lines.append(summary_table(run, editorial, config))
     lines.append('')
     if editorial:
         lines.append('> 洞察面向本周新增功能点，行动为跟进建议，均为编辑观点；数字均由脚本按当轮快照采集，不手工填写。')

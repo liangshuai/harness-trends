@@ -18,6 +18,65 @@ def package_total(rows):
     return sum(r['total'] for r in rows) if rows and all(r['status']=='ok' for r in rows) else None
 
 
+def cn_number(value):
+    """Chinese magnitude formatting without importing the HTML renderer."""
+    if value is None:
+        return None
+    if abs(value) >= 1e8:
+        return f'{value / 1e8:,.2f}亿'
+    if abs(value) >= 1e4:
+        return f'{value / 1e4:,.0f}万'
+    return f'{value:,.0f}'
+
+
+def user_disclosure_rows(run, config):
+    """User-scale public disclosures, combined and single-product figures kept apart.
+    Mirrors the HTML report's「用户规模公开信息（合计与单品分开）」panel."""
+    registered = run.get('user_disclosures', config.get('user_disclosures', []))
+    primary = next((r for r in registered if r.get('id') == 'codex-work-40m-primary'), None)
+    policy = (config.get('user_population_policy') or {}).get('codex', {})
+    disclosure = config.get('disclosure') or {}
+    spec = (config.get('models_v2') or {}).get('codex', {})
+    rows = []
+    if primary:
+        rows.append({'scope':policy.get('label', primary.get('label', 'Codex')),
+                     'metric':'WAU / 周活' if primary.get('period') == 'WAU' else '活跃用户（窗口未明确）',
+                     'value':primary['value'], 'display':cn_number(primary['value']),
+                     'as_of':primary.get('as_of'), 'note':'合计口径 · 只计一次；活跃窗口未明示'})
+    if spec.get('wau_anchor'):
+        rows.append({'scope':'Codex（历史单品数据）', 'metric':'历史WAU / 周活',
+                     'value':spec['wau_anchor'], 'display':'超过' + cn_number(spec['wau_anchor']),
+                     'as_of':spec.get('as_of'), 'note':'不是当前人数'})
+    if disclosure.get('dau'):
+        rows.append({'scope':'DSH', 'metric':'DAU / 日活', 'value':disclosure['dau'],
+                     'display':cn_number(disclosure['dau']),
+                     'as_of':disclosure.get('as_of'), 'note':'官方API用户范围'})
+        rows.append({'scope':'DSH', 'metric':'MAU / 月活', 'value':disclosure['mau'],
+                     'display':cn_number(disclosure['mau']),
+                     'as_of':disclosure.get('as_of'), 'note':'月窗口未明示'})
+    return rows
+
+
+def user_cell(run, config, pid):
+    """Summary-table lines for active users; disclosures only, each figure keeps its own scope.
+    Returns a list of plain-text lines (no markup), or None when nothing is disclosed."""
+    if pid == 'codex':
+        rows = user_disclosure_rows(run, config)
+        texts = []
+        combined = next((r for r in rows if 'Codex' in r['scope'] and '历史' not in r['scope']), None)
+        history = next((r for r in rows if '历史' in r['scope']), None)
+        if combined:
+            texts.append(f'{combined["display"]}+（{combined["scope"]}，{combined["as_of"]}）')
+        if history:
+            texts.append(f'单品历史：{history["display"]}WAU（{history["as_of"]}）')
+        return texts or None
+    if pid == 'dsh':
+        disclosure = config.get('disclosure') or {}
+        if disclosure.get('mau'):
+            return [f'{cn_number(disclosure["mau"])}MAU / {cn_number(disclosure["dau"])}DAU（官方披露，{disclosure["as_of"]}）']
+    return None
+
+
 def summary_rows(run):
     """One raw-value row per harness for the shared summary table; renderers format their own cells."""
     views = (run.get('editorial') or {}).get('products', {})
