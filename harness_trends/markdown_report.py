@@ -47,6 +47,14 @@ def _plugins_cell(row):
     return f'{row["plugins"]:,}（{row["plugin_source"]}）'
 
 
+def _insight_cell(run, row):
+    """Editorial insights are itemized: one numbered point per line, never merged into a paragraph."""
+    value = row['insight']
+    if isinstance(value, list) and value:
+        return '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1))
+    return cell(value or default_insight(run, row['pid']))
+
+
 def summary_table(run, editorial):
     header = ['Harness', '周Token（OpenRouter）', '周npm下载', '官方仓库Contributors', '插件数量', '洞察（本周新功能）', '行动']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
@@ -54,7 +62,7 @@ def summary_table(run, editorial):
         lines.append('| ' + ' | '.join([
             cell(row['name']), _token_cell(row), _downloads_cell(row), _contributors_cell(row),
             _plugins_cell(row),
-            cell(row['insight'] or default_insight(run, row['pid'])),
+            _insight_cell(run, row),
             cell(row['action'] or '—')]) + ' |')
     return '\n'.join(lines)
 

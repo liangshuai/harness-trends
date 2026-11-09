@@ -319,9 +319,9 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'insight':'份额过半|网关安全收紧','action':'跟踪Marketplace扩张'},
+            'claude':{'insight':['无人值守主线：denyInsteadOfPrompting','MCP任务后台化'],'action':'跟踪Marketplace扩张'},
             'codex':{'insight':'下载回调','action':'实测命令中心'},
-            'pi':{'insight':'份额第二','action':'研究扩展架构'},
+            'pi':{'insight':['扩展changelog通道','渲染提速'],'action':'研究扩展架构'},
             'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
         page=render_markdown(run,config)
         self.assertIn('| Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察（本周新功能） | 行动 |',page)
@@ -331,9 +331,21 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('9,463（dshmarket.com）',page)
         self.assertIn('478（openai/codex）',page)
         self.assertIn('56（anthropics/claude-code）',page)
-        self.assertIn('份额过半\\|网关安全收紧',page)
+        # List-form insights: one numbered point per line, string insights stay single-line.
+        self.assertIn('1）无人值守主线：denyInsteadOfPrompting<br>2）MCP任务后台化',page)
+        self.assertIn('1）扩展changelog通道<br>2）渲染提速',page)
+        self.assertIn('下载回调',page)
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
+
+    def test_summary_insight_list_escapes_pipes_per_item(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
+            'claude':{'insight':['a|b','c']},'codex':{'insight':['x']},'pi':{'insight':['y']},'dsh':{'insight':['z']}}}
+        page=render_markdown(run,config)
+        self.assertIn('1）a\\|b<br>2）c',page)
+        html_page=render(run,config)
+        self.assertIn('<ol class="insight-list"><li>a|b</li><li>c</li></ol>',html_page)
 
     def test_markdown_without_editorial_degrades_to_release_highlights(self):
         run,config=self.markdown_run();run['editorial']=None
@@ -363,7 +375,7 @@ class MarkdownReportTests(unittest.TestCase):
     def test_html_renders_summary_table_and_features_section(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'insight':'权限模型转向可审计的自动化运行','action':'评估CI适配','feature_summary':'与CHANGELOG一致',
+            'claude':{'insight':['权限模型转向可审计的自动化运行','企业网关是迭代重心'],'action':'评估CI适配','feature_summary':'与CHANGELOG一致',
                       'sources':['https://github.com/anthropics/claude-code/releases']},
             'codex':{'insight':'多Agent统一调度','action':'实测命令中心'},
             'pi':{'insight':'生态可维护性优先','action':'研究扩展体系'},
@@ -371,7 +383,8 @@ class MarkdownReportTests(unittest.TestCase):
         page=render(run,config)
         self.assertIn('summary-table',page)
         self.assertIn('洞察（本周新功能）',page)
-        self.assertIn('权限模型转向可审计的自动化运行',page)
+        self.assertIn('<ol class="insight-list"><li>权限模型转向可审计的自动化运行</li><li>企业网关是迭代重心</li></ol>',page)
+        self.assertIn('多Agent统一调度',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
         self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)

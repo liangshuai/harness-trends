@@ -1,16 +1,16 @@
 # AI Agent Harness 市场观察周报 · Markdown 版
 
-数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 16:10（北京时间）· 方法版本 0.1.0
+数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 16:17（北京时间）· 方法版本 0.1.0
 HTML 完整版：`reports/latest.html`（含四周趋势图、规模估算、本周新功能特性与数据附录）；结构化快照：`data/latest.json`。
 
 ## 一、四家汇总表
 
 | Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察（本周新功能） | 行动 |
 |---|---|---|---|---|---|---|
-| Claude Code | 10.05T（份额52.6%），环比-1.5% | 1,419.4万（环比+10.1%） | 56（anthropics/claude-code） | 529（Claude官方Marketplace） | 本周3版的功能主线是「无人值守」：denyInsteadOfPrompting把权限提示改为策略化拒绝并继续执行、MCP任务自动后台化、auto mode在网关侧强制服务端检查——权限模型从「人守着点允许」转向可审计的自动化运行；同时网关类功能（pooled预算规则、login_notice、JSON日志、成本报表）密集落地，显示企业网关是当前迭代重心。 | 评估denyInsteadOfPrompting对CI/子代理场景的适配成本；对照网关新能力（成本报表、pooled预算）评估企业侧管理开销是否下降。 |
-| Codex | 2.62T（份额13.7%），环比-52.1% | 2,590.8万（环比-6.9%） | 478（openai/codex） | 1,265（ChatGPT插件目录（mcptop.com）） | 0.167.0的功能指向「多Agent统一调度」：Agent Command Center集中管理多个agent并标记未读结果、会话级后端切换保留草稿、本地图片预览与Vertex AI向导降低多云接入门槛——从单会话CLI转向调度面板，且明显在做多后端/多云以降低锁定；高频alpha+周度stable的节奏不变。 | 实测codex agents --no-daemon命令中心、后端切换保留草稿与未读结果标记；评估多后端切换对混合云/多供应商部署的实际价值。 |
-| Pi | 4.20T（份额22.0%），环比-7.6% | 663.4万（环比+5.5%） | 306（earendil-works/pi） | 5,360（pi.dev官方Package Catalog） | 1.5.0的功能全部围绕「扩展生态的可维护性」：扩展更新changelog给作者一条触达用户的发布说明通道、流式渲染提速优化大输出体验、自定义自更新命令适配各种包管理器、OSC 7501把运行状态暴露给终端/面板——持续做可组合底座而非功能堆叠，生态基础设施优先于单点能力。 | 研究扩展changelog与OSC 7501对外部集成面板的开放思路对自研harness插件体系的借鉴价值。 |
-| DeepSeek Harness | 2.25T（份额11.8%），环比+19.3% | 82.7万（环比+8.1%） | 50（deepseek-ai/deepseek-harness） | 9,463（dshmarket.com） | 0.2.2-rc.1的功能集中在「补易用性短板」：手机/平板适配、六种新语言、引用插入、历史导出Markdown、统一右键菜单，都是在向日常工具的可用性靠拢而非堆模型能力；插件热更新失败自动回滚与富文本详情页在强化「一切皆插件」的运维体验；实验性subagent_oar直接调度本机Codex/Claude CLI当子代理，是跨harness整合的差异化信号。 | 关注subagent_oar插件（把独立任务交给本机Codex/Claude CLI）的跨harness调度思路能否借鉴；评估插件热更新回滚机制对自家插件运维的参考价值。 |
+| Claude Code | 10.05T（份额52.6%），环比-1.5% | 1,419.4万（环比+10.1%） | 56（anthropics/claude-code） | 529（Claude官方Marketplace） | 1）功能主线是「无人值守」：denyInsteadOfPrompting 将权限提示改为策略化拒绝并继续执行<br>2）MCP 任务自动后台化，长工具调用不再阻塞会话<br>3）auto mode 在网关/关遥测时改走服务端检查，权限模型从「人守着点允许」转向可审计的自动化<br>4）网关类功能密集落地（pooled预算规则、login_notice、JSON日志、成本报表），企业网关是当前迭代重心 | 评估denyInsteadOfPrompting对CI/子代理场景的适配成本；对照网关新能力（成本报表、pooled预算）评估企业侧管理开销是否下降。 |
+| Codex | 2.62T（份额13.7%），环比-52.1% | 2,590.8万（环比-6.9%） | 478（openai/codex） | 1,265（ChatGPT插件目录（mcptop.com）） | 1）0.167.0 上线 Agent Command Center，集中管理多个 agent 并标记未读结果<br>2）会话级后端切换保留草稿，配合 Vertex AI 向导（gcp_setup_wizard）降低多云接入门槛<br>3）从单会话 CLI 转向调度面板，明显在做多后端/多云以降低锁定<br>4）高频 alpha + 周度 stable 的发布节奏不变 | 实测codex agents --no-daemon命令中心、后端切换保留草稿与未读结果标记；评估多后端切换对混合云/多供应商部署的实际价值。 |
+| Pi | 4.20T（份额22.0%），环比-7.6% | 663.4万（环比+5.5%） | 306（earendil-works/pi） | 5,360（pi.dev官方Package Catalog） | 1）扩展更新 changelog 给作者一条触达用户的发布说明通道<br>2）流式渲染提速（大工具调用增量解析、高亮/Markdown渲染复用）优化大输出体验<br>3）自定义自更新命令适配各种包管理器，OSC 7501 向终端/面板暴露运行状态<br>4）整体在做可组合底座而非功能堆叠，生态基础设施优先于单点能力 | 研究扩展changelog与OSC 7501对外部集成面板的开放思路对自研harness插件体系的借鉴价值。 |
+| DeepSeek Harness | 2.25T（份额11.8%），环比+19.3% | 82.7万（环比+8.1%） | 50（deepseek-ai/deepseek-harness） | 9,463（dshmarket.com） | 1）功能集中在补易用性短板：手机/平板适配、六种新语言、引用插入、历史导出Markdown、统一右键菜单<br>2）插件热更新失败自动回滚 + 富文本详情页，强化「一切皆插件」的运维体验<br>3）实验性 subagent_oar 直接调度本机 Codex/Claude CLI 当子代理，是跨harness整合的差异化信号<br>4）方向是向日常工具的可用性靠拢，而非堆模型能力 | 关注subagent_oar插件（把独立任务交给本机Codex/Claude CLI）的跨harness调度思路能否借鉴；评估插件热更新回滚机制对自家插件运维的参考价值。 |
 
 > 洞察面向本周新增功能点，与行动均为编辑观点（`data/editorial/2026-11-08.json`，2026-11-09整理）；数字均由脚本按当轮快照采集，不手工填写。
 
