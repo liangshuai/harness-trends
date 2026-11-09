@@ -229,6 +229,18 @@ class ReportTests(unittest.TestCase):
         self.assertEqual(result['status'],'ok')
         self.assertEqual(result['products']['pi']['tokens'],100)
 
+    def test_skill_bundle_matches_repo_sources(self):
+        """The skill ships an inlined copy of every script it runs; drift fails here."""
+        skill=Path('.claude/skills/harness-weekly/scripts')
+        if not skill.exists():
+            self.skipTest('skill 内联副本不存在（本测试运行于独立分发的副本内）')
+        for relative in ['run_report.py','deploy_report.py','config.json','.env.example','tests/test_report.py']:
+            self.assertEqual((skill/relative).read_text(),Path(relative).read_text(),
+                             f'skill 内联脚本与仓库版本不一致：{relative}；执行 .claude/skills/harness-weekly/sync.sh 同步')
+        for module in Path('harness_trends').glob('*.py'):
+            self.assertEqual((skill/'harness_trends'/module.name).read_text(),module.read_text(),
+                             f'skill 内联脚本与仓库版本不一致：harness_trends/{module.name}；执行 sync.sh 同步')
+
     def test_v2_dedup_and_own_product_anchor_replace_bad_transfer(self):
         run,config=fixture();compute(run,config)
         config['models_v2']['codex']['current_estimate_enabled']=True

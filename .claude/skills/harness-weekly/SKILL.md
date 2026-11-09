@@ -16,6 +16,29 @@ description: 生成或更新 Harness 市场观察周报（Codex/Claude Code/Pi/D
 每周流程固定顺序：**A 采集 → B 检索 → C 写笔记 → A' 重跑嵌入 → 校验 → 提交推送**。
 换机器跑同样报告：先做 §1 初始化，再按 §2→§6 顺序执行，任何一步都不允许跳过或改序。
 
+## 0.5 本 skill 是自包含的（只拿到 skill 文件夹也能用）
+
+```
+harness-weekly/
+├── SKILL.md            本手册
+├── scripts/            全部运行代码的内联副本（run_report.py、harness_trends/、tests/、config.json、.env.example、deploy_report.py、Harness-资料/raw 披露原图）
+├── examples/           范本：编辑笔记 editorial-*.json、示例报告 report-latest.md
+└── sync.sh             仓库→skill 同步脚本
+```
+
+两种使用方式：
+- **在本仓库内**（正常情况）：直接用仓库根目录的脚本（§2 的命令在仓库根执行）。根目录是唯一权威版本。
+- **只拿到本 skill 文件夹**（分发给他人在别的机器/项目用）：
+
+```sh
+mkdir harness-trends && cp -r <skill路径>/scripts/. harness-trends/ && cd harness-trends
+cp .env.example .env && 编辑 .env 填密钥（见 §1）
+python3 run_report.py --refresh          # 之后按 §2→§7 正常执行
+python3 -m unittest discover -s tests    # 副本内运行会自动跳过与仓库比对的一致性测试
+```
+
+**维护规则**：在本仓库改了任何代码/配置/测试后，必须执行 `sh .claude/skills/harness-weekly/sync.sh` 同步内联副本；根目录测试 `test_skill_bundle_matches_repo_sources` 会逐文件比对，漏同步直接挂测试。examples/ 里的范本随 sync 自然更新，不要求与当期一致。
+
 ## 核心原则（不可违背）
 
 1. **数字只由脚本采集**（A 类），永远不手工填写/修改报告中任何数字。Agent 只产出 C 类定性内容。
@@ -127,7 +150,7 @@ for pid,u in r['product_updates'].items():
 
 ## 4. C 类：Agent 生成编辑笔记
 
-写到 `data/editorial/<窗口结束日>.json`（窗口结束日 = `data/latest.json` 的 `window.end`，如 `2026-11-08`）。
+写到 `data/editorial/<窗口结束日>.json`（窗口结束日 = `data/latest.json` 的 `window.end`，如 `2026-11-08`；独立分发的副本无历史范本时，参考 `examples/editorial-*.json`）。
 
 ### 4.1 完整 JSON 结构（字段必填情况与写法公式）
 
@@ -179,6 +202,8 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ---
 
 ## 5. 报告模板（结构与格式基准，改版式不得偏离）
+
+成品实例见 `examples/report-latest.md`（Markdown 版完整样例；HTML 结构见 5.2 描述）。
 
 ### 5.1 Markdown（`reports/latest.md`）逐节模板
 
