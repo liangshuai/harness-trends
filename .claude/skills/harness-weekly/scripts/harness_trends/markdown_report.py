@@ -161,8 +161,6 @@ def render_markdown(run, config):
         if takeaways:
             lines.append('')
             lines.append('**本周最值得深入研究或借鉴**：' + ' '.join(f'{index}）{cell(item)}' for index, item in enumerate(takeaways, 1)))
-        lines.append('')
-        lines.append('> 本周新功能为编辑整理的重点功能摘要（源自官方发布并经网络检索核实）；数字均由脚本按当轮快照采集，不手工填写。')
     else:
         lines.append('')
         lines.append('> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察与结尾总结待补；数字均由脚本采集。')
