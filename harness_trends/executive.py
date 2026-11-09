@@ -6,7 +6,8 @@ from pathlib import Path
 import re
 from zoneinfo import ZoneInfo
 from .render_methodology import esc, table, render as methodology
-from .metrics import scale_summary
+from .changelog import summarize
+from .metrics import SUMMARY_ORDER, default_insight, scale_summary, summary_rows
 
 COLORS={'codex':'#305aef','claude':'#d77653','dsh':'#318e80','pi':'#9d7ad4','other':'#dbe0e9'}
 NAMES={'codex':'Codex','claude':'Claude Code','dsh':'DSH','pi':'Pi'}
@@ -82,6 +83,7 @@ CSS='''
 :root{--ink:#242424;--muted:#777777;--line:#E8E9EB;--paper:#FFFFFF;--primary:#F05A23;--secondary:#FFF1EA;--aux:#F6F7F8}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}a{color:#B33D13;text-underline-offset:3px}header{background:#FFFFFF;color:var(--ink);border-top:4px solid var(--primary);border-bottom:1px solid var(--line);padding:37px max(calc((100vw - 1160px)/2),26px) 35px;position:relative;overflow:hidden}header:after{content:'';position:absolute;width:480px;height:480px;right:-80px;top:-300px;border:90px solid var(--secondary);border-radius:50%;pointer-events:none}.eyebrow{font-size:10px;letter-spacing:3.5px;color:#AF451F}.header-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;position:relative;z-index:1}h1{font-size:36px;line-height:1.2;letter-spacing:-1px;margin:14px 0 9px}.header-sub{color:#777777;margin:0;font-size:13px}.issue{font-size:12px;color:#777777;text-align:right;white-space:nowrap}.issue strong{display:block;font-size:19px;color:#242424;margin-bottom:5px}nav{position:sticky;top:0;z-index:5;background:#ffffffed;backdrop-filter:blur(12px);border-bottom:1px solid var(--line);display:flex;gap:28px;padding:13px max(calc((100vw - 1160px)/2),26px);overflow:auto}nav a{font-size:12px;color:#666666;text-decoration:none;white-space:nowrap}main{max-width:1212px;padding:25px 26px 55px;margin:auto}section{margin:34px 0;scroll-margin-top:70px}h2{font-size:22px;letter-spacing:-.4px;line-height:1.4;margin:0}h3{font-size:16px;margin:0 0 5px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:15px;margin-bottom:17px}.section-label{font-size:10px;letter-spacing:2px;color:#777777;margin-bottom:5px}.sub,.muted{color:var(--muted)}.sub{font-size:12px;margin:5px 0}.scope{font-size:12px;background:var(--secondary);color:#775040;padding:11px 16px;border-radius:7px;margin-bottom:21px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.kpi,.panel{background:white;border:1px solid var(--line);border-radius:10px;padding:23px}.kpi-label{color:#777777;font-size:12px}.kpi-value{font-size:31px;font-weight:680;line-height:1.3;letter-spacing:-1px;margin:12px 0 8px}.kpi-note{font-size:11px;color:#777777}.up{color:#238b70;font-weight:600}.down{color:#ca725e;font-weight:600}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:9px;flex-shrink:0}.panel{min-width:0}.donut-layout{display:flex;align-items:center;justify-content:center;gap:10px;margin:10px 0}.donut{width:52%;max-width:285px;flex-shrink:0}.donut-value{font-size:27px;fill:#242424;font-weight:700;letter-spacing:-.5px}.donut-caption{font-size:10px;fill:#777777}.legend{flex:1;min-width:0}.legend-row{display:grid;grid-template-columns:minmax(72px,1fr) 44px 53px;gap:7px;align-items:center;padding:11px 0;border-bottom:1px solid var(--aux);font-size:11px}.legend-row>span:first-child{display:flex;align-items:center;white-space:normal}.legend-row strong{text-align:right;font-size:12px}.legend-row>span:last-child{text-align:right}.legend-row:last-child{border:0}.footnote{font-size:10px;line-height:1.7;color:#777777;margin-top:15px}.rank-row{display:grid;grid-template-columns:106px 1fr 88px;gap:12px;align-items:center;margin:24px 0}.rank-name{font-size:12px;white-space:nowrap}.bar-pair{position:relative;height:27px}.bar-old{position:absolute;top:0;height:10px;background:#E7E9EC;border-radius:3px}.bar-current{position:absolute;bottom:0;height:10px;border-radius:3px;min-width:0}.rank-number{text-align:right;line-height:1.4}.rank-number strong{font-size:15px}.rank-number small{display:block;font-size:10px;margin-top:3px}.mini-key{font-size:10px;color:#777777;display:flex;align-items:center;gap:6px;margin-top:18px}.mini-key i,.mini-key b{display:inline-block;width:12px;height:6px;background:#E7E9EC;border-radius:2px}.mini-key b{background:var(--primary);margin-left:8px}.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.insight{padding:18px;background:var(--secondary);border-radius:8px;font-size:12px}.insight b{display:block;margin-bottom:6px;font-size:13px}.trend-svg{width:100%;display:block;margin-top:18px}.axis{font-size:11px;fill:#777777;font-family:inherit}.chart-key{display:flex;gap:22px;flex-wrap:wrap;font-size:11px;margin:13px 0}.table-scroll{overflow:auto;background:white;border:1px solid var(--line);border-radius:9px;margin:16px 0}table{width:100%;border-collapse:collapse;white-space:nowrap;font-size:12px}th{font-size:11px;font-weight:500;background:var(--aux);color:#666666;text-align:left}td,th{padding:14px 17px;border-bottom:1px solid var(--aux)}tbody tr:last-child td{border:0}td:first-child{font-weight:600}.badge{font-size:10px;color:#666666;border:1px solid var(--line);border-radius:4px;padding:3px 7px}.badge.official{background:var(--secondary);color:#A8411A;border-color:#F4D4C5}.dsh-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:18px}.dsh-metrics .value{font-size:27px;font-weight:650;line-height:1.5}.dsh-metrics small{color:#777777;font-size:10px}.disclosure-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:18px 0}.disclosure-grid img{width:100%;height:auto;border:1px solid var(--line);border-radius:7px}.chart-caption{font-size:11px;color:#777777;margin:8px 0}.button,button{border:1px solid var(--line);background:white;color:#A8411A;border-radius:6px;padding:8px 12px;font-size:11px;cursor:pointer;text-decoration:none;display:inline-block}details{background:white;border:1px solid var(--line);border-radius:8px;padding:19px;margin:16px 0}summary{font-size:13px;font-weight:600;cursor:pointer}.details-body{padding-top:15px}.formula{white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,monospace;background:var(--aux);border-radius:7px;padding:16px}footer{font-size:10px;color:#777777;border-top:1px solid var(--line);padding-top:23px;margin-top:34px}.empty{padding:80px 15px;text-align:center;color:#777777}.alert{background:var(--secondary);color:#775040;padding:15px;border-radius:8px;font-size:12px}.method-detail section{margin:28px 0}.method-detail h2{font-size:19px}.method-detail .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.method-detail .card{padding:13px;background:var(--aux);border-radius:6px}.method-detail .number{font-size:24px}.method-detail .tag{font-size:10px;color:#777777}.method-detail .notice{padding:12px;background:var(--secondary);margin:15px 0}.method-detail .bar-row{display:grid;grid-template-columns:115px 1fr 65px;gap:10px;margin:13px 0}.method-detail .bar-track{height:12px;background:var(--aux)}.method-detail .bar-track>div{height:100%}.method-detail .foot{font-size:11px;color:#777777}@media(max-width:1000px){.donut-layout{flex-direction:column}.donut{width:80%}.legend{width:100%}.kpi-value{font-size:25px}.rank-row{grid-template-columns:87px 1fr 73px;gap:7px}.insights{grid-template-columns:1fr}}@media(max-width:660px){header{padding:28px 20px}.header-row{display:block}h1{font-size:29px}.issue{text-align:left;margin-top:20px}.issue strong{font-size:14px}.kpis{grid-template-columns:1fr 1fr;gap:10px}.kpi,.panel{padding:17px}.grid{grid-template-columns:1fr}.donut-layout{flex-direction:row}.donut{width:48%}.legend-row{grid-template-columns:1fr 42px 48px}.dsh-metrics{grid-template-columns:1fr 1fr}main{padding:22px 16px}nav{padding:12px 20px;gap:20px}.section-head{align-items:flex-start}.disclosure-grid{grid-template-columns:1fr}.method-detail .cards{grid-template-columns:1fr 1fr}.kpi-note{font-size:10px}}@media print{body{background:white;font-size:11px}header{background:white;color:#242424;padding:16px 20px;border-bottom:2px solid var(--primary)}header:after,nav,.no-print,button{display:none}header .header-sub,header .issue,header .issue strong{color:#777777}h1{font-size:27px}main{padding:15px 20px}.panel,.kpi,.table-scroll{break-inside:avoid}.section-head{break-after:avoid}.grid{grid-template-columns:1fr 1fr}.donut-layout{flex-direction:row}.donut{width:48%}.kpis{grid-template-columns:repeat(4,1fr)}.kpi-value{font-size:23px}.insights{grid-template-columns:repeat(3,1fr)}.table-scroll{overflow:visible}table{white-space:normal}.footnote{font-size:9px}details:not([open]){display:none}section{margin:24px 0}.trend-svg{max-height:230px}a{color:inherit}}
 
 h1,.kpi-value{color:var(--primary)}nav a:hover,nav a:focus-visible{color:#A8411A;background:var(--secondary);border-radius:4px}button:hover{background:var(--secondary);border-color:var(--primary)}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+.summary-table table{white-space:normal}.summary-table td,.summary-table th{vertical-align:top;min-width:84px}.summary-table td:nth-child(6),.summary-table td:nth-child(7){min-width:240px}.summary-table small{display:inline-block;margin-top:3px}#features ul{padding-left:20px;margin:8px 0}#features ul ul{margin:5px 0;padding-left:18px}
 '''
 
 
@@ -91,6 +93,68 @@ def heading(kicker,title,right=''):
 
 def product_publisher_count(product):
     return product['github'].get('publisher_count',0)
+
+
+def summary_section(run):
+    """Four-harness summary table at the top of the report, mirroring the Markdown edition."""
+    rows=[]
+    for row in summary_rows(run):
+        token='<strong>'+number(row['tokens'])+'</strong>' if row['tokens'] is not None else '—'
+        if row['share'] is not None:token+=f'<br><small class="muted">份额 {row["share"]:.1%}</small>'
+        if row['token_wow'] is not None:token+='<br><small>'+change(row['token_wow'])+'</small>'
+        downloads=number(row['downloads']) if row['downloads'] is not None else '—'
+        if row['download_wow'] is not None:downloads+='<br><small>'+change(row['download_wow'])+'</small>'
+        contributors='—' if row['contributors'] is None else f'{row["contributors"]:,}<br><small class="muted">{esc(row.get("repo") or "")}</small>'
+        plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}<br><small class="muted">{esc(row["plugin_source"] or "")}</small>'
+        insight=esc(row['insight'] or default_insight(run,row['pid']))
+        action=esc(row['action']) if row['action'] else '<span class="muted">—</span>'
+        rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,insight,action])
+    body=('<div class="table-scroll summary-table"><table><thead><tr>'
+          +''.join(f'<th scope="col">{esc(x)}</th>' for x in
+                   ['Harness','周Token / OpenRouter','周npm下载','官方仓库Contributors','插件数量','洞察（本周新功能）','行动'])
+          +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
+          +'</tbody></table></div>')
+    return (f'<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载为渠道观测；Contributors为官方公开仓库非匿名账号计数；'
+            '插件数量各家目录口径不同，不可横向排名；洞察与行动为编辑观点（data/editorial/）。</p>'+body)
+
+
+def features_section(run):
+    """This week's shipped features: scripted Releases/CHANGELOG extraction plus editorial verification."""
+    updates=run.get('product_updates') or {}
+    if not updates:
+        return ''
+    views=(run.get('editorial') or {}).get('products',{})
+    s='<section id="features">'+heading('05 / WEEKLY FEATURES','本周新功能特性','脚本采集 GitHub Releases + CHANGELOG.md 原文 · 网络检索核实为编辑内容')
+    for pid in SUMMARY_ORDER:
+        product=run['products'].get(pid)
+        update=updates.get(pid)
+        if product is None or update is None:
+            continue
+        releases=update.get('releases',[])
+        versions='、'.join(r.get('version') or r.get('tag','') for r in releases) or '窗口内无发布'
+        s+=f'<div class="panel" style="margin-top:14px"><div class="section-head"><div><h3>{dot(pid)}{esc(product["name"])}</h3>' \
+           f'<p class="sub">窗口内发布：{esc(versions)}（来源：GitHub Releases{" + CHANGELOG.md" if update.get("changelog") else ""}）</p></div></div>'
+        items=[]
+        for item in summarize(update):
+            if not item['highlights']:
+                continue
+            bullets=''.join(f'<li>{esc(b)}</li>' for b in item['highlights'])
+            items.append(f'<li><b>{esc(item["version"])}</b>（{esc(item["published_at"][:10])}，'
+                         f'{"预发布" if item["prerelease"] else "正式版"}，{esc(item["basis"])}）<ul>{bullets}</ul></li>')
+        if items:
+            s+='<ul>'+''.join(items)+'</ul>'
+        elif update.get('status')=='missing':
+            reason='；'.join(update.get('errors') or ['未知原因'])
+            s+=f'<p class="sub">脚本采集失败：{esc(reason)}；本产品仅剩编辑内容。</p>'
+        else:
+            s+='<p class="sub">窗口内发布说明为占位文本，无可提取功能要点。</p>'
+        view=views.get(pid) or {}
+        if view.get('feature_summary'):
+            s+=f'<p><span class="badge">编辑</span> 网络检索核实：{esc(view["feature_summary"])}</p>'
+            for source in view.get('sources',[]):
+                s+=f'<p class="footnote">来源：<a href="{esc(source)}" target="_blank" rel="noopener">{esc(source)}</a></p>'
+        s+='</div>'
+    return s+'</section>'
 
 
 def scale_section(run,config):
@@ -146,11 +210,12 @@ def render(run,config):
     pages=run['openrouter_current'].get('pages',[])
     asof=pages[-1].get('meta',{}).get('as_of','—') if pages else '—'
     s='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Agent Harness 市场观察周报 · 数据汇报版</title><style>'+CSS+'</style></head><body>'
-    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>AI Agent Harness 市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
+    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>AI Agent Harness 市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#features">本周新功能</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
     s+='<section id="overview" style="margin-top:0"><div class="kpis">'
     kpis=[('四家样本 · 周Token总量',number(total),'较前周 '+change(growth(total,oldtotal))),('四家样本 · 周请求总量',number(requests),'一次任务可能包含多次请求'),('本周Token份额第一',f'{share:.1%}' if share is not None else '—',NAMES[leader] if leader else '等待完整数据'),('Token增长最快',f'{valid[fastest]:+.1%}' if fastest else '—',NAMES[fastest] if fastest else '等待对照窗口')]
     for label,value,note in kpis:s+=f'<div class="kpi"><div class="kpi-label">{label}</div><div class="kpi-value">{value}</div><div class="kpi-note">{note}</div></div>'
     s+='</div>'
+    s+=summary_section(run)
     if complete:
         ds=cur.get('dsh',{}).get('share_four');dsold=prev.get('dsh',{}).get('share_four')
         pp=(ds-dsold)*100 if ds is not None and dsold is not None else None
@@ -201,7 +266,7 @@ def render(run,config):
             src='data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode()
             gallery.append(f'<div><img alt="DSH披露原图：{label}" src="{src}" loading="lazy"><p class="chart-caption">{label} · 披露原图</p></div>')
     if gallery:s+='<details class="no-print"><summary>查看披露原图：用户、Token、插件</summary><div class="disclosure-grid">'+''.join(gallery)+'</div><p class="footnote">用户与Token原图前五点为连续七天日均，11月4日为单日值，不能直接做同口径周环比。</p></details>'
-    s+='</div></section>'+scale_section(run,config)+'<section id="appendix">'+heading('APPENDIX / ESTIMATES & EVIDENCE','估算与数据附录','答疑备用，不进入主报告份额图')
+    s+='</div></section>'+features_section(run)+scale_section(run,config)+'<section id="appendix">'+heading('APPENDIX / ESTIMATES & EVIDENCE','估算与数据附录','答疑备用，不进入主报告份额图')
     rows=[]
     for p,v in products.items():
         mid=next((r for r in v.get('b_scenarios',[]) if r['alpha']==1.0),{})

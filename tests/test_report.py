@@ -332,7 +332,6 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('478（openai/codex）',page)
         self.assertIn('56（anthropics/claude-code）',page)
         self.assertIn('份额过半\\|网关安全收紧',page)
-        self.assertIn('Open the agent command center with codex agents --no-daemon',page)
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
 
@@ -346,15 +345,51 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('窗口内无发布，无新增功能可析（脚本提取，无编辑点评）',claude)
         self.assertTrue(claude.rstrip().endswith('| — |'))
 
-    def test_markdown_feature_section_quotes_sources_and_flags_failures(self):
+    def test_markdown_replaces_features_with_html_sourced_metrics_digest(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
+        page=render_markdown(run,config)
+        self.assertIn('## 二、用量与生态指标汇总（与HTML报告同源）',page)
+        self.assertIn('| Harness | 本周Token | 四家内部份额 | Token环比 | 份额周变化 | 本周请求 |',page)
+        self.assertIn('### 公开插件与参与账号样本（GitHub）',page)
+        self.assertIn('### DSH 官方披露',page)
+        self.assertIn('548.0万',page)
+        # The feature digest now lives only in the HTML report.
+        self.assertNotIn('## 二、本周新功能特性',page)
+        self.assertNotIn('窗口内发布：',page)
+        self.assertNotIn('网络检索核实（编辑）',page)
+        self.assertIn('见 HTML 完整版',page)
+
+    def test_html_renders_summary_table_and_features_section(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
+            'claude':{'insight':'权限模型转向可审计的自动化运行','action':'评估CI适配','feature_summary':'与CHANGELOG一致',
+                      'sources':['https://github.com/anthropics/claude-code/releases']},
+            'codex':{'insight':'多Agent统一调度','action':'实测命令中心'},
+            'pi':{'insight':'生态可维护性优先','action':'研究扩展体系'},
+            'dsh':{'insight':'补易用性短板','action':'关注subagent_oar'}}}
+        page=render(run,config)
+        self.assertIn('summary-table',page)
+        self.assertIn('洞察（本周新功能）',page)
+        self.assertIn('权限模型转向可审计的自动化运行',page)
+        self.assertIn('id="features"',page)
+        self.assertIn('href="#features"',page)
+        self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)
+        self.assertIn('网络检索核实：与CHANGELOG一致',page)
+        # Old snapshots without product_updates skip the section instead of crashing.
+        run2,config2=self.markdown_run();run2.pop('product_updates')
+        page2=render(run2,config2)
+        self.assertNotIn('id="features"',page2)
+        self.assertIn('summary-table',page2)
+
+    def test_html_features_section_flags_collection_failures(self):
         run,config=self.markdown_run()
         run['product_updates']['claude']={'repo':'anthropics/claude-code','status':'missing','errors':['HTTP 403'],'releases':[]}
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
             'claude':{'feature_summary':'与CHANGELOG一致','sources':['https://github.com/anthropics/claude-code/releases']}}}
-        page=render_markdown(run,config)
-        self.assertIn('脚本采集失败：HTTP 403',page)
-        self.assertIn('**网络检索核实（编辑）**：与CHANGELOG一致',page)
-        self.assertIn('来源：https://github.com/anthropics/claude-code/releases',page)
+        page=render(run,config)
+        self.assertIn('脚本采集失败：HTTP 403；本产品仅剩编辑内容。',page)
+        self.assertIn('网络检索核实：与CHANGELOG一致',page)
 
 
 if __name__=='__main__': unittest.main()

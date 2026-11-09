@@ -1,5 +1,12 @@
 from __future__ import annotations
 
+from .changelog import summarize
+
+# Briefing order for the shared summary table, shared by the HTML and Markdown reports.
+SUMMARY_ORDER = ['claude', 'codex', 'pi', 'dsh']
+PLUGIN_SOURCE = {'claude':'Claude官方Marketplace', 'codex':'ChatGPT插件目录（mcptop.com）',
+                 'pi':'pi.dev官方Package Catalog', 'dsh':'dshmarket.com'}
+
 
 def ratio_delta(current, previous):
     if current is None or previous is None or previous <= 0:
@@ -9,6 +16,50 @@ def ratio_delta(current, previous):
 
 def package_total(rows):
     return sum(r['total'] for r in rows) if rows and all(r['status']=='ok' for r in rows) else None
+
+
+def summary_rows(run):
+    """One raw-value row per harness for the shared summary table; renderers format their own cells."""
+    views = (run.get('editorial') or {}).get('products', {})
+    rows = []
+    for pid in SUMMARY_ORDER:
+        product = run['products'].get(pid)
+        if product is None:
+            continue
+        current = run['openrouter_current'].get('products', {}).get(pid, {})
+        previous = run['openrouter_previous'].get('products', {}).get(pid, {})
+        repo = (run.get('official_repos') or {}).get(pid, {})
+        plugins = None
+        if pid == 'pi':
+            plugins = (run.get('model_v2_inputs') or {}).get('pi_catalog', {}).get('total')
+        else:
+            plugins = (run.get('marketplaces') or {}).get(pid, {}).get('count')
+        view = views.get(pid, {})
+        rows.append({'pid':pid, 'name':product['name'],
+                     'tokens':current.get('tokens'), 'share':current.get('share_four'),
+                     'token_wow':ratio_delta(current.get('tokens'), previous.get('tokens')),
+                     'downloads':product.get('downloads_current'), 'download_wow':product.get('download_wow'),
+                     'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
+                     'plugins':plugins, 'plugin_source':PLUGIN_SOURCE.get(pid),
+                     'insight':view.get('insight'), 'action':view.get('action')})
+    return rows
+
+
+def default_insight(run, pid):
+    """Scripted fallback so the summary table stays complete in weeks without an editorial file.
+    Insight is about the week's shipped features, so the fallback summarizes release
+    highlights instead of volume metrics."""
+    update = (run.get('product_updates') or {}).get(pid, {})
+    releases = update.get('releases', [])
+    highlights = []
+    for item in summarize(update):
+        highlights.extend(item['highlights'])
+    if highlights:
+        lead = highlights[0][:60] + ('…' if len(highlights[0]) > 60 else '')
+        return f'窗口内{len(releases)}个发布，功能要点如：{lead}（脚本提取，无编辑点评）'
+    if releases:
+        return f'窗口内{len(releases)}个发布，发布说明为占位文本，无可提取要点（脚本提取，无编辑点评）'
+    return '窗口内无发布，无新增功能可析（脚本提取，无编辑点评）'
 
 
 def scale_summary(product, reference_alpha=1.0):

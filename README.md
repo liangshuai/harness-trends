@@ -19,8 +19,8 @@ python3 run_report.py --refresh
 
 ## 输出与周更
 
-- `reports/latest.html`：当前汇报版，含份额图、四周趋势、规模估算及数据附录；断网可阅读。
-- `reports/latest.md`：Markdown 版周报，开篇即四家汇总表（周Token、周npm下载、官方仓库Contributors、插件数量、洞察、行动），随后是脚本采集的窗口内新功能特性与编辑核实内容。
+- `reports/latest.html`：当前汇报版，开头核心数据区即四家汇总表（周Token、周npm下载、官方仓库Contributors、插件数量、洞察、行动），随后是份额图、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
+- `reports/latest.md`：Markdown 版周报，开篇即同一张四家汇总表，第二节是与 HTML 报告同源的用量与生态指标汇总（KPI、用量份额表、四周趋势表、GitHub样本、DSH披露）；新功能特性不在 Markdown 版中，见 HTML 完整版。
 - `data/latest.json`、`data/runs/`：当前及历史结构化快照。
 - `data/raw/`、`data/cache/`：公开原始响应、请求来源和缓存。
 - `config.json`：产品、来源、采样上限及所有情景参数。

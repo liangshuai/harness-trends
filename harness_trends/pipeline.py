@@ -38,8 +38,8 @@ def inventory(run):
     for pid,row in run.get('product_updates',{}).items():
         add(NAMES.get(pid,pid)+'窗口内发布与CHANGELOG','GitHub Releases + CHANGELOG.md 按窗口过滤',row.get('status','missing'),
             f"https://github.com/{row.get('repo','')}/releases" if row.get('repo') else '未配置')
-    add('Markdown周报汇总表与新功能节','只读取当轮结构化快照渲染；洞察/行动为编辑笔记',
-        ('editorial' if run.get('editorial') else 'no_editorial') if 'editorial' in run else 'generated','markdown_report.py + data/editorial/')
+    add('汇总表与本周新功能特性（HTML+MD）','只读取当轮结构化快照渲染；洞察/行动/网络检索核实为编辑笔记',
+        ('editorial' if run.get('editorial') else 'no_editorial') if 'editorial' in run else 'generated','metrics.summary_rows + executive.py + markdown_report.py + data/editorial/')
     for a in run.get('historical_source_checks',[]):add(a['name'],'固定历史披露；每次重抓源页检查，不冒充本周统计',a['status'],a['source'])
     for a in run.get('user_disclosures',[]):add(a['label'],'重抓官方嵌入源并核对产品范围、数值与周期；保留发帖日期',a['status'],a['source'])
     add('图表、标题摘要与HTML','只读取当轮结构化快照渲染','generated','executive.py + render_estimates_v2.py')
