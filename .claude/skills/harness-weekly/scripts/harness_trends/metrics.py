@@ -98,12 +98,22 @@ def summary_rows(run):
                      'downloads':product.get('downloads_current'), 'download_wow':product.get('download_wow'),
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
                      'plugins':plugins,
+                     'features':view.get('features'),
                      'action':view.get('action')})
     return rows
 
 
+def feature_lines(run, pid, limit=5, width=66):
+    """Lines for the「本周新功能」column: editorial Chinese summaries when present,
+    else scripted release highlights (newest version first) as the fallback."""
+    row = next((r for r in summary_rows(run) if r['pid'] == pid), None)
+    if row and isinstance(row.get('features'), list) and row['features']:
+        return [str(item) for item in row['features']]
+    return feature_highlights(run, pid, limit, width)
+
+
 def feature_highlights(run, pid, limit=5, width=66):
-    """Lines for the「本周新功能」column: scripted release highlights, newest version first.
+    """Scripted fallback: release highlights, newest version first.
     Each line is '<version>：<highlight>', truncated to keep the summary table compact."""
     update = (run.get('product_updates') or {}).get(pid, {})
     lines = []

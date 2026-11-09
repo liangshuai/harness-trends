@@ -7,7 +7,7 @@ import re
 from zoneinfo import ZoneInfo
 from .render_methodology import esc, table, render as methodology
 from .changelog import summarize
-from .metrics import SUMMARY_ORDER, feature_highlights, scale_summary, summary_rows, user_cell
+from .metrics import SUMMARY_ORDER, feature_lines, scale_summary, summary_rows, user_cell
 
 COLORS={'codex':'#305aef','claude':'#d77653','dsh':'#318e80','pi':'#9d7ad4','other':'#dbe0e9'}
 NAMES={'codex':'Codex','claude':'Claude Code','dsh':'DSH','pi':'Pi'}
@@ -108,7 +108,7 @@ def summary_section(run, config):
         plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}'
         user_lines=user_cell(run,config,row['pid'])
         users='<br>'.join(esc(line) for line in user_lines) if user_lines else '<span class="muted">—</span>'
-        highlights=feature_highlights(run,row['pid'])
+        highlights=feature_lines(run,row['pid'])
         # Plain numbered lines, not a real list element: keeps table rows compact and aligned.
         features='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(highlights,1)) if highlights else '<span class="muted">—</span>'
         action=esc(row['action']) if row['action'] else '<span class="muted">—</span>'

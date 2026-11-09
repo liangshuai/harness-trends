@@ -331,7 +331,7 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'action':'跟踪Marketplace扩张'},
+            'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],'action':'跟踪Marketplace扩张'},
             'codex':{'action':'实测命令中心'},
             'pi':{'action':'研究扩展架构'},
             'dsh':{'action':'关注subagent_oar'}}}
@@ -348,7 +348,8 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertNotIn('dshmarket.com）',page)
         self.assertIn('478（openai/codex）',page)
         self.assertIn('56（anthropics/claude-code）',page)
-        # 本周新功能 column carries scripted release highlights with version prefixes.
+        # Editorial Chinese feature summaries take precedence; scripted fallback keeps version prefixes.
+        self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)

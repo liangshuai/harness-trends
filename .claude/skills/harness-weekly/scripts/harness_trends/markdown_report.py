@@ -3,7 +3,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from .executive import NAMES, number
-from .metrics import SUMMARY_ORDER, cn_number, feature_highlights, ratio_delta, summary_rows, user_cell, user_disclosure_rows
+from .metrics import SUMMARY_ORDER, cn_number, feature_lines, ratio_delta, summary_rows, user_cell, user_disclosure_rows
 
 
 def cell(text):
@@ -48,8 +48,8 @@ def _plugins_cell(row):
 
 
 def _features_cell(run, pid):
-    """本周新功能 column: scripted release highlights, one numbered line each."""
-    highlights = feature_highlights(run, pid)
+    """本周新功能 column: editorial summaries first, scripted highlights as fallback."""
+    highlights = feature_lines(run, pid)
     if not highlights:
         return '—'
     return '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(highlights, 1))
@@ -148,9 +148,9 @@ def render_markdown(run, config):
     lines.append(summary_table(run, editorial, config))
     lines.append('')
     if editorial:
-        lines.append('> 本周新功能列为脚本采集的官方发布要点摘录；行动为编辑建议；数字均由脚本按当轮快照采集，不手工填写。')
+        lines.append('> 本周新功能为编辑整理的当周重点功能摘要（源自官方发布并经网络检索核实）；行动为编辑建议；数字均由脚本按当轮快照采集，不手工填写。')
     else:
-        lines.append('> 本周新功能列为脚本采集的官方发布要点摘录；本轮无编辑笔记，行动列待补；数字均由脚本采集。')
+        lines.append('> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，行动列待补；数字均由脚本采集。')
     lines += ['', *metrics_digest(run, config)]
     lines.append('## 三、口径与来源')
     lines.append('')
@@ -163,7 +163,7 @@ def render_markdown(run, config):
                  ' Plugins 分类计数（该目录另有全量口径，见下注）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数'
                  '（含 extension/skill/theme/prompt 等类型，非纯 extension）；DSH 取 dshmarket.com 公布的社区插件总数。'
                  '四者口径互不相同，不可直接横向排名。')
-    lines.append('- **本周新功能/行动**：本周新功能列为脚本按窗口提取的官方 Releases/CHANGELOG 要点摘录（截断显示，完整原文见HTML报告「本周新功能特性」部分）；行动为编辑建议，不属于采集数据。')
+    lines.append('- **本周新功能/行动**：本周新功能列为编辑从当周官方 Releases/CHANGELOG 中总结挑选的重点摘要（经网络检索核实）；无编辑笔记的周次自动降级为脚本提取的原文摘录；行动为编辑建议。')
     mcptop = run.get('marketplaces', {}).get('codex', {})
     if mcptop.get('directory_total') is not None and mcptop.get('count') is not None:
         note = f'- 注：ChatGPT 插件目录全量 {mcptop["directory_total"]:,} 个，本表取 Plugins 分类计数 {mcptop["count"]:,}'
