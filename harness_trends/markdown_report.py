@@ -123,12 +123,11 @@ def metrics_digest(run, config):
         lines.append('')
     disclosure_rows = user_disclosure_rows(run, config)
     if disclosure_rows:
-        lines += ['### 用户规模公开信息（合计与单品分开）', '',
+        lines += ['### 用户规模公开信息', '',
                   '| 产品范围 | 指标 | 公开数值 | 日期与说明 |', '|---|---|---|---|']
         for item in disclosure_rows:
             lines.append(f'| {item["scope"]} | {item["metric"]} | {item["display"]} | {item["as_of"]}；{item["note"]} |')
-        lines += ['', '合计口径与单品口径分开列示、只计一次，保留原披露日期，不外推为当期实测；月活不是日活。'
-                  'Claude Code 与 Pi 暂无用户数公开披露（Claude Code 官方口径为收入），汇总表中相应留空。', '']
+        lines.append('')
     lines += ['### DSH 官方披露', '']
     disclosure = config['disclosure']
     lines += [f'截至 {disclosure["as_of"]}（媒体转述厂商披露，不同于OpenRouter渠道数据）：'

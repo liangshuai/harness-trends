@@ -31,7 +31,7 @@ def render_scales(run,config):
         ['Codex（历史单品数据）','历史WAU / 周活','超过'+number(spec['codex']['wau_anchor']),esc(spec['codex']['as_of'])+'；不是当前人数'],
         ['DSH','DAU / 日活',number(d['dau']),esc(d['as_of'])+'；官方API用户范围'],
         ['DSH','MAU / 月活',number(d['mau']),esc(d['as_of'])+'；月窗口未明示']])
-    s+='<div class="panel"><h3>用户规模公开信息（合计与单品分开）</h3>'+table(['产品范围','指标','公开数值','日期与来源'],disclosure_rows)
+    s+='<div class="panel"><h3>用户规模公开信息</h3>'+table(['产品范围','指标','公开数值','日期与来源'],disclosure_rows)
     if primary:
         secondary=next((r for r in registered if r['id']=='codex-work-40m-commentary'),None)
         s+='<p class="footnote">本报告按约定将Codex与ChatGPT Work作为同一个用户规模分析对象，合计人数只计一次。此处采用10月7日4000万活跃用户作为参考，保留披露日期，不自动外推成11月新实测人数。Tibo原帖未说明活跃窗口；'

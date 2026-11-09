@@ -122,7 +122,7 @@ def summary_section(run, config):
           +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
           +'</tbody></table></div>')
     return ('<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
-            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露（合计与单品分开）；洞察与行动为编辑观点。</p>'+body)
+            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；洞察与行动为编辑观点。</p>'+body)
 
 
 def features_section(run):

@@ -31,7 +31,7 @@ def cn_number(value):
 
 def user_disclosure_rows(run, config):
     """User-scale public disclosures, combined and single-product figures kept apart.
-    Mirrors the HTML report's「用户规模公开信息（合计与单品分开）」panel."""
+    Mirrors the HTML report's「用户规模公开信息」panel."""
     registered = run.get('user_disclosures', config.get('user_disclosures', []))
     primary = next((r for r in registered if r.get('id') == 'codex-work-40m-primary'), None)
     policy = (config.get('user_population_policy') or {}).get('codex', {})
