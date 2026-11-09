@@ -1,6 +1,6 @@
 # AI Agent Harness 市场观察周报
 
-数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 16:49（北京时间）
+数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 16:53（北京时间）
 
 ## 一、四家汇总表
 
@@ -56,5 +56,3 @@
 - **插件数量**：Claude Code 取 claude.com/marketplace/plugins 页面公布总数；Codex 取 mcptop.com 所示 ChatGPT 插件目录 Plugins 分类计数（该目录另有全量口径，见下注）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数（含 extension/skill/theme/prompt 等类型，非纯 extension）；DSH 取 dshmarket.com 公布的社区插件总数。四者口径互不相同，不可直接横向排名。
 - **洞察/行动**：面向本周新增功能点的编辑解读与建议，不属于采集数据；无编辑笔记的周次自动降级为脚本提取的发布要点摘要。
 - 注：ChatGPT 插件目录全量 12,404 个，本表取 Plugins 分类计数 1,265（mcptop.com，2026-11-09观测）。
-
-各项指标的逐项采集状态与原始来源详见配套完整报告的数据附录。

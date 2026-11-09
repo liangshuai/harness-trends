@@ -170,6 +170,4 @@ def render_markdown(run, config):
         if mcptop.get('observed_at'):
             note += f'（mcptop.com，{mcptop["observed_at"][:10]}观测）'
         lines.append(note + '。')
-    lines.append('')
-    lines.append('各项指标的逐项采集状态与原始来源详见配套完整报告的数据附录。')
     return '\n'.join(lines) + '\n'
