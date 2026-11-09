@@ -331,12 +331,11 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],'action':'跟踪Marketplace扩张'},
-            'codex':{'action':'实测命令中心'},
-            'pi':{'action':'研究扩展架构'},
-            'dsh':{'action':'关注subagent_oar'}}}
+            'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],'insight':['无人值守权限策略值得借鉴','工具调用阻塞会话的共性痛点']},
+            'codex':{'insight':['多agent集中管理是通用交互范式']},
+            'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 行动 |',page)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 洞察 |',page)
         self.assertNotIn('Markdown 版',page)
         self.assertNotIn('data/editorial',page)
         self.assertNotIn('按用户指定',page)
@@ -351,19 +350,28 @@ class MarkdownReportTests(unittest.TestCase):
         # Editorial Chinese feature summaries take precedence; scripted fallback keeps version prefixes.
         self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
+        # 洞察 column carries borrowing-value analysis; 行动 column is gone.
+        self.assertIn('1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点',page)
+        self.assertIn('1）多agent集中管理是通用交互范式',page)
+        self.assertNotIn('行动</th>',page)
+        self.assertNotIn('| 行动',page)
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
 
-    def test_action_cell_escapes_pipes(self):
+    def test_insight_cell_and_takeaways_escape_pipes(self):
         run,config=self.markdown_run()
-        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'action':'跟踪A|B'},'codex':{'action':'实测C'},'pi':{'action':'研究D'},'dsh':{'action':'关注E'}}}
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06',
+            'takeaways':['方向A|B值得深研'],
+            'products':{'claude':{'insight':['借鉴A|B','共性C']},'codex':{},'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('跟踪A\\|B',page)
+        self.assertIn('1）借鉴A\\|B<br>2）共性C',page)
+        self.assertIn('本周最值得深入研究或借鉴',page)
+        self.assertIn('1）方向A\\|B值得深研',page)
         html_page=render(run,config)
-        self.assertIn('跟踪A|B',html_page)
+        self.assertIn('1）借鉴A|B<br>2）共性C',html_page)
+        self.assertIn('1）方向A|B值得深研',html_page)
 
-    def test_markdown_without_editorial_keeps_features_and_blanks_action(self):
+    def test_markdown_without_editorial_keeps_features_and_blanks_insight(self):
         run,config=self.markdown_run();run['editorial']=None
         page=render_markdown(run,config)
         self.assertIn('本轮无编辑笔记',page)
@@ -395,19 +403,21 @@ class MarkdownReportTests(unittest.TestCase):
 
     def test_html_renders_summary_table_and_features_section(self):
         run,config=self.markdown_run()
-        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'action':'评估CI适配','feature_summary':'与CHANGELOG一致',
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','takeaways':['研究权限分级设计'],
+            'products':{
+            'claude':{'feature_summary':'与CHANGELOG一致',
                       'sources':['https://github.com/anthropics/claude-code/releases']},
-            'codex':{'action':'实测命令中心'},
-            'pi':{'action':'研究扩展体系'},
-            'dsh':{'action':'关注subagent_oar'}}}
+            'codex':{},'pi':{},'dsh':{}}}
         page=render(run,config)
         self.assertIn('summary-table',page)
         self.assertIn('>本周新功能</th>',page)
         self.assertIn('>活跃用户</th>',page)
         self.assertIn('4,000万+（Codex（含 ChatGPT Work），2026-10-07）',page)
         self.assertIn('548万MAU / 154万DAU（官方披露，2026-11-04）',page)
-        self.assertIn('评估CI适配',page)
+        self.assertIn('>洞察</th>',page)
+        self.assertIn('本周最值得深入研究或借鉴',page)
+        self.assertIn('研究权限分级设计',page)
+        self.assertIn('不反映数据变化情况',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
         self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)

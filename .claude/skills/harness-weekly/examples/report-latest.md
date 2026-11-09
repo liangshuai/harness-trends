@@ -1,17 +1,21 @@
 # AI Agent Harness 市场观察周报
 
-数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 19:36（北京时间）
+数据窗口：2026-11-02 — 2026-11-08（UTC）· 生成于 2026-11-09 19:48（北京时间）
 
 ## 一、四家汇总表
 
-| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 行动 |
+| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 洞察 |
 |---|---|---|---|---|---|---|---|
-| Claude Code | 10.05T（份额52.6%），环比-1.5% | 1,419.4万（环比+10.1%） | 56（anthropics/claude-code） | 529 | — | 1）denyInsteadOfPrompting：无人值守时权限提示改为策略化拒绝并继续执行<br>2）MCP 任务自动后台化，长工具调用不再阻塞会话<br>3）auto mode 网关侧安全检查收紧，权限决策可审计<br>4）/usage 新增消费展示；网关新增成本报表与 pooled 预算规则 | 评估denyInsteadOfPrompting对CI/子代理场景的适配成本；对照网关新能力（成本报表、pooled预算）评估企业侧管理开销是否下降。 |
-| Codex | 2.62T（份额13.7%），环比-52.1% | 2,590.8万（环比-6.9%） | 478（openai/codex） | 1,265 | 4,000万+（Codex（含 ChatGPT Work），2026-10-07）<br>单品历史：超过500万WAU（2026-06-02） | 1）Agent Command Center（codex agents --no-daemon）集中管理多个 agent，未读结果标记<br>2）会话级后端切换保留草稿<br>3）本地图片预览；Vertex AI 配置向导 gcp_setup_wizard<br>4）macOS/Windows 系统代理设置可在 /experimental 开启 | 实测codex agents --no-daemon命令中心、后端切换保留草稿与未读结果标记；评估多后端切换对混合云/多供应商部署的实际价值。 |
-| Pi | 4.20T（份额22.0%），环比-7.6% | 663.4万（环比+5.5%） | 306（earendil-works/pi） | 5,360 | — | 1）扩展更新 changelog：作者可向用户推送更新说明，可折叠展示<br>2）流式渲染提速：大工具调用增量解析、高亮与渲染复用<br>3）OSC 7501 程序状态上报（工作/阻塞/完成）<br>4）自定义自更新命令；GPT-6.1 Terra 接入 | 研究扩展changelog与OSC 7501对外部集成面板的开放思路对自研harness插件体系的借鉴价值。 |
-| DeepSeek Harness | 2.25T（份额11.8%），环比+19.3% | 82.7万（环比+8.1%） | 50（deepseek-ai/deepseek-harness） | 9,463 | 548万MAU / 154万DAU（官方披露，2026-11-04） | 1）手机/平板适配：软键盘交互、导航与窄屏布局优化<br>2）插件热更新失败自动回滚；管理页富文本详情<br>3）完整历史会话可复制为 Markdown<br>4）实验性 subagent_oar：把独立任务交给本机 Codex/Claude CLI 执行 | 关注subagent_oar插件（把独立任务交给本机Codex/Claude CLI）的跨harness调度思路能否借鉴；评估插件热更新回滚机制对自家插件运维的参考价值。 |
+| Claude Code | 10.05T（份额52.6%），环比-1.5% | 1,419.4万（环比+10.1%） | 56（anthropics/claude-code） | 529 | — | 1）denyInsteadOfPrompting：无人值守时权限提示改为策略化拒绝并继续执行<br>2）MCP 任务自动后台化，长工具调用不再阻塞会话<br>3）auto mode 网关侧安全检查收紧，权限决策可审计<br>4）/usage 新增消费展示；网关新增成本报表与 pooled 预算规则 | 1）无人值守权限策略值得借鉴：把不可判定权限显式降级为「拒绝并继续」，是自动化场景的通用解法<br>2）MCP 长任务后台化+完成回报，解决工具调用阻塞会话的共性痛点<br>3）网关侧成本报表与 pooled 预算规则：企业多团队计费分摊是共性需求 |
+| Codex | 2.62T（份额13.7%），环比-52.1% | 2,590.8万（环比-6.9%） | 478（openai/codex） | 1,265 | 4,000万+（Codex（含 ChatGPT Work），2026-10-07）<br>单品历史：超过500万WAU（2026-06-02） | 1）Agent Command Center（codex agents --no-daemon）集中管理多个 agent，未读结果标记<br>2）会话级后端切换保留草稿<br>3）本地图片预览；Vertex AI 配置向导 gcp_setup_wizard<br>4）macOS/Windows 系统代理设置可在 /experimental 开启 | 1）多 agent 集中管理+未读结果标记，是多任务并行场景的通用交互范式<br>2）后端切换保留草稿：会话状态与模型供应商解耦，降低迁移摩擦，值得跟进<br>3）把多云接入做成 onboarding 向导（gcp_setup_wizard），是降低接入门槛的共性做法 |
+| Pi | 4.20T（份额22.0%），环比-7.6% | 663.4万（环比+5.5%） | 306（earendil-works/pi） | 5,360 | — | 1）扩展更新 changelog：作者可向用户推送更新说明，可折叠展示<br>2）流式渲染提速：大工具调用增量解析、高亮与渲染复用<br>3）OSC 7501 程序状态上报（工作/阻塞/完成）<br>4）自定义自更新命令；GPT-6.1 Terra 接入 | 1）扩展更新 changelog 通道：插件作者与用户间的版本沟通是生态通用需求，自家插件体系可直接参考<br>2）OSC 7501 以开放协议向终端/面板暴露运行状态，集成友好度高<br>3）持续做最小内核+全量扩展化，验证了可组合底座路线的可行性 |
+| DeepSeek Harness | 2.25T（份额11.8%），环比+19.3% | 82.7万（环比+8.1%） | 50（deepseek-ai/deepseek-harness） | 9,463 | 548万MAU / 154万DAU（官方披露，2026-11-04） | 1）手机/平板适配：软键盘交互、导航与窄屏布局优化<br>2）插件热更新失败自动回滚；管理页富文本详情<br>3）完整历史会话可复制为 Markdown<br>4）实验性 subagent_oar：把独立任务交给本机 Codex/Claude CLI 执行 | 1）subagent_oar 跨 harness 调度（复用本机 Codex/Claude CLI）：把竞品当子进程整合的思路值得研究<br>2）插件热更新失败自动回滚：插件生态做大后的运维安全网，是共性需求<br>3）移动端/多语言优先于模型能力的取舍，指向非程序员用户群体 |
 
-> 本周新功能为编辑整理的当周重点功能摘要（源自官方发布并经网络检索核实）；行动为编辑建议；数字均由脚本按当轮快照采集，不手工填写。
+> 洞察基于本周新增功能的分析，不反映数据变化情况；所涉产品均为第三方产品，其数据波动无法溯源。
+
+**本周最值得深入研究或借鉴**：1）无人值守权限策略（Claude Code denyInsteadOfPrompting）与多 agent 集中调度（Codex Agent Command Center）共同指向「自动化批量化」主线，值得精细化研究其权限分级与任务编排设计 2）subagent_oar 的跨 harness 调度与 Pi 的扩展 changelog 通道，分别代表「整合竞品能力」与「生态沟通机制」两个可直接借鉴的方向
+
+> 本周新功能为编辑整理的重点功能摘要（源自官方发布并经网络检索核实）；数字均由脚本按当轮快照采集，不手工填写。
 
 ## 二、用量与生态指标汇总
 
@@ -54,5 +58,5 @@
 - **周下载量**：npm downloads API 逐日加总的主包七天下载，含更新、CI 与重复下载，不等于活跃用户。
 - **开源贡献者**：官方公开仓库的 GitHub contributors（非匿名账号，与官网UI同口径）；仅统计公开官方仓库，闭源/内部镜像开发不计入，厂商间口径差异见各行仓库名。
 - **插件数量**：Claude Code 取 claude.com/marketplace/plugins 页面公布总数；Codex 取 mcptop.com 所示 ChatGPT 插件目录 Plugins 分类计数（该目录另有全量口径，见下注）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数（含 extension/skill/theme/prompt 等类型，非纯 extension）；DSH 取 dshmarket.com 公布的社区插件总数。四者口径互不相同，不可直接横向排名。
-- **本周新功能/行动**：本周新功能列为编辑从当周官方 Releases/CHANGELOG 中总结挑选的重点摘要（经网络检索核实）；无编辑笔记的周次自动降级为脚本提取的原文摘录；行动为编辑建议。
+- **本周新功能/洞察**：本周新功能列为编辑从当周官方 Releases/CHANGELOG 中总结挑选的重点摘要（经网络检索核实）；洞察为编辑对新增功能中值得同行借鉴的价值点与共性需求的分析，不反映数据变化；无编辑笔记的周次本周新功能自动降级为脚本提取的原文摘录。
 - 注：ChatGPT 插件目录全量 12,404 个，本表取 Plugins 分类计数 1,265（mcptop.com，2026-11-09观测）。

@@ -111,15 +111,23 @@ def summary_section(run, config):
         highlights=feature_lines(run,row['pid'])
         # Plain numbered lines, not a real list element: keeps table rows compact and aligned.
         features='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(highlights,1)) if highlights else '<span class="muted">—</span>'
-        action=esc(row['action']) if row['action'] else '<span class="muted">—</span>'
-        rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,features,action])
+        raw_insight=row['insight']
+        if isinstance(raw_insight,list) and raw_insight:
+            insight='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(raw_insight,1))
+        else:
+            insight='<span class="muted">—</span>'
+        rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,features,insight])
     body=('<div class="table-scroll summary-table"><table><thead><tr>'
           +''.join(f'<th scope="col">{esc(x)}</th>' for x in
-                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','本周新功能','行动'])
+                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','本周新功能','洞察'])
           +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
           +'</tbody></table></div>')
+    closing='<p class="sub" style="margin-top:10px">洞察基于本周新增功能的分析，不反映数据变化情况；所涉产品均为第三方产品，其数据波动无法溯源。</p>'
+    takeaways=(run.get('editorial') or {}).get('takeaways') or []
+    if takeaways:
+        closing+='<p style="margin-top:12px"><strong>本周最值得深入研究或借鉴</strong>：'+' '.join(f'{index}）{esc(item)}' for index,item in enumerate(takeaways,1))+'</p>'
     return ('<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
-            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为官方发布要点摘录；行动为编辑建议。</p>'+body)
+            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为编辑整理的重点摘要；洞察为编辑对新增功能的借鉴价值分析。</p>'+body+closing)
 
 
 def features_section(run):

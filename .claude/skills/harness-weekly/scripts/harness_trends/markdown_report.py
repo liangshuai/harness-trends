@@ -55,8 +55,16 @@ def _features_cell(run, pid):
     return '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(highlights, 1))
 
 
+def _insight_cell(row):
+    """洞察 column: what peers can borrow from this week's features, one numbered line each."""
+    value = row['insight']
+    if isinstance(value, list) and value:
+        return '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1))
+    return '—'
+
+
 def summary_table(run, editorial, config):
-    header = ['Harness', '周Token（OpenRouter）', '周下载量', '开源贡献者', '插件数量', '活跃用户', '本周新功能', '行动']
+    header = ['Harness', '周Token（OpenRouter）', '周下载量', '开源贡献者', '插件数量', '活跃用户', '本周新功能', '洞察']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
     for row in summary_rows(run):
         user_lines = user_cell(run, config, row['pid'])
@@ -66,7 +74,7 @@ def summary_table(run, editorial, config):
             _plugins_cell(row),
             users_text,
             _features_cell(run, row['pid']),
-            cell(row['action'] or '—')]) + ' |')
+            _insight_cell(row)]) + ' |')
     return '\n'.join(lines)
 
 
@@ -147,10 +155,17 @@ def render_markdown(run, config):
     lines.append('')
     lines.append(summary_table(run, editorial, config))
     lines.append('')
+    lines.append('> 洞察基于本周新增功能的分析，不反映数据变化情况；所涉产品均为第三方产品，其数据波动无法溯源。')
     if editorial:
-        lines.append('> 本周新功能为编辑整理的当周重点功能摘要（源自官方发布并经网络检索核实）；行动为编辑建议；数字均由脚本按当轮快照采集，不手工填写。')
+        takeaways = editorial.get('takeaways') or []
+        if takeaways:
+            lines.append('')
+            lines.append('**本周最值得深入研究或借鉴**：' + ' '.join(f'{index}）{cell(item)}' for index, item in enumerate(takeaways, 1)))
+        lines.append('')
+        lines.append('> 本周新功能为编辑整理的重点功能摘要（源自官方发布并经网络检索核实）；数字均由脚本按当轮快照采集，不手工填写。')
     else:
-        lines.append('> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，行动列待补；数字均由脚本采集。')
+        lines.append('')
+        lines.append('> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察与结尾总结待补；数字均由脚本采集。')
     lines += ['', *metrics_digest(run, config)]
     lines.append('## 三、口径与来源')
     lines.append('')
@@ -163,7 +178,7 @@ def render_markdown(run, config):
                  ' Plugins 分类计数（该目录另有全量口径，见下注）；Pi 取 pi.dev 官方 Package Catalog 未筛选总数'
                  '（含 extension/skill/theme/prompt 等类型，非纯 extension）；DSH 取 dshmarket.com 公布的社区插件总数。'
                  '四者口径互不相同，不可直接横向排名。')
-    lines.append('- **本周新功能/行动**：本周新功能列为编辑从当周官方 Releases/CHANGELOG 中总结挑选的重点摘要（经网络检索核实）；无编辑笔记的周次自动降级为脚本提取的原文摘录；行动为编辑建议。')
+    lines.append('- **本周新功能/洞察**：本周新功能列为编辑从当周官方 Releases/CHANGELOG 中总结挑选的重点摘要（经网络检索核实）；洞察为编辑对新增功能中值得同行借鉴的价值点与共性需求的分析，不反映数据变化；无编辑笔记的周次本周新功能自动降级为脚本提取的原文摘录。')
     mcptop = run.get('marketplaces', {}).get('codex', {})
     if mcptop.get('directory_total') is not None and mcptop.get('count') is not None:
         note = f'- 注：ChatGPT 插件目录全量 {mcptop["directory_total"]:,} 个，本表取 Plugins 分类计数 {mcptop["count"]:,}'

@@ -1,0 +1,1 @@
+{"url": "https://raw.githubusercontent.com/JimLiu/baoyu-design/main/package.json", "fetched_unix": 1794207406.787956, "status": 200, "body": "{\n  \"name\": \"baoyu-design\",\n  \"version\": \"2.12.1\",\n  \"private\": true,\n  \"scripts\": {\n    \"test\": \"node --test 'archive/baoyu-design/agents/tests/*.test.mjs'\"\n  }\n}\n", "has_next": false}

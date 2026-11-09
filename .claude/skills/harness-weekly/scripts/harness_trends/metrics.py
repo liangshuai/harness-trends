@@ -99,7 +99,7 @@ def summary_rows(run):
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
                      'plugins':plugins,
                      'features':view.get('features'),
-                     'action':view.get('action')})
+                     'insight':view.get('insight')})
     return rows
 
 
