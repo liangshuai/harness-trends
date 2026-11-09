@@ -59,8 +59,11 @@ class Client:
         try:
             with urlopen(Request(url, headers=headers), timeout=18) as response:
                 body = response.read().decode('utf-8', 'replace')
+                link = response.headers.get('Link', '')
+                # GitHub pagination: the rel="last" page number of a per_page=1 request is the exact list length.
+                last = re.search(r'[?&]page=(\d+)>;\s*rel="last"', link)
                 envelope = {'url': url, 'fetched_unix': time.time(), 'status': response.status, 'body': body,
-                            'has_next': 'rel="next"' in response.headers.get('Link', '')}
+                            'has_next': 'rel="next"' in link, 'last_page': int(last.group(1)) if last else None}
         except HTTPError as exc:
             # Do not log server response bodies, headers, or credentials.
             if exc.code in (408,429,500,502,503,504) and _attempt<2:
@@ -91,6 +94,11 @@ class Client:
             return json.loads(self.get(url, **kwargs))
         except json.JSONDecodeError:
             raise FetchError('响应不是有效 JSON') from None
+
+    def last_page(self, url):
+        """Last page number recorded in the response Link header, or None when absent or from a legacy cache."""
+        envelope = self.memory.get(url)
+        return envelope.get('last_page') if envelope else None
 
 
 def npm_downloads(client, package, start, end):
@@ -237,6 +245,38 @@ def github_ecosystem(client, product, settings):
     result['contributor_count'] = len(accounts) if observed else None
     result['publisher_count'] = len(result['publisher_ids'])
     result['identity_note'] = 'User类型且非[bot]账号；不等于已验证自然人。累计全仓提交者，可能含文档贡献；monorepo路径不明者不纳入主计数。'
+    return result
+
+
+def official_repo(client, product):
+    """Official core-repository metrics, separate from the third-party plugin sample.
+
+    Contributors are non-anonymous accounts (anon=false), the same figure the GitHub UI
+    shows; per_page=1 makes the Link header's last page equal to the exact count.
+    """
+    token = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN')
+    repo = product['repo']
+    url = f'https://api.github.com/repos/{repo}/contributors?per_page=1&anon=false'
+    result = {'repo':repo, 'product_id':product['id'], 'source':url, 'status':'missing',
+              'contributors':None, 'counting':'非匿名账号，per_page=1时Link头last页码即精确总数'}
+    try:
+        body = client.get(url, token=token)
+        last = client.last_page(url)
+        if last is None and not client.offline:
+            # Legacy cached envelopes predate the last_page field; refetch once to rebuild it.
+            body = client.get(url, token=token, fresh=True)
+            last = client.last_page(url)
+        if last is not None:
+            result.update(status='ok', contributors=last)
+        else:
+            try:
+                rows = json.loads(body)
+            except ValueError:
+                rows = None
+            if isinstance(rows, list):
+                result.update(status='ok', contributors=len(rows))
+    except FetchError as exc:
+        result['reason'] = str(exc)
     return result
 
 

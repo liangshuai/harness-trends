@@ -2,6 +2,7 @@
 from datetime import datetime,timezone
 import hashlib
 from .collect import FetchError
+from .executive import NAMES
 
 
 def check_historical_sources(client,config):
@@ -30,6 +31,15 @@ def inventory(run):
     catalog=run['model_v2_inputs']['pi_catalog']
     add('Pi目录扩展包及作者字段','官网全分页抓取、跨包去重',catalog['status'],catalog['source'])
     add('用户等效情景、插件作者及插件估算','根据当轮输入与固定参数重新计算','computed','models_v2 + config.json')
+    for pid,row in run.get('marketplaces',{}).items():
+        add(row.get('label',pid)+'插件目录计数','官网落地页解析公布总数',row.get('status','missing'),row.get('source') or '未配置')
+    for pid,row in run.get('official_repos',{}).items():
+        add(NAMES.get(pid,pid)+'官方仓库贡献者','GitHub contributors 非匿名账号，Link头last页码',row.get('status','missing'),row.get('source') or '未配置')
+    for pid,row in run.get('product_updates',{}).items():
+        add(NAMES.get(pid,pid)+'窗口内发布与CHANGELOG','GitHub Releases + CHANGELOG.md 按窗口过滤',row.get('status','missing'),
+            f"https://github.com/{row.get('repo','')}/releases" if row.get('repo') else '未配置')
+    add('Markdown周报汇总表与新功能节','只读取当轮结构化快照渲染；洞察/行动为编辑笔记',
+        ('editorial' if run.get('editorial') else 'no_editorial') if 'editorial' in run else 'generated','markdown_report.py + data/editorial/')
     for a in run.get('historical_source_checks',[]):add(a['name'],'固定历史披露；每次重抓源页检查，不冒充本周统计',a['status'],a['source'])
     for a in run.get('user_disclosures',[]):add(a['label'],'重抓官方嵌入源并核对产品范围、数值与周期；保留发帖日期',a['status'],a['source'])
     add('图表、标题摘要与HTML','只读取当轮结构化快照渲染','generated','executive.py + render_estimates_v2.py')

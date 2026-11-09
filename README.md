@@ -20,11 +20,18 @@ python3 run_report.py --refresh
 ## 输出与周更
 
 - `reports/latest.html`：当前汇报版，含份额图、四周趋势、规模估算及数据附录；断网可阅读。
+- `reports/latest.md`：Markdown 版周报，开篇即四家汇总表（周Token、周npm下载、官方仓库Contributors、插件数量、洞察、行动），随后是脚本采集的窗口内新功能特性与编辑核实内容。
 - `data/latest.json`、`data/runs/`：当前及历史结构化快照。
 - `data/raw/`、`data/cache/`：公开原始响应、请求来源和缓存。
 - `config.json`：产品、来源、采样上限及所有情景参数。
 
 已配置的 Codex 自动任务每周一纽约时间上午9点运行同一命令。机器和执行环境需要可用。默认检查npm日结；两个高下载主包同时返回零时，统一回退至最近有有效下载数据的UTC日，避免把结算延迟画成下跌。
+
+## Markdown 周报的口径与编辑笔记
+
+汇总表数字全部脚本采集：Token与npm来自既有采集；官方仓库Contributors用 GitHub contributors（非匿名账号、与官网UI同口径，per_page=1 时 Link 头 last 页码即精确总数），只反映公开官方仓库，内部开发不计入；插件数量各家指定来源——Claude Code 取 claude.com/marketplace/plugins 公布总数、Codex 取 mcptop.com 所示 ChatGPT 插件目录 Plugins 分类计数（目录全量另存 directory_total）、Pi 取 pi.dev 官方 Package Catalog、DSH 取 dshmarket.com 公布总数，四者口径互不相同，不做横向排名。新功能特性由脚本按窗口提取官方 GitHub Releases 与 CHANGELOG.md 原文条目（`harness_trends/changelog.py`，只认产品发布线标签，占位式发布说明不算要点）。
+
+洞察/行动列与"网络检索核实"段是编辑内容，存放在 `data/editorial/<窗口结束日>.json`，运行时嵌入快照留档；文件缺失时该列自动降级为脚本数据摘要，不阻塞周更。编辑笔记只写定性判断，不复述精确数值，避免与当轮采集数字漂移；数字仍不允许手工填写。
 
 ```sh
 python3 run_report.py --end 2026-11-05  # 固定窗口

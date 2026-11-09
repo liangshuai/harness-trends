@@ -1,0 +1,50 @@
+{
+  "window_end": "2026-11-08",
+  "prepared_at": "2026-11-09",
+  "note": "编辑内容：洞察/行动/feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。feature_summary均已对照官方CHANGELOG或GitHub Releases原文核实。洞察文字刻意不复述精确数值，避免与脚本采集的当轮数字漂移。",
+  "general_sources": [
+    "https://github.com/anthropics/claude-code/releases",
+    "https://github.com/openai/codex/releases",
+    "https://github.com/deepseek-ai/deepseek-harness/releases",
+    "https://github.com/earendil-works/pi/releases",
+    "https://pi.dev/changelog"
+  ],
+  "products": {
+    "claude": {
+      "insight": "OpenRouter样本内Token份额过半居首，npm下载环比双位数增长；本周连发3版，主线是无人值守自动化（denyInsteadOfPrompting、MCP任务后台化）与网关侧安全检查收紧。",
+      "action": "评估denyInsteadOfPrompting对CI/子代理场景的适配成本；跟踪官方Marketplace目录与付费/用量可见性功能的迭代节奏。",
+      "feature_summary": "网络检索与CHANGELOG.md一致：v2.1.319新增permissions.denyInsteadOfPrompting（权限提示改为拒绝并继续）、MCP任务自动后台化（可用CLAUDE_CODE_DISABLE_MCP_TASK_BACKGROUND关闭）、auto mode在网关/关闭遥测时改走服务端检查；另新增/claude-api latency-optimize、/usage消费展示与/tasks的Earlier in this session行。第三方报道亦以denyInsteadOfPrompting为头条。",
+      "sources": [
+        "https://github.com/anthropics/claude-code/releases",
+        "https://support.claude.com/en/articles/12138966-release-notes",
+        "https://releasebot.io/updates/anthropic/claude-code"
+      ]
+    },
+    "codex": {
+      "insight": "npm周下载仍是四家最大分发量，但本周环比回落、为四家中唯一负增长；Token也从前一周的峰值明显回调。0.167.0上线Agent Command Center，向多Agent统一调度与多后端切换转型；官方仓库贡献者为四家最高。",
+      "action": "实测codex agents --no-daemon命令中心、后端切换保留草稿与未读结果标记；观察下载与Token回落是版本节奏还是需求分流，下期复核。",
+      "feature_summary": "网络检索与官方Release Notes一致：0.167.0以Agent Command Center（codex agents --no-daemon）为头条，命令中心与会话选择器标记未读结果；支持后端切换保留草稿、本地图片预览、gcp_setup_wizard（Vertex AI）向导与系统代理设置opt-in。窗口内alpha版（0.168/0.169系列）发布说明为占位文本，未单独核实功能点。",
+      "sources": [
+        "https://github.com/openai/codex/releases",
+        "https://developers.openai.com/codex/release-notes"
+      ]
+    },
+    "pi": {
+      "insight": "Token份额居第二、明显高于Codex，npm下载环比正增长；1.5.0主打扩展更新changelog与流式渲染提速；官方目录扩展包规模已超过Claude官方Marketplace一个量级。",
+      "action": "研究其最小内核+全量扩展化架构对自研harness的借鉴价值；跟踪pi.dev目录作者数与OSC 7501状态上报在终端/面板中的采用。",
+      "feature_summary": "网络检索与pi.dev官方changelog一致：1.5.0新增扩展更新changelog展示（作者可选路径、collapseChangelog折叠）、大工具调用增量解析与高亮/Markdown渲染复用提速、OSC 7501程序状态上报（工作/阻塞/完成）、自定义自更新命令与GPT-6.1 Terra接入；npm包@earendil-works/pi-coding-agent同步发布1.5.0。",
+      "sources": [
+        "https://pi.dev/changelog/releases/1.5.0",
+        "https://github.com/earendil-works/pi/releases"
+      ]
+    },
+    "dsh": {
+      "insight": "Token份额四家最低但环比增长，npm下载基数最小，548万MAU主要来自非npm渠道；0.2.2-rc.1完善移动端、第三方插件热更新与回滚，社区插件市场已达近万量级。",
+      "action": "关注实验性subagent_oar插件（把独立任务交给本机Codex/Claude CLI）的跨harness调度思路；移动端与多语言适配可能带来非程序员增量用户。",
+      "feature_summary": "网络检索与GitHub Release一致：v0.2.2-rc.1汇总自v0.2.1-rc.5的变更：手机/平板适配与软键盘交互、聊天文本引用插入、完整历史会话复制为Markdown、统一右键与键盘菜单、插件管理页富文本与第三方插件更新（失败自动回滚）、实验性subagent_oar插件及日/西/法/德/俄/巴葡六种新语言界面。",
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/releases"
+      ]
+    }
+  }
+}

@@ -10,12 +10,16 @@ import os
 from pathlib import Path
 import sys
 
-from harness_trends.collect import Client, FetchError, github_ecosystem, npm_downloads, openrouter_window
+from harness_trends.collect import Client, FetchError, github_ecosystem, npm_downloads, openrouter_window, official_repo
 from harness_trends.metrics import compute, package_total
 from harness_trends.render import render
 from harness_trends.models_v2 import collect_inputs, apply as apply_models_v2
 from harness_trends.pipeline import check_historical_sources, inventory
 from harness_trends.user_disclosures import collect_user_disclosures, apply_population_scope
+from harness_trends.marketplaces import collect_marketplaces
+from harness_trends.changelog import collect_product_updates
+from harness_trends.markdown_report import render_markdown
+from harness_trends.executive import NAMES
 
 ROOT=Path(__file__).resolve().parent
 METHOD='0.1.0'
@@ -99,7 +103,8 @@ def main():
     if args.render_only:
         run=json.loads(args.render_only.read_text())
         (reports/'latest.html').write_text(render(run,run.get('configuration',config)))
-        print('已重建 reports/latest.html')
+        (reports/'latest.md').write_text(render_markdown(run,run.get('configuration',config)))
+        print('已重建 reports/latest.html 与 reports/latest.md')
         return 0
     if args.offline and args.refresh:parser.error('--offline 与 --refresh 不能同时使用')
     settings=config['collection'].copy()
@@ -181,6 +186,15 @@ def main():
     run['historical_source_checks']=check_historical_sources(client,config)
     run['user_disclosures']=collect_user_disclosures(client,config)
     apply_population_scope(run,config)
+    print('采集插件市场目录计数、官方仓库贡献者与窗口内发布…',flush=True)
+    run['marketplaces']=collect_marketplaces(client,config)
+    run['official_repos']={p['id']:official_repo(client,p) for p in config['products']}
+    run['product_updates']=collect_product_updates(client,config['products'],run['window'])
+    for pid,row in run['official_repos'].items():
+        print(f'  {NAMES.get(pid,pid)} 官方仓库贡献者 {row.get("contributors")}（{row["status"]}）；'
+              f'窗口内发布 {len(run["product_updates"].get(pid,{}).get("releases",[]))} 个',flush=True)
+    editorial_path=ROOT/'data/editorial'/f'{end}.json'
+    run['editorial']=json.loads(editorial_path.read_text()) if editorial_path.exists() else None
     run['data_inventory']=inventory(run)
     previous,same=previous_snapshot(ROOT,end,signature)
     run['previous_snapshot']=previous
@@ -211,7 +225,10 @@ def main():
     page=render(run,config)
     (reports/f'{run_id}.html').write_text(page)
     temp=reports/'latest.html.tmp';temp.write_text(page);temp.replace(reports/'latest.html')
-    print(f'完成：{reports/"latest.html"}',flush=True)
+    markdown=render_markdown(run,config)
+    (reports/f'{run_id}.md').write_text(markdown)
+    temp=reports/'latest.md.tmp';temp.write_text(markdown);temp.replace(reports/'latest.md')
+    print(f'完成：{reports/"latest.html"} 与 {reports/"latest.md"}',flush=True)
     print(f'运行快照：data/runs/{run_id}.json；GitHub实时请求 {client.github_calls} 次',flush=True)
     return 0 if any(p['downloads_current'] is not None or p['a_observed'] is not None for p in run['products'].values()) else 2
 

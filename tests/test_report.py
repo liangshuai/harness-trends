@@ -12,6 +12,9 @@ from run_report import load_env, previous_snapshot, settled_end, METHOD
 from harness_trends.executive import donut
 from harness_trends.models_v2 import apply as apply_v2, npm_equivalent
 from harness_trends.catalogs import parse_pi_catalog
+from harness_trends.marketplaces import parse_dshmarket, parse_mcptop, parse_claude_marketplace
+from harness_trends.changelog import collect_product_updates, feature_bullets, parse_changelog, summarize
+from harness_trends.markdown_report import render_markdown
 from harness_trends.pipeline import check_historical_sources, inventory
 from harness_trends.user_disclosures import parse_x_disclosure, apply_population_scope
 import re
@@ -246,6 +249,110 @@ class ReportTests(unittest.TestCase):
         run['model_v2_inputs']['owners']['dsh']['owner_repo_ratio']=0.2
         apply_v2(run,config)
         self.assertAlmostEqual(run['products']['dsh']['scale_estimates']['developers']['reference'],dsh/2)
+
+
+class MarkdownReportTests(unittest.TestCase):
+    def markdown_run(self):
+        run,config=fixture();compute(run,config)
+        run['marketplaces']={'claude':{'status':'ok','count':529,'source':'https://claude.com/marketplace/plugins'},
+            'codex':{'status':'ok','count':1265,'directory_total':12404,'source':'https://mcptop.com/?source=openai'},
+            'dsh':{'status':'ok','count':9463,'source':'https://dshmarket.com/'}}
+        run['official_repos']={p:{'status':'ok','contributors':{'claude':56,'codex':478,'dsh':50,'pi':306}[p],
+            'repo':{'claude':'anthropics/claude-code','codex':'openai/codex','dsh':'deepseek-ai/deepseek-harness','pi':'earendil-works/pi'}[p]} for p in run['products']}
+        run['model_v2_inputs']={'pi_catalog':{'status':'ok','total':5360,'source':'https://pi.dev/packages'}}
+        run['product_updates']={'codex':{'repo':'openai/codex','status':'ok','changelog':None,'releases':[
+            {'tag':'rust-v0.167.0','version':'0.167.0','published_at':'2026-11-06T01:40:00Z','prerelease':False,
+             'html_url':'https://github.com/openai/codex/releases/tag/rust-v0.167.0',
+             'body':'## New Features\n\n- Open the agent command center with `codex agents --no-daemon` (#58238).\n\n## Bug Fixes\n\n- Saved chats stay visible after you switch model providers.','body_chars':140}]},
+            'claude':{'repo':'anthropics/claude-code','status':'ok','changelog':{'sections':{}},'releases':[]},
+            'dsh':{'repo':'deepseek-ai/deepseek-harness','status':'empty','changelog':None,'releases':[]},
+            'pi':{'repo':'earendil-works/pi','status':'ok','changelog':None,'releases':[
+                {'tag':'v1.5.0','version':'1.5.0','published_at':'2026-11-02T11:05:31Z','prerelease':False,
+                 'html_url':'https://github.com/earendil-works/pi/releases/tag/v1.5.0',
+                 'body':'Release 1.5.0','body_chars':14}]}}
+        return run,config
+
+    def test_marketplace_parsers_read_published_counts(self):
+        self.assertEqual(parse_dshmarket('<p>Browse and search <b><span id="count">9463</span> community plugins</b></p>'),9463)
+        self.assertEqual(parse_claude_marketplace('<p class="sr-only" role="status">529 plugins</p>'),529)
+        facet,total=parse_mcptop('<li aria-label="Highlight Plugins"><span title="Plugins">Plugins</span>'
+                                 '<span class="tnum">1,265</span></li><p>Right now that’s 12,404 plugins, updated daily.</p>')
+        self.assertEqual(facet,1265);self.assertEqual(total,12404)
+
+    def test_marketplace_parsers_fail_closed_on_unknown_markup(self):
+        for parser,markup in ((parse_dshmarket,'<html>no counter</html>'),(parse_mcptop,'<html>no facet</html>'),
+                              (parse_claude_marketplace,'<html>no status</html>')):
+            with self.assertRaises(FetchError):parser(markup)
+
+    def test_feature_bullets_support_headings_chinese_and_added_fallback(self):
+        english=feature_bullets('## New Features\n\n- Open the **agent command center** with `codex agents`.\n- Second feature.\n\n## Bug Fixes\n\n- A fix.')
+        self.assertEqual(english,['Open the agent command center with codex agents.','Second feature.'])
+        chinese=feature_bullets('<h3 id="cn">新增功能</h3>\n\n- 完善手机和平板适配。 @a\n- 支持将聊天文本作为引用插入。\n\n### 体验优化\n\n- 其他优化。')
+        self.assertEqual(chinese,['完善手机和平板适配。 @a','支持将聊天文本作为引用插入。'])
+        changelog=feature_bullets('## 2.1.319\n\n- Added support for MCP tasks in the terminal.\n- Fixed an empty diff.')
+        self.assertEqual(changelog,['Added support for MCP tasks in the terminal.'])
+
+    def test_parse_changelog_extracts_requested_versions_only(self):
+        sections=parse_changelog('# Changelog\n\n## 2.1.319\n\n- Added MCP tasks.\n\n## 2.1.318\n\n- Older.\n',['2.1.319'])
+        self.assertEqual(list(sections),['2.1.319']);self.assertIn('MCP tasks',sections['2.1.319'])
+
+    def test_updates_collector_filters_window_and_marks_stub_bodies(self):
+        class ReleaseClient:
+            def json(self,url,**kwargs):
+                return [{'tag_name':'rust-v0.167.0','published_at':'2026-11-06T01:40:00Z','prerelease':False,
+                          'html_url':'u','body':'## New Features\n\n- Agent command center with lots of text to exceed the stub threshold for sure.'},
+                         {'tag_name':'rust-v0.169.0-alpha.3','published_at':'2026-11-07T19:31:41Z','prerelease':True,
+                          'html_url':'u','body':'Release 0.169.0-alpha.3'},
+                         {'tag_name':'rust-v0.150.0','published_at':'2026-10-01T00:00:00Z','prerelease':False,
+                          'html_url':'u','body':'Old release outside the window with a long enough body to matter for the check.'}]
+            def get(self,url,**kwargs):raise FetchError('HTTP 404')
+        updates=collect_product_updates(ReleaseClient(),[{'id':'codex','repo':'openai/codex'}],
+                                        {'start':'2026-11-02','end':'2026-11-08'})
+        row=updates['codex']
+        self.assertEqual(row['status'],'ok')
+        self.assertEqual([r['version'] for r in row['releases']],['0.167.0','0.169.0-alpha.3'])
+        summary=summarize(row)
+        self.assertEqual(summary[0]['highlights'],['Agent command center with lots of text to exceed the stub threshold for sure.'])
+        self.assertEqual(summary[0]['basis'],'GitHub Release')
+        self.assertEqual(summary[1]['highlights'],[])
+
+    def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
+            'claude':{'insight':'份额过半|网关安全收紧','action':'跟踪Marketplace扩张'},
+            'codex':{'insight':'下载回调','action':'实测命令中心'},
+            'pi':{'insight':'份额第二','action':'研究扩展架构'},
+            'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
+        page=render_markdown(run,config)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察 | 行动 |',page)
+        self.assertIn('529（Claude官方Marketplace）',page)
+        self.assertIn('1,265（ChatGPT插件目录（mcptop.com））',page)
+        self.assertIn('5,360（pi.dev官方Package Catalog）',page)
+        self.assertIn('9,463（dshmarket.com）',page)
+        self.assertIn('478（openai/codex）',page)
+        self.assertIn('56（anthropics/claude-code）',page)
+        self.assertIn('份额过半\\|网关安全收紧',page)
+        self.assertIn('Open the agent command center with codex agents --no-daemon',page)
+        self.assertIn('目录全量 12,404',page)
+        self.assertNotIn('\t',page)
+
+    def test_markdown_without_editorial_degrades_to_scripted_fallback(self):
+        run,config=self.markdown_run();run['editorial']=None
+        page=render_markdown(run,config)
+        self.assertIn('本轮无编辑笔记',page)
+        self.assertIn('脚本数据，无编辑点评',page)
+        row=next(line for line in page.splitlines() if line.startswith('| Claude Code'))
+        self.assertTrue(row.rstrip().endswith('| — |'))
+
+    def test_markdown_feature_section_quotes_sources_and_flags_failures(self):
+        run,config=self.markdown_run()
+        run['product_updates']['claude']={'repo':'anthropics/claude-code','status':'missing','errors':['HTTP 403'],'releases':[]}
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
+            'claude':{'feature_summary':'与CHANGELOG一致','sources':['https://github.com/anthropics/claude-code/releases']}}}
+        page=render_markdown(run,config)
+        self.assertIn('脚本采集失败：HTTP 403',page)
+        self.assertIn('**网络检索核实（编辑）**：与CHANGELOG一致',page)
+        self.assertIn('来源：https://github.com/anthropics/claude-code/releases',page)
 
 
 if __name__=='__main__': unittest.main()

@@ -183,6 +183,18 @@
       "workers": 4
     }
   },
+  "marketplaces": {
+    "claude": {
+      "url": "https://claude.com/marketplace/plugins?utm_source=chatgpt.com"
+    },
+    "codex": {
+      "url": "https://mcptop.com/?source=openai",
+      "count_note": "取Plugins分类计数而非目录全量，按报告指定口径"
+    },
+    "dsh": {
+      "url": "https://dshmarket.com/"
+    }
+  },
   "user_disclosures": [
     {
       "id": "codex-work-40m-primary",
