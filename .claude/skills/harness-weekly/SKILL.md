@@ -211,10 +211,10 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ### 5.1 Markdown（`reports/latest.md`）逐节模板
 
 ```
-# AI Agent Harness 市场观察周报
+# coding agent harness市场观察周报
 数据窗口：<start> — <end>（UTC）· 生成于 <北京时间>（北京时间）
 
-## 一、四家汇总表
+## 一、主流Harness汇总表
 | Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 洞察 |
 （行序固定：Claude Code → Codex → Pi → DeepSeek Harness）
 
@@ -248,7 +248,7 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 本周新功能 → 规模估算 → 数据附录。
 
-1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **四家汇总表**（与 MD 同源同列，共享 `metrics.summary_rows`；本周新功能列同样由 `feature_highlights` 脚本生成）；
+1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源同列，共享 `metrics.summary_rows`；本周新功能列同样由 `feature_highlights` 脚本生成）；
 2. 用量份额（环形图 ×2）；规模与增长（Token/请求条形）；四周趋势（折线）；
 3. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；
 4. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + 各版本脚本采集要点（原文引用）+ `编辑` 徽标的"网络检索核实"段 + 来源链接；

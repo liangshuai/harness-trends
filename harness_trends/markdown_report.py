@@ -143,10 +143,10 @@ def render_markdown(run, config):
     generated = datetime.fromisoformat(run['generated_at']).astimezone(ZoneInfo('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M')
     start, end = run['window']['start'], run['window']['end']
     editorial = run.get('editorial')
-    lines = ['# AI Agent Harness 市场观察周报', '']
+    lines = ['# coding agent harness市场观察周报', '']
     lines.append(f'数据窗口：{start} — {end}（UTC）· 生成于 {generated}（北京时间）')
     lines.append('')
-    lines.append('## 一、四家汇总表')
+    lines.append('## 一、主流Harness汇总表')
     lines.append('')
     lines.append(summary_table(run, editorial, config))
     lines.append('')
