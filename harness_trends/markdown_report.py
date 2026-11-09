@@ -44,7 +44,7 @@ def _contributors_cell(row):
 def _plugins_cell(row):
     if row['plugins'] is None:
         return '—'
-    return f'{row["plugins"]:,}（{row["plugin_source"]}）'
+    return f'{row["plugins"]:,}'
 
 
 def _insight_cell(run, row):

@@ -4,8 +4,6 @@ from .changelog import summarize
 
 # Briefing order for the shared summary table, shared by the HTML and Markdown reports.
 SUMMARY_ORDER = ['claude', 'codex', 'pi', 'dsh']
-PLUGIN_SOURCE = {'claude':'Claude官方Marketplace', 'codex':'ChatGPT插件目录（mcptop.com）',
-                 'pi':'pi.dev官方Package Catalog', 'dsh':'dshmarket.com'}
 
 
 def ratio_delta(current, previous):
@@ -99,7 +97,7 @@ def summary_rows(run):
                      'token_wow':ratio_delta(current.get('tokens'), previous.get('tokens')),
                      'downloads':product.get('downloads_current'), 'download_wow':product.get('download_wow'),
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
-                     'plugins':plugins, 'plugin_source':PLUGIN_SOURCE.get(pid),
+                     'plugins':plugins,
                      'insight':view.get('insight'), 'action':view.get('action')})
     return rows
 

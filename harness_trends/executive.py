@@ -105,7 +105,7 @@ def summary_section(run, config):
         downloads=number(row['downloads']) if row['downloads'] is not None else '—'
         if row['download_wow'] is not None:downloads+='<br><small>'+change(row['download_wow'])+'</small>'
         contributors='—' if row['contributors'] is None else f'{row["contributors"]:,}<br><small class="muted">{esc(row.get("repo") or "")}</small>'
-        plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}<br><small class="muted">{esc(row["plugin_source"] or "")}</small>'
+        plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}'
         user_lines=user_cell(run,config,row['pid'])
         users='<br>'.join(esc(line) for line in user_lines) if user_lines else '<span class="muted">—</span>'
         raw=row['insight']
