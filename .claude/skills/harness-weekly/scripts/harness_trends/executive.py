@@ -7,7 +7,7 @@ import re
 from zoneinfo import ZoneInfo
 from .render_methodology import esc, table, render as methodology
 from .changelog import summarize
-from .metrics import SUMMARY_ORDER, default_insight, scale_summary, summary_rows, user_cell
+from .metrics import SUMMARY_ORDER, feature_highlights, scale_summary, summary_rows, user_cell
 
 COLORS={'codex':'#305aef','claude':'#d77653','dsh':'#318e80','pi':'#9d7ad4','other':'#dbe0e9'}
 NAMES={'codex':'Codex','claude':'Claude Code','dsh':'DSH','pi':'Pi'}
@@ -108,21 +108,18 @@ def summary_section(run, config):
         plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}'
         user_lines=user_cell(run,config,row['pid'])
         users='<br>'.join(esc(line) for line in user_lines) if user_lines else '<span class="muted">—</span>'
-        raw=row['insight']
-        if isinstance(raw,list) and raw:
-            # Plain numbered lines, not a real list element: keeps table rows compact and aligned.
-            insight='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(raw,1))
-        else:
-            insight=esc(raw or default_insight(run,row['pid']))
+        highlights=feature_highlights(run,row['pid'])
+        # Plain numbered lines, not a real list element: keeps table rows compact and aligned.
+        features='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(highlights,1)) if highlights else '<span class="muted">—</span>'
         action=esc(row['action']) if row['action'] else '<span class="muted">—</span>'
-        rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,insight,action])
+        rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,features,action])
     body=('<div class="table-scroll summary-table"><table><thead><tr>'
           +''.join(f'<th scope="col">{esc(x)}</th>' for x in
-                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','洞察（本周新功能）','行动'])
+                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','本周新功能','行动'])
           +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
           +'</tbody></table></div>')
     return ('<p class="sub" style="margin:20px 0 0"><strong>四家汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
-            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；洞察与行动为编辑观点。</p>'+body)
+            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为官方发布要点摘录；行动为编辑建议。</p>'+body)
 
 
 def features_section(run):

@@ -98,25 +98,22 @@ def summary_rows(run):
                      'downloads':product.get('downloads_current'), 'download_wow':product.get('download_wow'),
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
                      'plugins':plugins,
-                     'insight':view.get('insight'), 'action':view.get('action')})
+                     'action':view.get('action')})
     return rows
 
 
-def default_insight(run, pid):
-    """Scripted fallback so the summary table stays complete in weeks without an editorial file.
-    Insight is about the week's shipped features, so the fallback summarizes release
-    highlights instead of volume metrics."""
+def feature_highlights(run, pid, limit=5, width=66):
+    """Lines for the「本周新功能」column: scripted release highlights, newest version first.
+    Each line is '<version>：<highlight>', truncated to keep the summary table compact."""
     update = (run.get('product_updates') or {}).get(pid, {})
-    releases = update.get('releases', [])
-    highlights = []
+    lines = []
     for item in summarize(update):
-        highlights.extend(item['highlights'])
-    if highlights:
-        lead = highlights[0][:60] + ('…' if len(highlights[0]) > 60 else '')
-        return f'窗口内{len(releases)}个发布，功能要点如：{lead}（脚本提取，无编辑点评）'
-    if releases:
-        return f'窗口内{len(releases)}个发布，发布说明为占位文本，无可提取要点（脚本提取，无编辑点评）'
-    return '窗口内无发布，无新增功能可析（脚本提取，无编辑点评）'
+        for bullet in item['highlights']:
+            text = bullet if len(bullet) <= width else bullet[:width] + '…'
+            lines.append(f'{item["version"]}：{text}')
+            if len(lines) >= limit:
+                return lines
+    return lines
 
 
 def scale_summary(product, reference_alpha=1.0):

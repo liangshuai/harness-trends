@@ -331,12 +331,12 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'insight':['无人值守主线：denyInsteadOfPrompting','MCP任务后台化'],'action':'跟踪Marketplace扩张'},
-            'codex':{'insight':'下载回调','action':'实测命令中心'},
-            'pi':{'insight':['扩展changelog通道','渲染提速'],'action':'研究扩展架构'},
-            'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
+            'claude':{'action':'跟踪Marketplace扩张'},
+            'codex':{'action':'实测命令中心'},
+            'pi':{'action':'研究扩展架构'},
+            'dsh':{'action':'关注subagent_oar'}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 洞察（本周新功能） | 行动 |',page)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 行动 |',page)
         self.assertNotIn('Markdown 版',page)
         self.assertNotIn('data/editorial',page)
         self.assertNotIn('按用户指定',page)
@@ -348,31 +348,27 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertNotIn('dshmarket.com）',page)
         self.assertIn('478（openai/codex）',page)
         self.assertIn('56（anthropics/claude-code）',page)
-        # List-form insights: one numbered point per line, string insights stay single-line.
-        self.assertIn('1）无人值守主线：denyInsteadOfPrompting<br>2）MCP任务后台化',page)
-        self.assertIn('1）扩展changelog通道<br>2）渲染提速',page)
-        self.assertIn('下载回调',page)
+        # 本周新功能 column carries scripted release highlights with version prefixes.
+        self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
 
-    def test_summary_insight_list_escapes_pipes_per_item(self):
+    def test_action_cell_escapes_pipes(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'insight':['a|b','c']},'codex':{'insight':['x']},'pi':{'insight':['y']},'dsh':{'insight':['z']}}}
+            'claude':{'action':'跟踪A|B'},'codex':{'action':'实测C'},'pi':{'action':'研究D'},'dsh':{'action':'关注E'}}}
         page=render_markdown(run,config)
-        self.assertIn('1）a\\|b<br>2）c',page)
+        self.assertIn('跟踪A\\|B',page)
         html_page=render(run,config)
-        self.assertIn('1）a|b<br>2）c',html_page)
-        self.assertNotIn('<ol',html_page.split('id="features"')[0])
+        self.assertIn('跟踪A|B',html_page)
 
-    def test_markdown_without_editorial_degrades_to_release_highlights(self):
+    def test_markdown_without_editorial_keeps_features_and_blanks_action(self):
         run,config=self.markdown_run();run['editorial']=None
         page=render_markdown(run,config)
         self.assertIn('本轮无编辑笔记',page)
         codex=next(line for line in page.splitlines() if line.startswith('| Codex '))
-        self.assertIn('窗口内1个发布，功能要点如：Open the agent command center with codex agents --no-daemon …',codex)
+        self.assertIn('0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',codex)
         claude=next(line for line in page.splitlines() if line.startswith('| Claude Code'))
-        self.assertIn('窗口内无发布，无新增功能可析（脚本提取，无编辑点评）',claude)
         self.assertTrue(claude.rstrip().endswith('| — |'))
 
     def test_markdown_replaces_features_with_html_sourced_metrics_digest(self):
@@ -399,19 +395,18 @@ class MarkdownReportTests(unittest.TestCase):
     def test_html_renders_summary_table_and_features_section(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'insight':['权限模型转向可审计的自动化运行','企业网关是迭代重心'],'action':'评估CI适配','feature_summary':'与CHANGELOG一致',
+            'claude':{'action':'评估CI适配','feature_summary':'与CHANGELOG一致',
                       'sources':['https://github.com/anthropics/claude-code/releases']},
-            'codex':{'insight':'多Agent统一调度','action':'实测命令中心'},
-            'pi':{'insight':'生态可维护性优先','action':'研究扩展体系'},
-            'dsh':{'insight':'补易用性短板','action':'关注subagent_oar'}}}
+            'codex':{'action':'实测命令中心'},
+            'pi':{'action':'研究扩展体系'},
+            'dsh':{'action':'关注subagent_oar'}}}
         page=render(run,config)
         self.assertIn('summary-table',page)
-        self.assertIn('洞察（本周新功能）',page)
+        self.assertIn('>本周新功能</th>',page)
         self.assertIn('>活跃用户</th>',page)
         self.assertIn('4,000万+（Codex（含 ChatGPT Work），2026-10-07）',page)
         self.assertIn('548万MAU / 154万DAU（官方披露，2026-11-04）',page)
-        self.assertIn('1）权限模型转向可审计的自动化运行<br>2）企业网关是迭代重心',page)
-        self.assertIn('多Agent统一调度',page)
+        self.assertIn('评估CI适配',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
         self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)
