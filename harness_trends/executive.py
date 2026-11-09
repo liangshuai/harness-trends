@@ -125,7 +125,7 @@ def summary_section(run, config):
     closing='<p class="sub" style="margin-top:10px">洞察基于本周新增功能的分析，不反映数据变化情况；所涉产品均为第三方产品，其数据波动无法溯源。</p>'
     takeaways=(run.get('editorial') or {}).get('takeaways') or []
     if takeaways:
-        closing+='<p style="margin-top:12px"><strong>本周最值得深入研究或借鉴</strong>：'+' '.join(f'{index}）{esc(item)}' for index,item in enumerate(takeaways,1))+'</p>'
+        closing+='<p style="margin-top:12px"><strong>行动：本周最值得深入研究或借鉴</strong>：'+' '.join(f'{index}）{esc(item)}' for index,item in enumerate(takeaways,1))+'</p>'
     return ('<p class="sub" style="margin:20px 0 0"><strong>主流Harness汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
             '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为编辑整理的重点摘要；洞察为编辑对新增功能的借鉴价值分析。</p>'+body+closing)
 
@@ -221,8 +221,8 @@ def render(run,config):
     start,end=run['window']['start'],run['window']['end']
     pages=run['openrouter_current'].get('pages',[])
     asof=pages[-1].get('meta',{}).get('as_of','—') if pages else '—'
-    s='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>coding agent harness市场观察周报 · 数据汇报版</title><style>'+CSS+'</style></head><body>'
-    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>coding agent harness市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#features">本周新功能</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
+    s='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coding Agent Harness市场观察周报 · 数据汇报版</title><style>'+CSS+'</style></head><body>'
+    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>Coding Agent Harness市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#features">本周新功能</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
     s+='<section id="overview" style="margin-top:0"><div class="kpis">'
     kpis=[('四家样本 · 周Token总量',number(total),'较前周 '+change(growth(total,oldtotal))),('四家样本 · 周请求总量',number(requests),'一次任务可能包含多次请求'),('本周Token份额第一',f'{share:.1%}' if share is not None else '—',NAMES[leader] if leader else '等待完整数据'),('Token增长最快',f'{valid[fastest]:+.1%}' if fastest else '—',NAMES[fastest] if fastest else '等待对照窗口')]
     for label,value,note in kpis:s+=f'<div class="kpi"><div class="kpi-label">{label}</div><div class="kpi-value">{value}</div><div class="kpi-note">{note}</div></div>'

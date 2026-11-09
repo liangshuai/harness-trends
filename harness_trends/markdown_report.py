@@ -143,7 +143,7 @@ def render_markdown(run, config):
     generated = datetime.fromisoformat(run['generated_at']).astimezone(ZoneInfo('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M')
     start, end = run['window']['start'], run['window']['end']
     editorial = run.get('editorial')
-    lines = ['# coding agent harness市场观察周报', '']
+    lines = ['# Coding Agent Harness市场观察周报', '']
     lines.append(f'数据窗口：{start} — {end}（UTC）· 生成于 {generated}（北京时间）')
     lines.append('')
     lines.append('## 一、主流Harness汇总表')
@@ -155,7 +155,7 @@ def render_markdown(run, config):
         takeaways = editorial.get('takeaways') or []
         if takeaways:
             lines.append('')
-            lines.append('**本周最值得深入研究或借鉴**：' + ' '.join(f'{index}）{cell(item)}' for index, item in enumerate(takeaways, 1)))
+            lines.append('**行动：本周最值得深入研究或借鉴**：' + ' '.join(f'{index}）{cell(item)}' for index, item in enumerate(takeaways, 1)))
     else:
         lines.append('')
         lines.append('> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察与结尾总结待补；数字均由脚本采集。')

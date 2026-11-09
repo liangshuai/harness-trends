@@ -211,7 +211,7 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ### 5.1 Markdown（`reports/latest.md`）逐节模板
 
 ```
-# coding agent harness市场观察周报
+# Coding Agent Harness市场观察周报
 数据窗口：<start> — <end>（UTC）· 生成于 <北京时间>（北京时间）
 
 ## 一、主流Harness汇总表
