@@ -324,7 +324,7 @@ class MarkdownReportTests(unittest.TestCase):
             'pi':{'insight':'份额第二','action':'研究扩展架构'},
             'dsh':{'insight':'非npm渠道为主','action':'关注subagent_oar'}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察 | 行动 |',page)
+        self.assertIn('| Harness | 周Token（OpenRouter） | 周npm下载 | 官方仓库Contributors | 插件数量 | 洞察（本周新功能） | 行动 |',page)
         self.assertIn('529（Claude官方Marketplace）',page)
         self.assertIn('1,265（ChatGPT插件目录（mcptop.com））',page)
         self.assertIn('5,360（pi.dev官方Package Catalog）',page)
@@ -336,13 +336,15 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
 
-    def test_markdown_without_editorial_degrades_to_scripted_fallback(self):
+    def test_markdown_without_editorial_degrades_to_release_highlights(self):
         run,config=self.markdown_run();run['editorial']=None
         page=render_markdown(run,config)
         self.assertIn('本轮无编辑笔记',page)
-        self.assertIn('脚本数据，无编辑点评',page)
-        row=next(line for line in page.splitlines() if line.startswith('| Claude Code'))
-        self.assertTrue(row.rstrip().endswith('| — |'))
+        codex=next(line for line in page.splitlines() if line.startswith('| Codex '))
+        self.assertIn('窗口内1个发布，功能要点如：Open the agent command center with codex agents --no-daemon …',codex)
+        claude=next(line for line in page.splitlines() if line.startswith('| Claude Code'))
+        self.assertIn('窗口内无发布，无新增功能可析（脚本提取，无编辑点评）',claude)
+        self.assertTrue(claude.rstrip().endswith('| — |'))
 
     def test_markdown_feature_section_quotes_sources_and_flags_failures(self):
         run,config=self.markdown_run()

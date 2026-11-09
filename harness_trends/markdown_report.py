@@ -68,19 +68,24 @@ def _contributors_cell(run, pid):
 
 
 def _default_insight(run, pid):
-    """Scripted fallback so the table stays complete in weeks without an editorial file."""
-    row = run['openrouter_current'].get('products', {}).get(pid, {})
-    product = run['products'][pid]
-    parts = []
-    if row.get('share_four') is not None:
-        parts.append(f'四家OpenRouter样本内Token份额{row["share_four"]:.1%}')
-    if product.get('download_wow') is not None:
-        parts.append(f'npm下载环比{product["download_wow"]:+.1%}')
-    return '，'.join(parts) + '（脚本数据，无编辑点评）' if parts else '本周暂无完整对照数据（脚本数据，无编辑点评）'
+    """Scripted fallback so the table stays complete in weeks without an editorial file.
+    Insight is about the week's shipped features, so the fallback summarizes release
+    highlights instead of volume metrics."""
+    update = (run.get('product_updates') or {}).get(pid, {})
+    releases = update.get('releases', [])
+    highlights = []
+    for item in summarize(update):
+        highlights.extend(item['highlights'])
+    if highlights:
+        lead = highlights[0][:60] + ('…' if len(highlights[0]) > 60 else '')
+        return f'窗口内{len(releases)}个发布，功能要点如：{lead}（脚本提取，无编辑点评）'
+    if releases:
+        return f'窗口内{len(releases)}个发布，发布说明为占位文本，无可提取要点（脚本提取，无编辑点评）'
+    return '窗口内无发布，无新增功能可析（脚本提取，无编辑点评）'
 
 
 def summary_table(run, editorial):
-    header = ['Harness', '周Token（OpenRouter）', '周npm下载', '官方仓库Contributors', '插件数量', '洞察', '行动']
+    header = ['Harness', '周Token（OpenRouter）', '周npm下载', '官方仓库Contributors', '插件数量', '洞察（本周新功能）', '行动']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
     views = (editorial or {}).get('products', {})
     for pid in ROW_ORDER:
@@ -131,10 +136,10 @@ def render_markdown(run, config):
     lines.append(summary_table(run, editorial))
     lines.append('')
     if editorial:
-        lines.append(f'> 洞察与行动为编辑观点（`data/editorial/{editorial.get("window_end", end)}.json`，{editorial.get("prepared_at", "")[:10]}整理），'
-                     '数字均由脚本按当轮快照采集，不手工填写。')
+        lines.append(f'> 洞察面向本周新增功能点，与行动均为编辑观点（`data/editorial/{editorial.get("window_end", end)}.json`，'
+                     f'{editorial.get("prepared_at", "")[:10]}整理）；数字均由脚本按当轮快照采集，不手工填写。')
     else:
-        lines.append('> 本轮无编辑笔记：洞察列为脚本数据摘要，行动列待补；数字均由脚本采集。')
+        lines.append('> 本轮无编辑笔记：洞察列降级为脚本提取的窗口内发布要点，行动列待补；数字均由脚本采集。')
     lines.append('')
     lines.append('## 二、本周新功能特性（脚本采集 CHANGELOG / Releases，网络检索交叉核实）')
     lines.append('')
@@ -156,7 +161,7 @@ def render_markdown(run, config):
                  '四者口径互不相同，不可直接横向排名。')
     lines.append('- **新功能特性**：脚本按窗口提取官方 GitHub Releases 与 CHANGELOG.md 条目（原文引用，未翻译）；'
                  '「网络检索核实」为编辑内容，附来源链接，与脚本采集分开标注。')
-    lines.append('- **洞察/行动**：编辑观点，不属于采集数据；无编辑笔记的周次自动降级为脚本数据摘要。')
+    lines.append('- **洞察/行动**：面向本周新增功能点的编辑解读与建议，不属于采集数据；无编辑笔记的周次自动降级为脚本提取的发布要点摘要。')
     mcptop = run.get('marketplaces', {}).get('codex', {})
     if mcptop.get('directory_total') is not None and mcptop.get('count') is not None:
         note = f'- 注：ChatGPT 插件目录全量 {mcptop["directory_total"]:,} 个，本表按用户指定取 Plugins 分类计数 {mcptop["count"]:,}。'
