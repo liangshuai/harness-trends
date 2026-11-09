@@ -76,7 +76,7 @@ def metrics_digest(run, config):
     total = sum(cur['products'][p]['tokens'] for p in products) if complete else None
     prev = run['openrouter_previous']
     oldtotal = sum(prev['products'][p]['tokens'] for p in products) if all(prev.get('products', {}).get(p, {}).get('tokens') is not None for p in products) else None
-    lines = ['## 二、用量与生态指标汇总（与HTML报告同源）', '']
+    lines = ['## 二、用量与生态指标汇总', '']
     kpi = []
     if total is not None:
         text = f'四家周Token总量 {number(total)}'

@@ -345,7 +345,8 @@ class MarkdownReportTests(unittest.TestCase):
         page=render_markdown(run,config)
         self.assertIn('1）a\\|b<br>2）c',page)
         html_page=render(run,config)
-        self.assertIn('<ol class="insight-list"><li>a|b</li><li>c</li></ol>',html_page)
+        self.assertIn('1）a|b<br>2）c',html_page)
+        self.assertNotIn('<ol',html_page.split('id="features"')[0])
 
     def test_markdown_without_editorial_degrades_to_release_highlights(self):
         run,config=self.markdown_run();run['editorial']=None
@@ -361,7 +362,7 @@ class MarkdownReportTests(unittest.TestCase):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
         page=render_markdown(run,config)
-        self.assertIn('## 二、用量与生态指标汇总（与HTML报告同源）',page)
+        self.assertIn('## 二、用量与生态指标汇总',page)
         self.assertIn('| Harness | 本周Token | 四家内部份额 | Token环比 | 份额周变化 | 本周请求 |',page)
         self.assertIn('### 公开插件与参与账号样本（GitHub）',page)
         self.assertIn('### DSH 官方披露',page)
@@ -383,7 +384,7 @@ class MarkdownReportTests(unittest.TestCase):
         page=render(run,config)
         self.assertIn('summary-table',page)
         self.assertIn('洞察（本周新功能）',page)
-        self.assertIn('<ol class="insight-list"><li>权限模型转向可审计的自动化运行</li><li>企业网关是迭代重心</li></ol>',page)
+        self.assertIn('1）权限模型转向可审计的自动化运行<br>2）企业网关是迭代重心',page)
         self.assertIn('多Agent统一调度',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
