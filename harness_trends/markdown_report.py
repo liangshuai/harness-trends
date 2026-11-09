@@ -136,11 +136,6 @@ def metrics_digest(run, config):
         for item in disclosure_rows:
             lines.append(f'| {item["scope"]} | {item["metric"]} | {item["display"]} | {item["as_of"]}；{item["note"]} |')
         lines.append('')
-    lines += ['### DSH 官方披露', '']
-    disclosure = config['disclosure']
-    lines += [f'截至 {disclosure["as_of"]}（媒体转述厂商披露，不同于OpenRouter渠道数据）：'
-              f'日活 {number(disclosure["dau"])}；月活 {number(disclosure["mau"])}；'
-              f'单日Token {number(disclosure["tokens_daily"])}；公开第三方插件 {number(disclosure["plugins_union"])}（已去重）。', '']
     return lines
 
 
