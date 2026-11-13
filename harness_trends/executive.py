@@ -150,7 +150,7 @@ def summary_section(run, config):
             insight_parts.append('<b>洞察：</b><br>'+'<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(raw_insight,1)))
         action=_action_text(row.get('action'))
         if action:
-            insight_parts.append(f'<b>下一步行动：</b>{esc(action)}')
+            insight_parts.append(f'<b>行动：</b><br>{esc(action)}')
         insight='<br>'.join(insight_parts) if insight_parts else '<span class="muted">—</span>'
         rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,features,insight])
     body=('<div class="table-scroll summary-table"><table><thead><tr>'
