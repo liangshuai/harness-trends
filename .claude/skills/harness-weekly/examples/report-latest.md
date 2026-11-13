@@ -1,6 +1,7 @@
 # AI Harness 市场观察周报
 
 数据窗口：2026-11-05 — 2026-11-11
+
 详细报告：https://harness.mise.fun
 
 ## 一、主流Harness汇总表

@@ -14,7 +14,7 @@ def prepare():
     report=ROOT/'reports/latest.html'
     if not report.is_file():raise RuntimeError('请先运行 run_report.py 生成报告')
     body=report.read_text()
-    if '<h1>Coding Agent Harness市场观察周报</h1>' not in body:
+    if '<h1>AI Harness 市场观察周报</h1>' not in body:
         raise RuntimeError('报告标题校验失败，停止发布')
     # Check all literal dotenv values without printing any of them.
     env=ROOT/'.env'
