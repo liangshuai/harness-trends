@@ -7,9 +7,10 @@ SKILL=.claude/skills/harness-weekly
 mkdir -p "$SKILL/scripts/harness_trends" "$SKILL/scripts/tests" "$SKILL/examples"
 cp run_report.py refresh_plugins.py deploy_report.py config.json .env.example "$SKILL/scripts/"
 cp harness_trends/*.py "$SKILL/scripts/harness_trends/"
-# Top 10 应用类型标注：MD「Top 10 动向」模块与 HTML 类型标签依赖它，缺文件会退化为「未标注」
-mkdir -p "$SKILL/scripts/data"
+# Top 10 应用类型标注与插件榜中文简介：报告渲染依赖，缺文件会退化为「未标注」/来源原文
+mkdir -p "$SKILL/scripts/data/plugin_rankings"
 cp data/app_types.json "$SKILL/scripts/data/"
+cp data/plugin_rankings/translations.json "$SKILL/scripts/data/plugin_rankings/"
 cp tests/*.py "$SKILL/scripts/tests/"
 # 披露原图：HTML 报告会内嵌其 base64，缺图会导致独立副本输出与仓库版有差异
 mkdir -p "$SKILL/scripts/Harness-资料/raw"

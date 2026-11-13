@@ -115,15 +115,28 @@ def product_publisher_count(product):
     return product['github'].get('publisher_count',0)
 
 
+def arrow(v):
+    """Bold ↑/↓ week-over-week marker for summary-table cells, mirroring the Markdown edition."""
+    if v is None:return '<span class="muted">暂无对照</span>'
+    cls='up' if v>=0 else 'down';mark='↑' if v>=0 else '↓'
+    return f'<span class="{cls}"><b>{mark}{abs(v):.1%}</b></span>'
+
+
+def _action_text(action):
+    if isinstance(action,list) and action:
+        return '；'.join(str(item) for item in action)
+    return str(action) if action else None
+
+
 def summary_section(run, config):
     """Four-harness summary table at the top of the report, mirroring the Markdown edition."""
     rows=[]
     for row in summary_rows(run):
         token='<strong>'+number(row['tokens'])+'</strong>' if row['tokens'] is not None else '—'
         if row['share'] is not None:token+=f'<br><small class="muted">份额 {row["share"]:.1%}</small>'
-        if row['token_wow'] is not None:token+='<br><small>'+change(row['token_wow'])+'</small>'
+        if row['token_wow'] is not None:token+='<br><small>'+arrow(row['token_wow'])+'</small>'
         downloads=number(row['downloads']) if row['downloads'] is not None else '—'
-        if row['download_wow'] is not None:downloads+='<br><small>'+change(row['download_wow'])+'</small>'
+        if row['download_wow'] is not None:downloads+='<br><small>'+arrow(row['download_wow'])+'</small>'
         contributors='—' if row['contributors'] is None else f'{row["contributors"]:,}<br><small class="muted">{esc(row.get("repo") or "")}</small>'
         plugins='—' if row['plugins'] is None else f'{row["plugins"]:,}'
         user_lines=user_cell(run,config,row['pid'])
@@ -131,15 +144,18 @@ def summary_section(run, config):
         highlights=feature_lines(run,row['pid'])
         # Plain numbered lines, not a real list element: keeps table rows compact and aligned.
         features='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(highlights,1)) if highlights else '<span class="muted">—</span>'
+        insight_parts=[]
         raw_insight=row['insight']
         if isinstance(raw_insight,list) and raw_insight:
-            insight='<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(raw_insight,1))
-        else:
-            insight='<span class="muted">—</span>'
+            insight_parts.append('<b>洞察：</b><br>'+'<br>'.join(f'{index}）{esc(item)}' for index,item in enumerate(raw_insight,1)))
+        action=_action_text(row.get('action'))
+        if action:
+            insight_parts.append(f'<b>下一步行动：</b>{esc(action)}')
+        insight='<br>'.join(insight_parts) if insight_parts else '<span class="muted">—</span>'
         rows.append([dot(row['pid'])+esc(row['name']),token,downloads,contributors,plugins,users,features,insight])
     body=('<div class="table-scroll summary-table"><table><thead><tr>'
           +''.join(f'<th scope="col">{esc(x)}</th>' for x in
-                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','本周新功能','洞察'])
+                   ['Harness','周Token / OpenRouter','周下载量','开源贡献者','插件数量','活跃用户','本周新功能','洞察和行动'])
           +'</tr></thead><tbody>'+''.join('<tr>'+''.join(f'<td>{x}</td>' for x in row)+'</tr>' for row in rows)
           +'</tbody></table></div>')
     closing='<p class="sub" style="margin-top:10px">洞察基于本周新增功能的分析，不反映数据变化情况；所涉产品均为第三方产品，其数据波动无法溯源。</p>'
@@ -148,7 +164,7 @@ def summary_section(run, config):
         closing+=('<p style="margin-top:12px"><strong>行动：本周最值得深入研究或借鉴</strong></p>'
                   '<ol class="takeaways">'+''.join(f'<li>{esc(item)}</li>' for item in takeaways)+'</ol>')
     return ('<p class="sub" style="margin:20px 0 0"><strong>主流Harness汇总</strong>：Token与下载量为渠道观测；开源贡献者为官方公开仓库非匿名账号计数；'
-            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为编辑整理的重点摘要；洞察为编辑对新增功能的借鉴价值分析。</p>'+body+closing)
+            '插件数量各家目录口径不同，不可横向排名；活跃用户仅列官方披露；本周新功能为编辑整理的重点摘要；洞察和行动为编辑对新增功能的借鉴价值与落地方向分析。</p>'+body+closing)
 
 
 def top10_moves_panel(run, app_types):
@@ -280,7 +296,9 @@ def render(run,config):
     pages=run['openrouter_current'].get('pages',[])
     asof=pages[-1].get('meta',{}).get('as_of','—') if pages else '—'
     s='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Coding Agent Harness市场观察周报 · 数据汇报版</title><style>'+CSS+'</style></head><body>'
-    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>Coding Agent Harness市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#plugin-rankings">插件 Top 10</a><a href="#features">本周新功能</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
+    detail=(config.get('report') or {}).get('detail_url')
+    detail_html=f'<br><a href="{esc(detail)}" target="_blank" rel="noopener">详细报告：{esc(detail)}</a>' if detail else ''
+    s+=f'<header><div class="eyebrow">HARNESS INTELLIGENCE / WEEKLY BRIEF</div><div class="header-row"><div><h1>Coding Agent Harness市场观察周报</h1><p class="header-sub">Codex · Claude Code · DeepSeek Harness · Pi</p></div><div class="issue"><strong>{esc(end)}</strong>数据窗口 {esc(start)} — {esc(end)} / UTC{detail_html}</div></div></header><nav><a href="#overview">核心数据</a><a href="#share">用量份额</a><a href="#usage">规模与增长</a><a href="#trend">四周趋势</a><a href="#ecosystem">生态与用户</a><a href="#plugin-rankings">插件 Top 10</a><a href="#features">本周新功能</a><a href="#appendix">数据附录</a></nav><main><div class="scope">统计口径：OpenRouter公开数据；图表分别注明分母，不代表全市场用户份额。生成于 {esc(generated)}（北京时间）。</div>'
     s+='<section id="overview" style="margin-top:0"><div class="kpis">'
     kpis=[('四家样本 · 周Token总量',number(total),'较前周 '+change(growth(total,oldtotal))),('四家样本 · 周请求总量',number(requests),'一次任务可能包含多次请求'),('本周Token份额第一',f'{share:.1%}' if share is not None else '—',NAMES[leader] if leader else '等待完整数据'),('Token增长最快',f'{valid[fastest]:+.1%}' if fastest else '—',NAMES[fastest] if fastest else '等待对照窗口')]
     for label,value,note in kpis:s+=f'<div class="kpi"><div class="kpi-label">{label}</div><div class="kpi-value">{value}</div><div class="kpi-note">{note}</div></div>'

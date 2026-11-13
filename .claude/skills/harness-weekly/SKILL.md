@@ -181,8 +181,10 @@ for pid,u in r['product_updates'].items():
 - **insight**（数组，每家 2 条，中文，简要）：洞察列内容——**值得同行借鉴的价值点与共性需求**，只挑最重要的，一句话一条；
   - 写法公式：`<点子>：<为什么值得借鉴/是什么共性需求>`，如 `"无人值守权限策略值得借鉴：把不可判定权限显式降级为「拒绝并继续」，是自动化场景的通用解法"`；
   - 只谈功能设计层面，不写数据涨跌（表下已注明第三方数据波动无法溯源）。
+- **action**（每家 1 句，中文，简要）：「下一步行动」内容——**本周新增功能里值得企业级Agent通用底座借鉴的落地方向**，一句话，紧跟该家洞察之后渲染；
+  - 写法公式：`把<能力>沉淀为底座的<能力域>：<具体落地>`，如 `"把会话统一配置（--settings）与无人值守权限策略沉淀为底座的企业管理能力：配置集中下发、权限决策可审计"`；
+  - 只写可落地的工程方向，不复述数据。
 - **takeaways**（顶层字段，数组 1–2 条，简要）：汇总表结尾的"本周最值得深入研究或借鉴"文字总结，跨产品只挑最重要的一两个方向。
-- 编辑不要再写 action 字段（已废弃）。
 - **feature_summary**（每家 1 段）：套用 `"网络检索与<官方源>一致：<要点1>；<要点2>。第三方报道以<X>为头条。"`；差异与缺失按 §3 判定规则写。
 - **sources**：该家检索实际用到的 URL 数组。
 - 完整真实范本：`data/editorial/2026-11-08.json`（结构与口径以它为准）。
@@ -202,7 +204,15 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 缺失编辑笔记的周次：洞察列 `—`、结尾无行动列表、本周新功能降级为脚本提取的原文摘录，不阻塞。
 
-### 4.5 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
+### 4.5 插件榜中文简介（`data/plugin_rankings/translations.json`，随窗口增量维护）
+
+HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插件详情页 URL，值为一句中文介绍（简要概括，不逐词直译）。
+
+- **何时更新**：脚本跑完后对照快照 `plugin_rankings.products.<pid>.entries`，凡 URL 没有收录的就按来源原文补一句中文；
+- 未收录的条目自动回退显示来源原文，不阻塞报告；
+- 插件排名每周变化，旧条目保留（同一插件 URL 稳定），只增量补新进榜的。
+
+### 4.6 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
 
 「OpenRouter Top 10 动向」模块与 HTML 榜单类型标签依赖编辑维护的 `data/app_types.json`（键=数据集 `app_id` 字符串）：
 
@@ -222,20 +232,21 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ```
 # AI Harness 市场观察周报
 数据窗口：<start> — <end>
+详细报告：https://harness.mise.fun        ← config.json report.detail_url，MD/HTML 头部均引用
 
 ## 一、主流Harness汇总表
-| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |
+| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察和行动 |
 （行序：按 OpenRouter市场份额 从大到小，`metrics.summary_rows` 统一排序，MD/HTML 同序；缺份额数据的行保持简报序排最后）
 
-**官方披露**                        ← 汇总表下方，按 Harness 分组的无表格要点列表（仅 Codex / DSH 有）
-- **Codex**：活跃用户 4,000万+（…合计口径，日期，来源）；单品历史周活 超过500万 WAU（…）
-- **DeepSeek Harness**：日活 154万、月活 548万、单日Token 92.10万亿（…厂商披露）；公开第三方插件 3.49万（…）
+**官方披露**                        ← 汇总表下方，按 Harness 分组的无表格要点列表，每家只留最新一次披露
+- **Codex**：2026-10-07 披露活跃用户 4,000万+（Codex 与 ChatGPT Work 合计口径）
+- **DeepSeek Harness**：2026-11-04 披露日活 154万、月活 548万、单日Token 92.10万亿、公开第三方插件 3.49万
 
 **行动：本周最值得深入研究或借鉴**   ← 编辑 takeaways，真实编号列表
 1. …
 2. …
 
-## 二、模型使用与生态规模
+## 二、Token使用情况
 - KPI 一行：四家周Token总量 X（环比x%）；周请求总量 X；份额第一 <家> x%；Token环比变化最大 <家> x%
 ### 模型使用量及占比                  ← 6列表：周 Token 使用量/样本内 Token 占比/Token 使用量周环比/占比周变化（百分点）/周模型请求量
 ### 近四周 Token 使用量趋势（连续七天窗口，Token）   ← 行=四家，列=四个窗口结束日(MM-DD)
@@ -254,15 +265,15 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 | 列 | 格式示例 |
 |---|---|
-| 周 Token 使用量（万亿） | `10.56T（↑1.1%）`（环比只用 ↑↓ 箭头+百分数，降为 `（↓33.3%）`；无对照时只有数值） |
+| 周 Token 使用量（万亿） | `10.56T（**↑1.1%**）`（环比只用加粗 ↑↓ 箭头+百分数，降为 `（**↓33.3%**）`；无对照时只有数值；HTML 同款加粗箭头） |
 | OpenRouter市场份额 | `16.5%`（分母=榜单全部应用周Token合计 `slice_total_tokens`，非四家内部占比） |
-| 周下载量 | `1,625.4万（↑22.1%）` |
+| 周下载量 | `1,625.4万（**↑22.1%**）` |
 | 开源贡献者 | `477`（纯数字，不写仓库名） |
 | 插件数量 | `1,269`（纯数字，无来源标注） |
 | 本周新功能 | 编辑中文摘要优先：`1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）…`；无编辑笔记时降级为脚本原文摘录 `1）0.167.0：Open the agent…`；纯文本编号+换行，**不用列表标签**，无内容 `—` |
-| 洞察 | 编辑分析：值得同行借鉴的价值点/共性需求，`1）xxx<br>2）yyy`；无编辑笔记时 `—` |
+| 洞察和行动 | `洞察：1）xxx<br>2）yyy<br>下一步行动：<一句话>`；行动取编辑 action（企业级Agent通用底座借鉴点）；缺行动时只有洞察部分，全缺 `—` |
 
-活跃用户不设表格列：官方披露（新闻源/厂商口径的全部指标，含 DSH 单日Token与公开插件数）统一进汇总表下方的「官方披露」分组列表，合计与单品口径各自注明、不混排；Claude Code 与 Pi 暂无披露则整组不出现。
+活跃用户不设 MD 表格列（HTML 汇总表保留该列，同样只显示各家最新一次披露）：官方披露统一进 MD 汇总表下方的「官方披露」分组列表，每家一行、只留最新披露日期与当次披露的指标；Claude Code 与 Pi 暂无披露则整组不出现。
 
 正式文案禁则：不出现"Markdown 版"类格式标签、仓库文件路径、字段名、"按用户指定"类实现措辞；汇总表单元格内不用真实 `<ol>/<ul>`（正文与 takeaways 允许真实列表）。
 
@@ -270,12 +281,13 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 插件 Top 10 → 本周新功能 → 规模估算 → 数据附录。
 
-1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期）；表尾「行动：本周最值得深入研究或借鉴」为真实 `<ol>` 列表（MD 同款 takeaways）；
+1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期；洞察和行动列含加粗 ↑↓ 箭头与「洞察：/下一步行动：」标注，活跃用户列只显示各家最新一次披露；表头右侧给 `config report.detail_url` 的「详细报告」链接）；表尾「行动：本周最值得深入研究或借鉴」为真实 `<ol>` 列表（MD 同款 takeaways）；
 2. 用量份额（环形图 ×2）。其中「公开应用榜单Top10」图例有**专门的类型标签列**（tag 药丸样式，`data/app_types.json`，悬停显示作为 agent 执行引擎的集成评估；图下脚注说明标签口径）；同区下方「Top 10 动向」panel 列出本周新进榜应用（类型+定位+集成视角）、增长最多应用与退出应用（与 MD 第三节同源，共享 `metrics.top10_changes`）；
 3. 规模与增长（Token/请求条形）；四周趋势（折线）；
 4. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；
-5. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + **编辑整理的中文功能摘要**（`<ol>`，取 editorial `features`）+ 折叠的「官方发布原文（脚本采集，核对用）」+ `编辑` 徽标的"网络检索核实"段 + 来源链接；无编辑摘要的周次退回显示脚本采集原文并注明"编辑中文摘要待补"；
-6. 规模估算、数据附录（含全量采集状态清单）。
+5. **Harness Top10 插件观察**：四家各一张同构表（榜内名次/插件/指标列名随产品：累计安装量、npm 月下载量、目录排名、npm 近30天下载量/功能介绍），无跨产品对比总表；功能介绍优先用 `data/plugin_rankings/translations.json` 中文简介（§4.5），未收录回退源站原文；
+6. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + **编辑整理的中文功能摘要**（`<ol>`，取 editorial `features`）+ 折叠的「官方发布原文（脚本采集，核对用）」+ `编辑` 徽标的"网络检索核实"段 + 来源链接；无编辑摘要的周次退回显示脚本采集原文并注明"编辑中文摘要待补"；
+7. 规模估算、数据附录（含全量采集状态清单）。
 
 渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`（类型标签样式 `type_tag`+`TYPE_CLASSES`），MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
 
@@ -290,7 +302,7 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ## 6. 校验清单（换机零偏差验证，全过才算完成）
 
 ```sh
-python3 -m unittest discover -s tests          # 38 项全 OK
+python3 -m unittest discover -s tests          # 46 项全 OK
 python3 - <<'EOF'
 import json;d=json.load(open('data/latest.json'))
 assert d['openrouter_current']['status']=='ok'
@@ -349,6 +361,6 @@ commit 信息按当轮实际内容写（数据刷新 / 版式修改 / 逻辑修�
 
 ## 插件 Top 10 固定模块
 
-全报告 `python3 run_report.py --refresh` 自动采集并在 HTML 中渲染 `plugin_rankings`：Claude Code 官方结构化累计安装量（仅明确支持 claude-code）、Pi 官方月下载量、DSH 近30天 npm 下载量、Codex 共享目录位置替代榜。各取10条，指标不可跨产品横排；Codex来源无活跃量与安装量，不标成专属活跃排名。介绍来自源站原文。缺失显示原因，旧快照显示待采集。
+全报告 `python3 run_report.py --refresh` 自动采集并在 HTML 中渲染 `plugin_rankings`：Claude Code 官方结构化累计安装量（仅明确支持 claude-code）、Pi 官方月下载量、DSH 近30天 npm 下载量、Codex 目录排名。各取10条，指标不可跨产品横排。HTML 区块标题「Harness Top10 插件观察」，四张表同构（榜内名次/插件/指标列名随产品/功能介绍），无跨产品对比总表；功能介绍列优先用 `data/plugin_rankings/translations.json` 的中文简介（§4.5），未收录回退源站原文。缺失显示原因，旧快照显示待采集。
 
 仅刷新此模块：`python3 refresh_plugins.py --update-report`，共用运行锁、留存原始响应/独立榜单快照/运行快照与 HTML 归档，不重写其他模块的统计日期。离线复现追加 `--offline`。新增解析测试 `tests/test_plugin_rankings.py` 随 sync.sh 一同分发。

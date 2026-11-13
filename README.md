@@ -20,7 +20,7 @@ python3 run_report.py --refresh
 ## 输出与周更
 
 - `reports/latest.html`：当前汇报版，开头核心数据区即主流Harness汇总表（周Token、周下载量、开源贡献者、插件数量、活跃用户、本周新功能、洞察），随后是份额图（Top 10 应用带类型标签，用于评估能否整合为 agent 执行引擎）、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
-- `reports/latest.md`：Markdown 版周报（标题「AI Harness 市场观察周报」），正式汇报文案（不带格式标签与实现细节），开篇即主流Harness汇总表（周 Token 使用量、OpenRouter市场份额、周下载量、开源贡献者、插件数量、本周新功能、洞察），表下为「官方披露」分组要点与「行动」列表，第二节为模型使用与生态规模（KPI、使用量及占比表、近四周趋势表），第三节为 OpenRouter Top 10 动向（新进榜应用定位、增长最多应用）；新功能特性详解不在 Markdown 版中，见 HTML 完整版。
+- `reports/latest.md`：Markdown 版周报（标题「AI Harness 市场观察周报」），正式汇报文案（不带格式标签与实现细节），标题下给线上详细报告链接，开篇即主流Harness汇总表（周 Token 使用量、OpenRouter市场份额、周下载量、开源贡献者、插件数量、本周新功能、洞察和行动；环比用加粗 ↑↓ 箭头），表下为「官方披露」分组要点（每家只留最新一次披露）与「行动」编号列表，第二节为 Token使用情况（KPI、使用量及占比表、近四周趋势表），第三节为 OpenRouter Top 10 动向（新进榜应用定位、增长最多应用）；新功能特性详解不在 Markdown 版中，见 HTML 完整版。
 - `reports/archive/<窗口结束日>/`：每轮报告按周期归档（本轮副本 `<run_id>.*` 与该窗口最新版 `report.*`），开跑前自动归档旧 latest，历史轮次不丢失。
 - `data/latest.json`、`data/runs/`：当前及历史结构化快照。
 - `data/raw/`、`data/cache/`：公开原始响应、请求来源和缓存。
@@ -88,7 +88,7 @@ OpenRouter固定canonical app ID，排除同名Pi扩展。按指定UTC窗口回�
 
 ## 插件 Top 10（HTML 固定模块）
 
-`python3 run_report.py --refresh` 现在每次同时抓取四家插件榜，写入运行快照的 `plugin_rankings`，HTML 导航和正文固定包含「插件活跃度观察 · 四家 Top 10」。四张介绍表列出榜内名次、插件链接、指标值、来源功能介绍；前置对比表说明指标、周期、完整性及真实来源时间。
+`python3 run_report.py --refresh` 现在每次同时抓取四家插件榜，写入运行快照的 `plugin_rankings`，HTML 导航和正文固定包含「Harness Top10 插件观察」。四张同构表列出榜内名次、插件链接、对应指标列（累计安装量/npm 月下载量/目录排名/npm 近30天下载量）与中文功能介绍；介绍优先取编辑维护的 `data/plugin_rankings/translations.json`（按插件 URL 键，未收录回退来源原文），Codex 榜与其他三家同构展示。
 
 - Claude Code：官方目录内明确支持 Claude Code 的插件，按结构化 `installs` 累计安装量降序取 10。
 - Pi：官方 Package Catalog 的 Most downloads，按 npm 月下载量取 10；包含扩展、技能、主题、提示模板及组合包。

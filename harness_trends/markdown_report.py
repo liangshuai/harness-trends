@@ -14,10 +14,10 @@ def _percent(value):
 
 
 def _arrow(value):
-    """Week-over-week as a compact ↑/↓ marker, e.g. （↑22.1%）."""
+    """Week-over-week as a compact bolded ↑/↓ marker, e.g. （**↑22.1%**）."""
     if value is None:
         return ''
-    return f'（↑{value:.1%}）' if value >= 0 else f'（↓{abs(value):.1%}）'
+    return f'（**↑{value:.1%}**）' if value >= 0 else f'（**↓{abs(value):.1%}**）'
 
 
 def _token_cell(row):
@@ -58,15 +58,26 @@ def _features_cell(run, pid):
 
 
 def _insight_cell(row):
-    """洞察 column: what peers can borrow from this week's features, one numbered line each."""
+    """洞察和行动 column: 洞察 numbered lines, then the editorial 下一步行动 (what an
+    enterprise-grade general agent foundation can borrow), each plainly labelled."""
+    parts = []
     value = row['insight']
     if isinstance(value, list) and value:
-        return '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1))
-    return '—'
+        parts.append('洞察：' + '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1)))
+    action = row.get('action')
+    if isinstance(action, list) and action:
+        action_text = '；'.join(cell(item) for item in action)
+    elif action:
+        action_text = cell(action)
+    else:
+        action_text = None
+    if action_text:
+        parts.append('下一步行动：' + action_text)
+    return '<br>'.join(parts) if parts else '—'
 
 
 def summary_table(run, editorial, config):
-    header = ['Harness', '周 Token 使用量（万亿）', 'OpenRouter市场份额', '周下载量', '开源贡献者', '插件数量', '本周新功能', '洞察']
+    header = ['Harness', '周 Token 使用量（万亿）', 'OpenRouter市场份额', '周下载量', '开源贡献者', '插件数量', '本周新功能', '洞察和行动']
     lines = ['| ' + ' | '.join(header) + ' |', '|' + '|'.join(['---'] * len(header)) + '|']
     for row in summary_rows(run):
         lines.append('| ' + ' | '.join([
@@ -131,7 +142,7 @@ def metrics_digest(run, config):
     total = sum(cur['products'][p]['tokens'] for p in products) if complete else None
     prev = run['openrouter_previous']
     oldtotal = sum(prev['products'][p]['tokens'] for p in products) if all(prev.get('products', {}).get(p, {}).get('tokens') is not None for p in products) else None
-    lines = ['## 二、模型使用与生态规模', '']
+    lines = ['## 二、Token使用情况', '']
     kpi = []
     if total is not None:
         text = f'四家周Token总量 {number(total)}'
@@ -181,6 +192,9 @@ def render_markdown(run, config):
     editorial = run.get('editorial')
     lines = ['# AI Harness 市场观察周报', '']
     lines.append(f'数据窗口：{start} — {end}')
+    detail_url = (config.get('report') or {}).get('detail_url')
+    if detail_url:
+        lines.append(f'详细报告：{detail_url}')
     lines.append('')
     lines.append('## 一、主流Harness汇总表')
     lines.append('')
