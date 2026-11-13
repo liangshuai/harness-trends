@@ -342,10 +342,6 @@ def render(run,config):
     s+=table(['Harness','本周Token','四家内部份额','Token周环比','份额周变化','本周请求次数'],rows)+'</section><section id="trend">'+heading('03 / FOUR-WEEK TREND','四周用量趋势','连续、互不重叠的七天窗口')+'<div class="panel"><div class="chart-key">'+''.join('<span>'+dot(p)+esc(NAMES[p])+'</span>' for p in products)+'</div>'+trend_svg(run.get('openrouter_trend',[]),products)+'<p class="footnote">横轴为窗口结束日（UTC），缺失点留空不补零。按同一应用ID回取历史数据。</p></div></section>'
     s+='<section id="ecosystem">'+heading('04 / DISTRIBUTION & ECOSYSTEM','分发热度与公开生态','下载观测 / GitHub样本')+'<div class="panel"><h3>npm主包下载</h3><p class="sub">分发下载次数，包含更新、CI及重复下载</p>'
     s+=bars(products,{p:{'downloads':v.get('downloads_current')} for p,v in products.items()},{p:{'downloads':v.get('downloads_previous')} for p,v in products.items()},'downloads','下载次数')+'</div>'
-    rows=[]
-    for p,v in products.items():
-        g=v['github'];rows.append([dot(p)+esc(NAMES[p]),number(v.get('downloads_current')),change(v.get('download_wow')),number(g.get('verified_artifacts')),number(v.get('a_observed')),f'{g.get("checked_repos",0)} 个候选 / {g.get("contributor_repos_observed",0)} 个贡献者仓库'])
-    s+=table(['Harness','周npm下载','下载周环比','已核验发布单元','样本参与账号','本轮覆盖'],rows)+'<p class="footnote">插件与参与账号是受限公开样本，不是生态总量；一个仓库可能有多个插件。四家发现入口及覆盖不同，不按样本账号数做全市场排名。</p>'
     d=config['disclosure'];s+=f'<div class="panel" style="margin-top:22px"><div class="section-head"><div><h3>DSH 官方披露规模</h3><p class="sub">截至 {esc(d["as_of"])} · 媒体转述厂商披露，不同于OpenRouter渠道数据</p></div><span class="badge official">厂商披露</span></div><div class="dsh-metrics">'
     for v,label,note in [(d['dau'],'日活用户','官方API用户范围'),(d['mau'],'月活用户','具体月窗口未明示'),(d['tokens_daily'],'单日Token','官方API使用口径'),(d['plugins_union'],'公开第三方插件','厂商公开资料估算、已去重')]:s+=f'<div><small>{label}</small><div class="value">{number(v)}</div><small>{note}</small></div>'
     s+='</div><p class="footnote">其他三家尚未取得可直接比较的同口径用户披露；四家用户、开发者和插件估算已列在主报告“规模估算”部分，与厂商披露分开呈现。</p>'
