@@ -72,6 +72,9 @@ def _insight_cell(row):
     else:
         action_text = None
     if action_text:
+        due = row.get('action_due')
+        if due:
+            action_text += f'（计划 {cell(due)} 前）'
         parts.append('行动：<br>' + action_text)
     return '<br>'.join(parts) if parts else '—'
 
