@@ -1,9 +1,22 @@
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 from .changelog import summarize
 
 # Briefing order for the shared summary table, shared by the HTML and Markdown reports.
 SUMMARY_ORDER = ['claude', 'codex', 'pi', 'dsh']
+
+
+def load_app_types():
+    """Editorial per-app type labels (data/app_types.json); missing file or entry is not an error."""
+    path = Path(__file__).resolve().parent.parent/'data/app_types.json'
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return {}
+    return data.get('apps') or {}
 
 
 def ratio_delta(current, previous):
@@ -75,10 +88,58 @@ def user_cell(run, config, pid):
     return None
 
 
+def official_disclosure_groups(run, config):
+    """官方披露 grouped per harness for the Markdown summary block: every public figure from
+    news/vendor sources, combined and single-product scopes each labelled, never mixed."""
+    registered = run.get('user_disclosures', config.get('user_disclosures', []))
+    primary = next((r for r in registered if r.get('id') == 'codex-work-40m-primary'), None)
+    groups = []
+    if primary:
+        items = [f'活跃用户 {cn_number(primary["value"])}+（Codex 与 ChatGPT Work 合计口径，'
+                 f'{primary.get("as_of")}，OpenAI 团队成员公开帖）']
+        spec = (config.get('models_v2') or {}).get('codex', {})
+        if spec.get('wau_anchor'):
+            items.append(f'单品历史周活 超过{cn_number(spec["wau_anchor"])} WAU'
+                         f'（{spec.get("as_of")}，历史口径，非当前人数）')
+        groups.append({'pid': 'codex', 'name': 'Codex', 'items': items})
+    d = config.get('disclosure') or {}
+    if d.get('dau'):
+        headline = f'日活 {cn_number(d["dau"])}、月活 {cn_number(d["mau"])}'
+        if d.get('tokens_daily'):
+            tokens = d['tokens_daily']
+            headline += f'、单日Token {tokens/1e12:.2f}万亿' if abs(tokens) >= 1e12 else f'、单日Token {cn_number(tokens)}'
+        groups.append({'pid': 'dsh', 'name': 'DeepSeek Harness',
+                       'items': [headline + f'（{d.get("as_of")}，厂商披露）',
+                                 f'公开第三方插件 {d["plugins_union"]/1e4:.2f}万（去重后，{d.get("as_of")}）']
+                       if d.get('plugins_union') else [headline + f'（{d.get("as_of")}，厂商披露）']})
+    return groups
+
+
+def top10_changes(run):
+    """OpenRouter Top 10 movement vs the previous window: new entrants, dropouts and the fastest grower.
+    Growth is only comparable for apps present in both windows' Top 10 slices."""
+    top = (run.get('openrouter_current') or {}).get('top_apps') or []
+    old_top = (run.get('openrouter_previous') or {}).get('top_apps') or []
+    old = {str(a.get('app_id')): a for a in old_top}
+    apps = {str(a.get('app_id')): a for a in top}
+    grower, best = None, None
+    for app in top:
+        was = old.get(str(app.get('app_id')))
+        if not was:
+            continue
+        value = ratio_delta(app.get('total_tokens'), was.get('total_tokens'))
+        if value is not None and (best is None or value > best):
+            best, grower = value, app
+    return {'newcomers': [a for a in top if str(a.get('app_id')) not in old],
+            'dropouts': [a for a in old_top if str(a.get('app_id')) not in apps],
+            'grower': grower, 'grower_wow': best}
+
+
 def summary_rows(run):
     """One raw-value row per harness for the shared summary table; renderers format their own cells."""
     views = (run.get('editorial') or {}).get('products', {})
     rows = []
+    slice_total = (run.get('openrouter_current') or {}).get('slice_total_tokens')
     for pid in SUMMARY_ORDER:
         product = run['products'].get(pid)
         if product is None:
@@ -94,6 +155,8 @@ def summary_rows(run):
         view = views.get(pid, {})
         rows.append({'pid':pid, 'name':product['name'],
                      'tokens':current.get('tokens'), 'share':current.get('share_four'),
+                     'share_market':(current.get('tokens')/slice_total
+                                     if current.get('tokens') is not None and slice_total else None),
                      'token_wow':ratio_delta(current.get('tokens'), previous.get('tokens')),
                      'downloads':product.get('downloads_current'), 'download_wow':product.get('download_wow'),
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),

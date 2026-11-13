@@ -10,8 +10,8 @@ description: 生成或更新 Harness 市场观察周报（Codex/Claude Code/Pi/D
 | 类别 | 内容 | 谁来做 | 章节 |
 |---|---|---|---|
 | A 脚本采集 | 报告里**所有数字**：Token、下载、贡献者、插件数、活跃用户披露、新功能原文 | `run_report.py` 一条命令 | §2 |
-| B 网络检索 | 四家本周新功能的第三方报道与官方发布说明交叉材料 | Agent 联网搜索 | §3 |
-| C Agent 生成 | 本周新功能中文摘要（features）、洞察（借鉴价值/共性需求）、takeaways（结尾总结）、网络检索核实结论 → `data/editorial/<窗口结束日>.json` | Agent 按规则撰写 | §4 |
+| B 网络检索 | 四家本周新功能的第三方报道与官方发布说明交叉材料；Top 10 新应用的定位核实 | Agent 联网搜索 | §3 |
+| C Agent 生成 | 本周新功能中文摘要（features）、洞察（借鉴价值/共性需求）、takeaways（结尾总结）、网络检索核实结论 → `data/editorial/<窗口结束日>.json`；Top 10 应用类型标注 → `data/app_types.json` | Agent 按规则撰写 | §4 |
 
 每周流程固定顺序：**A 采集 → B 检索 → C 写笔记 → A' 重跑嵌入 → 校验 → 提交推送**。
 换机器跑同样报告：先做 §1 初始化，再按 §2→§6 顺序执行，任何一步都不允许跳过或改序。
@@ -21,7 +21,7 @@ description: 生成或更新 Harness 市场观察周报（Codex/Claude Code/Pi/D
 ```
 harness-weekly/
 ├── SKILL.md            本手册
-├── scripts/            全部运行代码的内联副本（run_report.py、harness_trends/、tests/、config.json、.env.example、deploy_report.py、Harness-资料/raw 披露原图）
+├── scripts/            全部运行代码的内联副本（run_report.py、harness_trends/、tests/、config.json、.env.example、deploy_report.py、data/app_types.json、Harness-资料/raw 披露原图）
 ├── examples/           范本：编辑笔记 editorial-*.json、示例报告 report-latest.md
 └── sync.sh             仓库→skill 同步脚本
 ```
@@ -200,7 +200,16 @@ python3 -c "import json;d=json.load(open('data/editorial/<日期>.json'));print(
 python3 run_report.py          # 缓存模式，把编辑笔记写进快照并重渲染两份报告
 ```
 
-缺失编辑笔记的周次：洞察列自动降级为脚本提取的发布要点（`窗口内N个发布，功能要点如：…`），行动列 `—`，不阻塞。
+缺失编辑笔记的周次：洞察列 `—`、结尾无行动列表、本周新功能降级为脚本提取的原文摘录，不阻塞。
+
+### 4.5 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
+
+「OpenRouter Top 10 动向」模块与 HTML 榜单类型标签依赖编辑维护的 `data/app_types.json`（键=数据集 `app_id` 字符串）：
+
+- **何时更新**：跑完脚本后对照 `data/latest.json` 的 `openrouter_current.top_apps`，凡出现文件中没有的 `app_id` 就网络检索其定位并补一条；类型定级变化（如某产品新出 SDK）时修订原条目。
+- **字段**：`name`（展示名）/ `type`（CLI=命令行引擎、SDK=可嵌入开发库、IDE插件=依附IDE宿主、产品=终端用户产品、工具=领域专用、服务=托管API、未标注）/ `note`（一句话定位，中文）/ `fit`（作为自有产品 agent 执行引擎集成的评估，一句）/ `sources`（核实来源 URL）。
+- **目的**：评估该应用能否方便地整合为自有产品的 agent 执行引擎（如 pi/DSH 有 SDK、Codex 是 CLI 可直接调度；OpenClaw 是产品不适合）。
+- 未收录的应用自动渲染为 `未标注`，不阻塞报告；核实后补录。
 
 ---
 
@@ -211,57 +220,77 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 ### 5.1 Markdown（`reports/latest.md`）逐节模板
 
 ```
-# Coding Agent Harness市场观察周报
-数据窗口：<start> — <end>（UTC）· 生成于 <北京时间>（北京时间）
+# AI Harness 市场观察周报
+数据窗口：<start> — <end>
 
 ## 一、主流Harness汇总表
-| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 洞察 |
+| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |
 （行序固定：Claude Code → Codex → Pi → DeepSeek Harness）
 
-> 本周新功能为编辑整理的当周重点功能摘要（源自官方发布并经网络检索核实）；行动为编辑建议；数字均由脚本按当轮快照采集，不手工填写。
+**官方披露**                        ← 汇总表下方，按 Harness 分组的无表格要点列表（仅 Codex / DSH 有）
+- **Codex**：活跃用户 4,000万+（…合计口径，日期，来源）；单品历史周活 超过500万 WAU（…）
+- **DeepSeek Harness**：日活 154万、月活 548万、单日Token 92.10万亿（…厂商披露）；公开第三方插件 3.49万（…）
 
-## 二、用量与生态指标汇总
+**行动：本周最值得深入研究或借鉴**   ← 编辑 takeaways，真实编号列表
+1. …
+2. …
+
+## 二、模型使用与生态规模
 - KPI 一行：四家周Token总量 X（环比x%）；周请求总量 X；份额第一 <家> x%；Token环比变化最大 <家> x%
-### 用量与份额（OpenRouter · 周Token）      ← 6列表：本周Token/四家内部份额/Token环比/份额周变化(pp)/本周请求
-### 四周Token趋势（连续七天窗口，Token）     ← 行=四家，列=四个窗口结束日(MM-DD)
-### 用户规模公开信息                          ← 4列表：产品范围/指标/公开数值/日期与说明（4行固定：Codex合计/Codex单品历史/DSH DAU/DSH MAU）
+### 模型使用量及占比                  ← 6列表：周 Token 使用量/样本内 Token 占比/Token 使用量周环比/占比周变化（百分点）/周模型请求量
+### 近四周 Token 使用量趋势（连续七天窗口，Token）   ← 行=四家，列=四个窗口结束日(MM-DD)
 
-## 三、口径与来源
-- 周Token / 周下载量 / 开源贡献者 / 插件数量 / 洞察与行动 各一条 + mcptop 口径注
+## 三、OpenRouter Top 10 动向
+- **新进入 Top 10**：<app>（第N名 · 周 Token X）——<类型>：<一句话定位>（类型与定位取 data/app_types.json）
+  - 集成视角：<能否作为 agent 执行引擎集成的评估>
+- **本周增长最多**：<app>（第N名 · 周 Token X，环比↑x%）——<类型>：<定位>
+- **退出 Top 10**：<app>（上期第N名）        ← 无新增应用时写"本周 Top 10 无新增应用。"
+
+## 四、口径与来源
+- 周 Token 使用量 / OpenRouter市场份额 / 周下载量 / 开源贡献者 / 插件数量 各一条
 ```
 
 **每列单元格格式**（汇总表，number() 规则：≥1e12→`x.xxT`；≥1e9→`x.xxB`；≥1e8→`x.xx亿`；≥1e4→`x.x万`）：
 
 | 列 | 格式示例 |
 |---|---|
-| 周Token | `10.05T（份额52.6%），环比-1.5%` |
-| 周下载量 | `1,419.4万（环比+10.1%）` |
-| 开源贡献者 | `478（openai/codex）` |
-| 插件数量 | `1,265`（纯数字，无来源标注） |
-| 活跃用户 | Codex 两行：`4,000万+（Codex（含 ChatGPT Work），2026-10-07）`<br>`单品历史：超过500万WAU（2026-06-02）`；DSH：`548万MAU / 154万DAU（官方披露，2026-11-04）`；Claude/Pi：`—` |
+| 周 Token 使用量（万亿） | `10.56T（↑1.1%）`（环比只用 ↑↓ 箭头+百分数，降为 `（↓33.3%）`；无对照时只有数值） |
+| OpenRouter市场份额 | `16.5%`（分母=榜单全部应用周Token合计 `slice_total_tokens`，非四家内部占比） |
+| 周下载量 | `1,625.4万（↑22.1%）` |
+| 开源贡献者 | `477`（纯数字，不写仓库名） |
+| 插件数量 | `1,269`（纯数字，无来源标注） |
 | 本周新功能 | 编辑中文摘要优先：`1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）…`；无编辑笔记时降级为脚本原文摘录 `1）0.167.0：Open the agent…`；纯文本编号+换行，**不用列表标签**，无内容 `—` |
 | 洞察 | 编辑分析：值得同行借鉴的价值点/共性需求，`1）xxx<br>2）yyy`；无编辑笔记时 `—` |
 
-正式文案禁则：不出现"Markdown 版"类格式标签、仓库文件路径、字段名、"按用户指定"类实现措辞、真实 `<ol>/<ul>`。
+活跃用户不设表格列：官方披露（新闻源/厂商口径的全部指标，含 DSH 单日Token与公开插件数）统一进汇总表下方的「官方披露」分组列表，合计与单品口径各自注明、不混排；Claude Code 与 Pi 暂无披露则整组不出现。
+
+正式文案禁则：不出现"Markdown 版"类格式标签、仓库文件路径、字段名、"按用户指定"类实现措辞；汇总表单元格内不用真实 `<ol>/<ul>`（正文与 takeaways 允许真实列表）。
 
 ### 5.2 HTML（`reports/latest.html`）结构
 
 导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 本周新功能 → 规模估算 → 数据附录。
 
-1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源同列，共享 `metrics.summary_rows`；本周新功能列同样由 `feature_highlights` 脚本生成）；
-2. 用量份额（环形图 ×2）；规模与增长（Token/请求条形）；四周趋势（折线）；
-3. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；
-4. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + 各版本脚本采集要点（原文引用）+ `编辑` 徽标的"网络检索核实"段 + 来源链接；
-5. 规模估算、数据附录（含全量采集状态清单）。
+1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期）；
+2. 用量份额（环形图 ×2）。其中「放到公开应用榜单中看 · Top 10」的每个应用名后带**类型标签**（`data/app_types.json`，徽标 hover 显示集成评估；图下脚注说明标签口径），用于评估能否整合为自有产品的 agent 执行引擎；
+3. 规模与增长（Token/请求条形）；四周趋势（折线）；
+4. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；
+5. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + 各版本脚本采集要点（原文引用）+ `编辑` 徽标的"网络检索核实"段 + 来源链接；
+6. 规模估算、数据附录（含全量采集状态清单）。
 
-渲染代码约束：汇总行构建与洞察降级在 `metrics.py`（`summary_rows/default_insight/user_disclosure_rows/user_cell`），HTML 渲染 `executive.py`，MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖）。
+渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`，MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
+
+### 5.3 报告归档（每轮自动执行）
+
+- 每轮渲染后，两份报告同时写入 `reports/archive/<窗口结束日>/`：本轮副本 `<run_id>.html|.md` 与该窗口最新版 `report.html|.md`；`reports/latest.*` 始终是最近一轮。
+- 每次开跑前 `run_report.archive_current` 会先把现存 `latest.*` 归档进其所属窗口文件夹（取 `data/latest.json` 的窗口；快照损坏时跳过不阻塞），任何一轮都不会被覆盖丢失。
+- `--render-only` 重建同样写入归档目录。
 
 ---
 
 ## 6. 校验清单（换机零偏差验证，全过才算完成）
 
 ```sh
-python3 -m unittest discover -s tests          # 34 项全 OK
+python3 -m unittest discover -s tests          # 38 项全 OK
 python3 - <<'EOF'
 import json;d=json.load(open('data/latest.json'))
 assert d['openrouter_current']['status']=='ok'
@@ -270,9 +299,10 @@ assert all(v['status']=='ok' for v in d['official_repos'].values())
 assert all('releases' in u for u in d['product_updates'].values())
 print('快照校验通过',d['window'])
 EOF
-head -30 reports/latest.md                      # 汇总表4行8列、无内部路径/格式标签
-python3 -c "page=open('reports/latest.html').read();assert 'summary-table' in page and 'id=\"features\"' in page;print('HTML校验通过')"
-grep -c '（合计与单品分开）\|配套完整报告\|按用户指定' reports/latest.md   # 应为 0
+head -30 reports/latest.md                      # 汇总表4行8列、官方披露块、无内部路径/格式标签
+python3 -c "page=open('reports/latest.html').read();assert 'summary-table' in page and 'id=\"features\"' in page and 'class=\"badge\"' in page;print('HTML校验通过')"
+grep -c '（合计与单品分开）\|配套完整报告\|按用户指定\|不反映数据变化情况' reports/latest.md   # 应为 0
+ls reports/archive/$(python3 -c "import json;print(json.load(open('data/latest.json'))['window']['end'])")/   # 该窗口 html+md 均已归档
 ```
 
 ## 7. 提交与发布
@@ -289,14 +319,19 @@ commit 信息按当轮实际内容写（数据刷新 / 版式修改 / 逻辑修�
 
 | 指标 | 实现 | 关键口径 |
 |---|---|---|
-| OpenRouter Token/份额 | `collect.openrouter_window` | canonical app ID 在 `config.json openrouter.app_ids`；四家齐全才算份额 |
+| OpenRouter Token/份额 | `collect.openrouter_window` | canonical app ID 在 `config.json openrouter.app_ids`；四家齐全才算样本内份额 |
+| OpenRouter市场份额 | `metrics.summary_rows` 的 `share_market` | 分母=`slice_total_tokens`（榜单全部应用合计，本轮最多200个），非四家内部 |
+| Top 10 动向 | `metrics.top10_changes` | 新进/退出按上期 Top 10 名单比对；增长最多仅在上期 Top 10 内可算环比 |
+| Top 10 类型标签 | `metrics.load_app_types` ← `data/app_types.json` | 编辑维护（§4.5）；未收录显示 `未标注` |
+| 官方披露块 | `metrics.official_disclosure_groups` | 新闻源/厂商披露全指标，按 Harness 分组，合计与单品口径各自注明 |
 | npm 下载 | `collect.npm_downloads` | 逐日必须完整否则 missing；结算探测自动回退 |
 | GitHub 插件样本 | `collect.github_ecosystem` | topic 搜索前100哈希抽样；官方仓库排除 |
 | Pi 目录 | `catalogs.collect_pi_catalog` | 官网全分页、跨包去重、作者归一 |
 | 三家市场计数 | `marketplaces.collect_marketplaces` | URL 在 `config.json marketplaces`；解析失败 fail closed |
-| 开源贡献者 | `collect.official_repo` | `per_page=1&anon=false`，Link 头 last 页码=精确值 |
+| 开源贡献者 | `collect.official_repo` | `per_page=1&anon=false`，Link 头 last 页码=精确值；表中只显示数量 |
 | 窗口内发布 | `changelog.collect_product_updates` | 只认 `rust-v/dsh-v/v` 前缀标签；正文<80字为占位不提要点 |
-| 活跃用户披露 | `metrics.user_disclosure_rows` | 只用官方披露，合计与单品分开 |
+| 活跃用户披露 | `metrics.user_disclosure_rows` / `user_cell` | 只用官方披露，合计与单品分开（HTML 汇总表列用） |
+| 报告归档 | `run_report.archive_dir` / `archive_current` | `reports/archive/<窗口结束日>/`；开跑前先归档旧 latest |
 | 规模估算 v2 | `models_v2.py` | 参数固定 config，不随周更调参 |
 
 ## 9. 常见坑
@@ -304,6 +339,9 @@ commit 信息按当轮实际内容写（数据刷新 / 版式修改 / 逻辑修�
 - Python 3.10：`fromisoformat` 不认 `Z` 后缀（代码已处理），别引入回归。
 - codex alpha 版正文是 "Release x.y.z" 占位符，无功能信息；只有 stable 版有完整 notes。
 - mcptop 页面有 Plugins 分类计数与目录全量两个数，汇总表取**分类计数**（全量在快照 `directory_total`）。
+- 两种"份额"分母不同不可混用：MD 汇总表「OpenRouter市场份额」分母是榜单全部应用；「样本内 Token 占比」分母是四家合计。
+- OpenRouter 上一窗口只保留 Top 10 名单，新进榜应用算不出环比（模块里只报名次与Token）。
+- Top 10 出现 `data/app_types.json` 没有的应用属正常：渲染为 `未标注`，当轮补录即可（§4.5）。
 - anthropics/claude-code 公开仓贡献者仅几十人是正常的（闭源镜像开发），口径已注明。
 - `--render-only` 仅供版式/审计，不能当周更命令。
 - 旧快照缺新字段（如 `product_updates`）时渲染器必须优雅降级（有测试覆盖）。

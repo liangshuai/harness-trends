@@ -50,6 +50,31 @@ def atomic_json(path, value):
     temp.replace(path)
 
 
+def archive_dir(reports, end):
+    """One folder per weekly window; every round's reports are filed here, never discarded."""
+    folder=reports/'archive'/str(end)
+    folder.mkdir(parents=True,exist_ok=True)
+    return folder
+
+
+def archive_current(reports, root):
+    """Before each run: file the existing latest reports under their own window so no round is lost."""
+    for name in ('latest.html','latest.md'):
+        if (reports/name).exists():
+            break
+    else:
+        return
+    try:
+        end=json.loads((root/'data/latest.json').read_text())['window']['end']
+    except (OSError,ValueError,KeyError):
+        return
+    folder=archive_dir(reports,end)
+    for name in ('latest.html','latest.md'):
+        source=reports/name
+        if source.exists():
+            (folder/('report'+source.suffix)).write_text(source.read_text())
+
+
 def previous_snapshot(root, end, signature):
     possibilities=[]
     for path in (root/'data/runs').glob('*.json'):
@@ -102,8 +127,13 @@ def main():
     reports=ROOT/'reports'; reports.mkdir(exist_ok=True)
     if args.render_only:
         run=json.loads(args.render_only.read_text())
-        (reports/'latest.html').write_text(render(run,run.get('configuration',config)))
-        (reports/'latest.md').write_text(render_markdown(run,run.get('configuration',config)))
+        folder=archive_dir(reports,run['window']['end'])
+        page=render(run,run.get('configuration',config))
+        (folder/'report.html').write_text(page)
+        (reports/'latest.html').write_text(page)
+        markdown=render_markdown(run,run.get('configuration',config))
+        (folder/'report.md').write_text(markdown)
+        (reports/'latest.md').write_text(markdown)
         print('已重建 reports/latest.html 与 reports/latest.md')
         return 0
     if args.offline and args.refresh:parser.error('--offline 与 --refresh 不能同时使用')
@@ -113,6 +143,7 @@ def main():
     if not 1<=settings['candidate_limit']<=100 or not 1<=settings['contributor_repo_limit']<=100:
         parser.error('candidate-limit 和 contributor-limit 必须在1–100之间')
     config['collection']=settings
+    archive_current(reports,ROOT)
     end=args.end or datetime.now(timezone.utc).date()-timedelta(days=1)
     if end>=datetime.now(timezone.utc).date():
         parser.error('只能统计已完成的UTC日')
@@ -223,12 +254,15 @@ def main():
     atomic_json(ROOT/'data/runs'/f'{run_id}.json',run)
     atomic_json(ROOT/'data/latest.json',run)
     page=render(run,config)
-    (reports/f'{run_id}.html').write_text(page)
+    folder=archive_dir(reports,end)
+    (folder/f'{run_id}.html').write_text(page)
+    (folder/'report.html').write_text(page)
     temp=reports/'latest.html.tmp';temp.write_text(page);temp.replace(reports/'latest.html')
     markdown=render_markdown(run,config)
-    (reports/f'{run_id}.md').write_text(markdown)
+    (folder/f'{run_id}.md').write_text(markdown)
+    (folder/'report.md').write_text(markdown)
     temp=reports/'latest.md.tmp';temp.write_text(markdown);temp.replace(reports/'latest.md')
-    print(f'完成：{reports/"latest.html"} 与 {reports/"latest.md"}',flush=True)
+    print(f'完成：{reports/"latest.html"} 与 {reports/"latest.md"}；归档：{folder}',flush=True)
     print(f'运行快照：data/runs/{run_id}.json；GitHub实时请求 {client.github_calls} 次',flush=True)
     return 0 if any(p['downloads_current'] is not None or p['a_observed'] is not None for p in run['products'].values()) else 2
 

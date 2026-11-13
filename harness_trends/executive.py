@@ -7,7 +7,7 @@ import re
 from zoneinfo import ZoneInfo
 from .render_methodology import esc, table, render as methodology
 from .changelog import summarize
-from .metrics import SUMMARY_ORDER, feature_lines, scale_summary, summary_rows, user_cell
+from .metrics import SUMMARY_ORDER, feature_lines, load_app_types, scale_summary, summary_rows, user_cell
 
 COLORS={'codex':'#305aef','claude':'#d77653','dsh':'#318e80','pi':'#9d7ad4','other':'#dbe0e9'}
 NAMES={'codex':'Codex','claude':'Claude Code','dsh':'DSH','pi':'Pi'}
@@ -32,7 +32,7 @@ def change(v):
 def dot(pid):return f'<span class="dot" style="background:{COLORS[pid]}"></span>'
 
 
-def donut(rows,center,caption,label):
+def donut(rows,center,caption,label,badges=None):
     total=sum(v for _,_,v in rows)
     if total<=0:return '<div class="empty">数据不足，暂不生成份额图</div>'
     arcs=[];legend=[];offset=0
@@ -40,7 +40,8 @@ def donut(rows,center,caption,label):
         share=value/total*100
         arcs.append(f'<circle cx="150" cy="150" r="112" fill="none" stroke="{COLORS[pid]}" stroke-width="35" pathLength="100" stroke-dasharray="{share:.10f} {100-share:.10f}" stroke-dashoffset="{-offset:.10f}" transform="rotate(-90 150 150)"><title>{esc(name)}：{share:.1f}% · {number(value)} Token</title></circle>')
         offset+=share
-        legend.append(f'<div class="legend-row"><span>{dot(pid)}{esc(name)}</span><strong>{share:.1f}%</strong><span class="muted">{number(value)}</span></div>')
+        badge=(badges or {}).get(pid,'')
+        legend.append(f'<div class="legend-row"><span>{dot(pid)}{esc(name)}{badge}</span><strong>{share:.1f}%</strong><span class="muted">{number(value)}</span></div>')
     svg=f'<svg class="donut" viewBox="0 0 300 300" role="img" aria-label="{esc(label)}"><title>{esc(label)}</title>'+''.join(arcs)+f'<text x="150" y="146" text-anchor="middle" class="donut-value">{esc(center)}</text><text x="150" y="172" text-anchor="middle" class="donut-caption">{esc(caption)}</text></svg>'
     return '<div class="donut-layout">'+svg+'<div class="legend">'+''.join(legend)+'</div></div>'
 
@@ -245,16 +246,21 @@ def render(run,config):
     top=run['openrouter_current'].get('top_apps',[])
     palette=['#687894','#DDA64E','#719552','#B56894','#419AA4','#9D7352','#A1A84F','#7F8792','#BD8C86','#568377']
     canonical={str(v.get('app_id')):pid for pid,v in cur.items() if v.get('app_id') is not None}
+    # Type labels assess whether each app can serve as an embeddable agent execution engine.
+    app_types=load_app_types()
+    badges={}
     broader=[]
     for index,app in enumerate(top):
         pid=canonical.get(str(app['app_id']),'app_'+str(app['app_id']))
         COLORS.setdefault(pid,palette[index%len(palette)])
+        info=app_types.get(str(app['app_id'])) or {}
+        if info.get('type'):badges[pid]=f' <span class="badge" title="{esc(info.get("fit") or info.get("note") or info["type"])}">{esc(info["type"])}</span>'
         broader.append((pid,f'{index+1}. '+app['app_name'],int(app['total_tokens'])))
     top_total=sum(row[2] for row in broader)
     if broader and overall and overall>=top_total:
         broader.append(('other','其余已取得应用',overall-top_total))
     else:broader=[]
-    s+=donut(broader,f'{top_total/overall:.1%}' if broader else '—','前10名合计占集合比例','OpenRouter公开应用前10名及其余已取得应用的Token份额')+'<p class="footnote">按本周Token排名展示前10名，含非编码工具；占比以已取得公开应用集合为分母，不代表整个Harness市场份额。</p></div></div></section>'
+    s+=donut(broader,f'{top_total/overall:.1%}' if broader else '—','前10名合计占集合比例','OpenRouter公开应用前10名及其余已取得应用的Token份额',badges)+'<p class="footnote">按本周Token排名展示前10名，含非编码工具；占比以已取得公开应用集合为分母，不代表整个Harness市场份额。</p><p class="footnote">类型标签（编辑整理，悬停查看集成评估）：CLI=命令行引擎可直接调度；SDK=可编程嵌入；IDE插件=依附IDE宿主；产品=终端用户产品，不宜作执行引擎；工具=领域专用；服务=托管API。用于评估能否整合为自有产品的agent执行引擎。</p></div></div></section>'
     s+='<section id="usage">'+heading('02 / VOLUME & MOMENTUM','用量规模与周增长','本周 vs 前一完整七天窗口')+'<div class="grid"><div class="panel"><h3>Token消耗排名</h3><p class="sub">输入 + 输出Token；T = 万亿，B = 十亿</p>'+bars(products,cur,prev,'tokens','Token')+'</div><div class="panel"><h3>请求量排名</h3><p class="sub">反映交互强度，不等于用户数量</p>'+bars(products,cur,prev,'requests','次')+'</div></div>'
     rows=[]
     for p in ordered:
