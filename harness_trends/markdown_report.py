@@ -194,6 +194,8 @@ def render_markdown(run, config):
     lines.append(f'数据窗口：{start} — {end}')
     detail_url = (config.get('report') or {}).get('detail_url')
     if detail_url:
+        # Blank line so 详细报告 renders on its own line instead of soft-wrapping into 数据窗口.
+        lines.append('')
         lines.append(f'详细报告：{detail_url}')
     lines.append('')
     lines.append('## 一、主流Harness汇总表')
