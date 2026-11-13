@@ -146,7 +146,7 @@ def render_plugin_rankings(run):
     translations = load_plugin_translations()
     body = ('<section id="plugin-rankings"><div class="section-head"><div>'
             '<div class="section-label">PLUGIN POPULARITY / TOP 10</div><h2>Harness Top10 插件观察</h2>'
-            '<p class="sub">安装与下载为热度代理，不等于活跃用户；各榜仅在自身口径内排序，不跨产品比较数值。</p></div></div>')
+            '<p class="sub">安装与下载量反映的是受关注程度，不代表活跃用户数；各榜仅在自身口径内排序，不跨产品比较数值。</p></div></div>')
     body += '<div class="plugin-tables">'
     for pid, (name, url, metric, _, _) in SPECS.items():
         row = products.get(pid, {})
