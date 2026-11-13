@@ -236,6 +236,6 @@
   },
   "report": {
     "detail_url": "https://harness.mise.fun",
-    "note": "详细报告固定线上地址；报告头部引用，不随部署别名变化"
+    "note": "详细报告固定线上地址；Markdown 周报头部引用（HTML 本身即详细报告）"
   }
 }

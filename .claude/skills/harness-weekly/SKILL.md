@@ -232,7 +232,7 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 ```
 # AI Harness 市场观察周报
 数据窗口：<start> — <end>
-详细报告：https://harness.mise.fun        ← config.json report.detail_url，MD/HTML 头部均引用
+详细报告：https://harness.mise.fun        ← config.json report.detail_url，仅 MD 引用（HTML 本身即详细报告，不加自指链接）
 
 ## 一、主流Harness汇总表
 | Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察和行动 |
@@ -281,7 +281,7 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 
 导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 插件 Top 10 → 本周新功能 → 规模估算 → 数据附录。
 
-1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期；洞察和行动列含加粗 ↑↓ 箭头与「洞察：/下一步行动：」标注，活跃用户列只显示各家最新一次披露；表头右侧给 `config report.detail_url` 的「详细报告」链接）；表尾「行动：本周最值得深入研究或借鉴」为真实 `<ol>` 列表（MD 同款 takeaways）；
+1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期；洞察和行动列含加粗 ↑↓ 箭头与「洞察：/下一步行动：」标注，活跃用户列只显示各家最新一次披露）；表尾「行动：本周最值得深入研究或借鉴」为真实 `<ol>` 列表（MD 同款 takeaways）；
 2. 用量份额（环形图 ×2）。其中「公开应用榜单Top10」图例有**专门的类型标签列**（tag 药丸样式，`data/app_types.json`，悬停显示作为 agent 执行引擎的集成评估；图下脚注说明标签口径）；同区下方「Top 10 动向」panel 列出本周新进榜应用（类型+定位+集成视角）、增长最多应用与退出应用（与 MD 第三节同源，共享 `metrics.top10_changes`）；
 3. 规模与增长（Token/请求条形）；四周趋势（折线）；
 4. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；

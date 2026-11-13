@@ -534,7 +534,8 @@ class MarkdownReportTests(unittest.TestCase):
         # Active users show only the latest disclosure; bolded arrows mark week-over-week direction.
         self.assertNotIn('单品历史',page)
         self.assertIn('<b>↑100.0%</b>',page)
-        self.assertIn('详细报告：https://harness.mise.fun',page)
+        # The page itself is the detailed report: no self-referential detail link in HTML.
+        self.assertNotIn('详细报告：',page)
         self.assertIn('>洞察和行动</th>',page)
         self.assertIn('本周最值得深入研究或借鉴',page)
         self.assertIn('<ol class="takeaways"><li>研究权限分级设计</li></ol>',page)

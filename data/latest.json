@@ -1,7 +1,7 @@
 {
-  "id": "2026-11-11_20261113T083619Z",
+  "id": "2026-11-11_20261113T083924Z",
   "method_version": "0.1.0",
-  "generated_at": "2026-11-13T08:36:19.856359+00:00",
+  "generated_at": "2026-11-13T08:39:24.381535+00:00",
   "collection_signature": "8d841ee8e638160efd6834bdf8f03f1d5b860024e85b95f6b35431d79bde4be7",
   "settlement_note": "用户指定统计日期；未自动回退。",
   "refresh_mode": "cached",
@@ -255,7 +255,7 @@
     },
     "report": {
       "detail_url": "https://harness.mise.fun",
-      "note": "详细报告固定线上地址；报告头部引用，不随部署别名变化"
+      "note": "详细报告固定线上地址；Markdown 周报头部引用（HTML 本身即详细报告）"
     }
   },
   "products": {
@@ -51527,7 +51527,7 @@
       "name": "DSH历史披露",
       "as_of": "2026-11-04",
       "source": "https://i.ifeng.com/c/8xp20MhJRe4",
-      "checked_at": "2026-11-13T08:36:20.181688+00:00",
+      "checked_at": "2026-11-13T08:39:24.708701+00:00",
       "policy": "保留原披露日期，作为固定历史锚点；重抓来源不等于获得新的运营披露。",
       "status": "source_retrieved",
       "sha256": "e5ee8afdc0a82afb201f888eee2d649774294495a36b59c6420454c1b33413c9"
@@ -51536,7 +51536,7 @@
       "name": "codex历史校准",
       "as_of": "2026-06-02",
       "source": "https://openai.com/index/codex-for-knowledge-work/",
-      "checked_at": "2026-11-13T08:36:20.182588+00:00",
+      "checked_at": "2026-11-13T08:39:24.709623+00:00",
       "policy": "保留原披露日期，作为固定历史锚点；重抓来源不等于获得新的运营披露。",
       "status": "source_unavailable",
       "reason": "HTTP 403"
@@ -51545,7 +51545,7 @@
       "name": "claude历史校准",
       "as_of": "2026-02-12",
       "source": "https://www.anthropic.com/news/anthropic-raises-30-billion-series-g-funding-380-billion-post-money-valuation",
-      "checked_at": "2026-11-13T08:36:21.264895+00:00",
+      "checked_at": "2026-11-13T08:39:25.799750+00:00",
       "policy": "保留原披露日期，作为固定历史锚点；重抓来源不等于获得新的运营披露。",
       "status": "source_retrieved",
       "sha256": "cbbe17dec759e496f69a5e6f8feb5e3f4091b56df7db37de9b1fdde8ee912ddd"
@@ -51564,7 +51564,7 @@
       "as_of": "2026-10-07",
       "source": "https://x.com/thsottiaux/status/2107913674593644711",
       "source_type": "OpenAI团队成员Tibo原帖",
-      "checked_at": "2026-11-13T08:36:21.269448+00:00",
+      "checked_at": "2026-11-13T08:39:25.805179+00:00",
       "status": "source_verified",
       "text": "Day 3/ The big one is GPT-6 in Chat, but today is also a little celebration day with a new high of 40M active users across Codex and ChatGPT Work. Loading a banked reset in everyone's paid accounts. See you again tomorrow! https://t.co/mHSI0PbWfe",
       "author": "Tibo",
@@ -51582,7 +51582,7 @@
       "as_of": "2026-10-07",
       "source": "https://x.com/petergostev/status/2107962371109167223",
       "source_type": "第三方转述，非独立新增用户量",
-      "checked_at": "2026-11-13T08:36:21.270318+00:00",
+      "checked_at": "2026-11-13T08:39:25.805776+00:00",
       "status": "source_verified",
       "text": "Codex & Work reached 40m weekly active users - more or less on trend from the previous milestones. If this trend continues, they will reach c.70m by the end of the year and c.100m by the end of March '27. Hope they have more compute coming. https://t.co/J3YSKuKngc pic.twitter.com/AjgDUZGl6l",
       "author": "Peter Gostev",
@@ -51629,7 +51629,7 @@
   },
   "plugin_rankings": {
     "version": 1,
-    "collected_at": "2026-11-13T08:36:21.280645+00:00",
+    "collected_at": "2026-11-13T08:39:25.813219+00:00",
     "products": {
       "claude": {
         "name": "Claude Code",
@@ -62495,15 +62495,15 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Devin-AXIS/jev-dsh-decision/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531927.755837,
-      "status": 404,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/morluto/generate-social-preview/main/.codex-plugin/plugin.json",
       "fetched_unix": 1794531927.8303318,
       "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/vinta/hal-9000/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531927.922152,
+      "status": 404,
       "has_next": false
     },
     {
@@ -62513,26 +62513,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/T0UGH/codex-self-evolution-plugin/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531927.764398,
+      "url": "https://raw.githubusercontent.com/Devin-AXIS/jev-dsh-decision/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531927.755837,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/songyb111-gachon/codex-auto-resume-windows/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531927.713634,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/Aqua-123/pstack-for-codex/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531928.688153,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/Devin-AXIS/jev-dsh-decision/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531928.70661,
+      "url": "https://raw.githubusercontent.com/T0UGH/codex-self-evolution-plugin/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531927.764398,
       "status": 404,
       "has_next": false
     },
@@ -62543,15 +62531,33 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/Devin-AXIS/jev-dsh-decision/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531928.70661,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Aqua-123/pstack-for-codex/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531928.688153,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/ZSeven-W/codex-openpencil/main/.agents/plugins/marketplace.json",
       "fetched_unix": 1794531928.7477078,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/vinta/hal-9000/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531927.922152,
+      "url": "https://raw.githubusercontent.com/vinta/hal-9000/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531929.068484,
       "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/songyb111-gachon/codex-auto-resume-windows/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531927.713634,
+      "status": 200,
       "has_next": false
     },
     {
@@ -62567,15 +62573,9 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/songyb111-gachon/codex-auto-resume-windows/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531928.7259772,
+      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531929.694015,
       "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/AMAP-ML/LongHorizon-Harness/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531929.716157,
-      "status": 404,
       "has_next": false
     },
     {
@@ -62591,26 +62591,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/aaddrick/contrarian/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531929.779367,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/vinta/hal-9000/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531929.068484,
+      "url": "https://raw.githubusercontent.com/AMAP-ML/LongHorizon-Harness/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531929.716157,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531929.694015,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/90le/worker-rights-cn/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531930.8142521,
+      "url": "https://raw.githubusercontent.com/aaddrick/contrarian/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531929.779367,
       "status": 200,
       "has_next": false
     },
@@ -62627,6 +62615,30 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/songyb111-gachon/codex-auto-resume-windows/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531928.7259772,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/90le/worker-rights-cn/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531930.8142521,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531930.665113,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/fatihguner/foreman/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531929.966357,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/AMAP-ML/LongHorizon-Harness/main/.agents/plugins/marketplace.json",
       "fetched_unix": 1794531930.6873522,
       "status": 404,
@@ -62639,26 +62651,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/fatihguner/foreman/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531929.966357,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531930.665113,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/jordan-gibbs/hyperresearch/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531930.2077088,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/coldteadotai/abide/master/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531931.638803,
+      "url": "https://raw.githubusercontent.com/callstackincubator/codex-mobile-dev-plugin/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531930.690065,
       "status": 404,
       "has_next": false
     },
@@ -62681,38 +62675,20 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/callstackincubator/codex-mobile-dev-plugin/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531930.690065,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/arbiterForge/codeArbiter/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531931.6533911,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/coldteadotai/abide/master/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531932.577523,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/svy04/ballast/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531931.869526,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/matlab/matlab-agentic-toolkit/main/.codex-plugin/plugin.json",
       "fetched_unix": 1794531932.0231,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/jordan-gibbs/hyperresearch/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531931.184953,
+      "url": "https://raw.githubusercontent.com/coldteadotai/abide/master/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531931.638803,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jordan-gibbs/hyperresearch/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531930.2077088,
       "status": 200,
       "has_next": false
     },
@@ -62720,6 +62696,12 @@
       "url": "https://raw.githubusercontent.com/shixinnt/codex-image-context-runtime/main/.codex-plugin/plugin.json",
       "fetched_unix": 1794531931.889357,
       "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/svy04/ballast/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531931.869526,
+      "status": 200,
       "has_next": false
     },
     {
@@ -62735,20 +62717,26 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/svy04/ballast/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531932.998338,
+      "url": "https://raw.githubusercontent.com/matlab/matlab-agentic-toolkit/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531932.969843,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/arbiterForge/codeArbiter/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531932.64973,
-      "status": 200,
+      "url": "https://raw.githubusercontent.com/coldteadotai/abide/master/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531932.577523,
+      "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Ikalus1988/MisakaNet/main/.codex-plugin/plugin.json",
-      "fetched_unix": 1794531932.800171,
+      "url": "https://raw.githubusercontent.com/arbiterForge/codeArbiter/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531931.6533911,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/jordan-gibbs/hyperresearch/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531931.184953,
       "status": 200,
       "has_next": false
     },
@@ -62759,9 +62747,21 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/matlab/matlab-agentic-toolkit/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531932.969843,
+      "url": "https://raw.githubusercontent.com/arbiterForge/codeArbiter/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531932.64973,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/svy04/ballast/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531932.998338,
       "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ikalus1988/MisakaNet/main/.codex-plugin/plugin.json",
+      "fetched_unix": 1794531932.800171,
+      "status": 200,
       "has_next": false
     },
     {
@@ -62771,15 +62771,15 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Ikalus1988/MisakaNet/main/.agents/plugins/marketplace.json",
-      "fetched_unix": 1794531933.7810571,
-      "status": 404,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/google/elephant-goldfish-model/main/.codex-plugin/plugin.json",
       "fetched_unix": 1794531932.148671,
       "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/Ikalus1988/MisakaNet/main/.agents/plugins/marketplace.json",
+      "fetched_unix": 1794531933.7810571,
+      "status": 404,
       "has_next": false
     },
     {
@@ -62849,14 +62849,14 @@
       "has_next": true
     },
     {
-      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.2548742,
+      "url": "https://raw.githubusercontent.com/galleonlabs/hypergrok-trading-desk/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.067551,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/galleonlabs/hypergrok-trading-desk/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.067551,
+      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.2548742,
       "status": 200,
       "has_next": false
     },
@@ -62873,9 +62873,9 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.0419798,
-      "status": 404,
+      "url": "https://raw.githubusercontent.com/galleonlabs/hypergrok-trading-desk/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.3342478,
+      "status": 200,
       "has_next": false
     },
     {
@@ -62885,14 +62885,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.0557098,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/zenstory-ai/video-recap-skills/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.041443,
+      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.298561,
       "status": 200,
       "has_next": false
     },
@@ -62903,50 +62897,20 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.298561,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/wshobson/agents/main/.claude-plugin/marketplace.json",
       "fetched_unix": 1794531952.248131,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/galleonlabs/hypergrok-trading-desk/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.3342478,
-      "status": 200,
+      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.0419798,
+      "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.059354,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.2548742,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.034561,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/zenstory-ai/video-recap-skills/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.065448,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531952.0505202,
+      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.0557098,
       "status": 200,
       "has_next": false
     },
@@ -62957,8 +62921,32 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.0557098,
+      "url": "https://raw.githubusercontent.com/patch-gg/anymove/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.2548742,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.0505202,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/zenstory-ai/video-recap-skills/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.041443,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/zenstory-ai/video-recap-skills/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.065448,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.034561,
       "status": 200,
       "has_next": false
     },
@@ -62975,39 +62963,15 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/documentation-standards/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531953.220821,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/rehan-remade/universal-modder/main/.claude-plugin/marketplace.json",
       "fetched_unix": 1794531951.981452,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.012654,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531952.996246,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/plugins/start/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531953.07219,
+      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531952.059354,
       "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/zenbu-labs/terminal-browser/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531952.9969852,
-      "status": 404,
       "has_next": false
     },
     {
@@ -63017,8 +62981,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Paradigm-Study/claude-share/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531954.022752,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/documentation-standards/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531953.220821,
       "status": 200,
       "has_next": false
     },
@@ -63026,6 +62990,12 @@
       "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
       "fetched_unix": 1794531951.012654,
       "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.0557098,
+      "status": 200,
       "has_next": false
     },
     {
@@ -63035,9 +63005,9 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/plugins/team/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531954.046706,
-      "status": 200,
+      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531952.996246,
+      "status": 404,
       "has_next": false
     },
     {
@@ -63047,21 +63017,21 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531953.991936,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/code-documentation/.claude-plugin/plugin.json",
       "fetched_unix": 1794531954.208962,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/zenbu-labs/terminal-browser/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531954.146901,
+      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/plugins/start/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531953.07219,
       "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.012654,
+      "status": 404,
       "has_next": false
     },
     {
@@ -63077,14 +63047,32 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/Paradigm-Study/claude-share/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531954.022752,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531953.991936,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/debugging-toolkit/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531955.175467,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/.claude-plugin/plugin.json",
       "fetched_unix": 1794531953.4217339,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/quant-sentiment-ai/claude-equity-research/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531953.316393,
+      "url": "https://raw.githubusercontent.com/zenbu-labs/terminal-browser/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531952.9969852,
       "status": 404,
       "has_next": false
     },
@@ -63095,8 +63083,26 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/finder/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531955.143133,
+      "url": "https://raw.githubusercontent.com/rsmdt/the-startup/main/plugins/team/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531954.046706,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/nirholas/XActions/main/plugins/xactions/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.310636,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.012654,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/git-pr-workflows/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.3547578,
       "status": 200,
       "has_next": false
     },
@@ -63113,14 +63119,68 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/debugging-toolkit/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531955.175467,
+      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531954.993738,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/nirholas/XActions/main/plugins/xactions/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.310636,
+      "url": "https://raw.githubusercontent.com/karanb192/awesome-claude-code-mods/main/finder/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531955.143133,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/zenbu-labs/terminal-browser/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531954.146901,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/quant-sentiment-ai/claude-equity-research/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531953.316393,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.012654,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531954.378766,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/operating-kit/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531957.340652,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531951.012654,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531955.933034,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/cth9191/animate/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531955.963487,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/hex/claude-council/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.1523578,
       "status": 200,
       "has_next": false
     },
@@ -63137,62 +63197,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.012654,
-      "status": 404,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.claude-plugin/plugin.json",
       "fetched_unix": 1794531954.993738,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531954.378766,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/cth9191/animate/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531955.963487,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/git-pr-workflows/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.3547578,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/OpenOSINT/OpenOSINT/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.130442,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.012654,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/hex/claude-council/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.1523578,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/quant-sentiment-ai/claude-equity-research/main/commands/trading-ideas/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531955.522526,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/plugin/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531955.3627589,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/backend-development/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531958.4941561,
       "status": 200,
       "has_next": false
     },
@@ -63203,32 +63215,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/OpenOSINT/OpenOSINT/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531957.099927,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/wondelai/skills/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531951.012654,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/hex/claude-council/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531957.087738,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/operating-kit/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531957.340652,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/ayghri/i-have-adhd/main/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.477769,
+      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/plugin/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531955.3627589,
       "status": 200,
       "has_next": false
     },
@@ -63239,26 +63227,38 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531955.933034,
+      "url": "https://raw.githubusercontent.com/quant-sentiment-ai/claude-equity-research/main/commands/trading-ideas/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531955.522526,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531954.993738,
+      "url": "https://raw.githubusercontent.com/hex/claude-council/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531957.087738,
+      "status": 404,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ayghri/i-have-adhd/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.477769,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/cth9191/animate/main/plugins/animate/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531958.323267,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/frontend-mobile-development/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531959.480555,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/backend-development/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531958.4941561,
+      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/cowork/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.3442528,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/OpenOSINT/OpenOSINT/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531957.099927,
       "status": 200,
       "has_next": false
     },
@@ -63275,20 +63275,26 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/thedotmack/claude-mem/main/cowork/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531956.3442528,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/.claude-plugin/plugin.json",
       "fetched_unix": 1794531957.4452941,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ayghri/i-have-adhd/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531957.428261,
+      "url": "https://raw.githubusercontent.com/cth9191/animate/main/plugins/animate/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531958.323267,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/full-stack-orchestration/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531960.680484,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/OpenOSINT/OpenOSINT/main/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531956.130442,
       "status": 200,
       "has_next": false
     },
@@ -63299,8 +63305,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/frontend-mobile-development/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531959.480555,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531958.3424242,
       "status": 200,
       "has_next": false
     },
@@ -63311,26 +63317,32 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/ayghri/i-have-adhd/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531957.428261,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/unit-testing/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531961.8278,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/ayghri/i-have-adhd/main/.claude-plugin/plugin.json",
       "fetched_unix": 1794531956.477769,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531958.3424242,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/.claude-plugin/marketplace.json",
+      "fetched_unix": 1794531958.8497448,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://raw.githubusercontent.com/google/elephant-goldfish-model/main/.claude-plugin/plugin.json",
       "fetched_unix": 1794531958.085939,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/.claude-plugin/marketplace.json",
-      "fetched_unix": 1794531958.8497448,
       "status": 200,
       "has_next": false
     },
@@ -63347,20 +63359,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/full-stack-orchestration/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531960.680484,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/google/elephant-goldfish-model/main/.claude-plugin/marketplace.json",
       "fetched_unix": 1794531959.034893,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/context-memory/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531960.025903,
       "status": 200,
       "has_next": false
     },
@@ -63371,8 +63371,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/frontend-design/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531960.340089,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/tdd-workflows/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531962.89989,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/context-memory/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531960.025903,
       "status": 200,
       "has_next": false
     },
@@ -63383,8 +63389,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/unit-testing/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531961.8278,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/frontend-design/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531960.340089,
       "status": 200,
       "has_next": false
     },
@@ -63395,14 +63401,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/artifacts-builder/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531961.349455,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/code-refactoring/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531964.116102,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/tdd-workflows/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531962.89989,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/artifacts-builder/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531961.349455,
       "status": 200,
       "has_next": false
     },
@@ -63413,14 +63419,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/theme-factory/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531962.333885,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/dependency-management/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531965.133513,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/code-refactoring/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531964.116102,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/theme-factory/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531962.333885,
       "status": 200,
       "has_next": false
     },
@@ -63431,14 +63437,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/canvas-design/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531963.4195058,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/error-debugging/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531966.117557,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/dependency-management/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531965.133513,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/canvas-design/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531963.4195058,
       "status": 200,
       "has_next": false
     },
@@ -63449,14 +63455,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/senior-frontend/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531964.3942971,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/team-collaboration/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531967.094215,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/error-debugging/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531966.117557,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/senior-frontend/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531964.3942971,
       "status": 200,
       "has_next": false
     },
@@ -63467,8 +63473,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/team-collaboration/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531967.094215,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/llm-application-dev/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531968.06815,
       "status": 200,
       "has_next": false
     },
@@ -63479,14 +63485,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/code-review/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531966.491193,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/llm-finetuning/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531969.042908,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/llm-application-dev/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531968.06815,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/code-review/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531966.491193,
       "status": 200,
       "has_next": false
     },
@@ -63497,14 +63503,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/refractor/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531967.637383,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/agent-orchestration/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531970.0234659,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/llm-finetuning/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531969.042908,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/refractor/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531967.637383,
       "status": 200,
       "has_next": false
     },
@@ -63515,14 +63521,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/code-review-assistant/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531968.615353,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/context-management/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531971.179724,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/agent-orchestration/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531970.0234659,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/code-review-assistant/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531968.615353,
       "status": 200,
       "has_next": false
     },
@@ -63533,14 +63539,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/bug-detective/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531969.591122,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/machine-learning-ops/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531972.158463,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/context-management/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531971.179724,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/bug-detective/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531969.591122,
       "status": 200,
       "has_next": false
     },
@@ -63551,14 +63557,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/audit/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531970.5737731,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/data-engineering/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531973.120846,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/machine-learning-ops/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531972.158463,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/audit/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531970.5737731,
       "status": 200,
       "has_next": false
     },
@@ -63569,14 +63575,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/data-engineering/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531973.120846,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/plan/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531971.557062,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/plan/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531971.557062,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/incident-response/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531974.086517,
       "status": 200,
       "has_next": false
     },
@@ -63593,8 +63599,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/incident-response/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531974.086517,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/error-diagnostics/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531975.064309,
       "status": 200,
       "has_next": false
     },
@@ -63611,8 +63617,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/error-diagnostics/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531975.064309,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/distributed-debugging/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531976.0741818,
       "status": 200,
       "has_next": false
     },
@@ -63629,8 +63635,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/distributed-debugging/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531976.0741818,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/observability-monitoring/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531977.2570019,
       "status": 200,
       "has_next": false
     },
@@ -63641,8 +63647,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/observability-monitoring/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531977.2570019,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/deployment-strategies/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531978.232474,
       "status": 200,
       "has_next": false
     },
@@ -63659,8 +63665,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/deployment-strategies/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531978.232474,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/deployment-validation/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531979.382837,
       "status": 200,
       "has_next": false
     },
@@ -63677,8 +63683,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/deployment-validation/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531979.382837,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/kubernetes-operations/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531980.3801658,
       "status": 200,
       "has_next": false
     },
@@ -63695,8 +63701,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/kubernetes-operations/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531980.3801658,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/cloud-infrastructure/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531981.3218272,
       "status": 200,
       "has_next": false
     },
@@ -63713,20 +63719,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/cloud-infrastructure/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531981.3218272,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/double-check/.claude-plugin/plugin.json",
       "fetched_unix": 1794531979.6517901,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/audit-project/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531980.2542531,
       "status": 200,
       "has_next": false
     },
@@ -63737,14 +63731,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/create-worktrees/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531980.624504,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/audit-project/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531980.2542531,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/documentation-generator/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531981.253545,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/create-worktrees/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531980.624504,
       "status": 200,
       "has_next": false
     },
@@ -63755,14 +63749,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/pr-review/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531981.619471,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/documentation-generator/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531981.253545,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/security-guidance/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531982.231232,
+      "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/pr-review/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531981.619471,
       "status": 200,
       "has_next": false
     },
@@ -63773,20 +63767,26 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/security-guidance/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531982.231232,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/update-branch-name/.claude-plugin/plugin.json",
       "fetched_unix": 1794531982.703296,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/developer-growth-analysis/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531983.418931,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/comprehensive-review/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531985.2905102,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/comprehensive-review/.claude-plugin/plugin.json",
-      "fetched_unix": 1794531985.2905102,
+      "url": "https://raw.githubusercontent.com/composio-community/awesome-claude-plugins/master/developer-growth-analysis/.claude-plugin/plugin.json",
+      "fetched_unix": 1794531983.418931,
       "status": 200,
       "has_next": false
     },
@@ -64115,20 +64115,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/blockchain-web3/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532014.5594618,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/code-reviewer/.claude-plugin/plugin.json",
       "fetched_unix": 1794532012.5307462,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/quantitative-trading/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532015.535829,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/blockchain-web3/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532014.5594618,
       "status": 200,
       "has_next": false
     },
@@ -64139,8 +64133,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/payment-processing/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532016.623567,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/quantitative-trading/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532015.535829,
       "status": 200,
       "has_next": false
     },
@@ -64151,8 +64145,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/game-development/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532017.6489532,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/payment-processing/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532016.623567,
       "status": 200,
       "has_next": false
     },
@@ -64163,8 +64157,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/accessibility-compliance/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532018.6682172,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/game-development/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532017.6489532,
       "status": 200,
       "has_next": false
     },
@@ -64175,8 +64169,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/python-development/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532019.678535,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/accessibility-compliance/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532018.6682172,
       "status": 200,
       "has_next": false
     },
@@ -64187,14 +64181,20 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/javascript-typescript/.claude-plugin/plugin.json",
-      "fetched_unix": 1794532020.6715882,
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/python-development/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532019.678535,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://raw.githubusercontent.com/ccplugins/awesome-claude-code-plugins/main/plugins/data-privacy-engineer/.claude-plugin/plugin.json",
       "fetched_unix": 1794532018.7553651,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/wshobson/agents/main/plugins/javascript-typescript/.claude-plugin/plugin.json",
+      "fetched_unix": 1794532020.6715882,
       "status": 200,
       "has_next": false
     },
@@ -64985,9 +64985,9 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/freestylefly/awesome-gpt-image-2/main/package.json",
-      "fetched_unix": 1794532134.4411561,
-      "status": 200,
+      "url": "https://raw.githubusercontent.com/Devin-AXIS/deepseek-design/main/package.json",
+      "fetched_unix": 1794532134.434019,
+      "status": 404,
       "has_next": false
     },
     {
@@ -64997,14 +64997,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Devin-AXIS/deepseek-design/main/package.json",
-      "fetched_unix": 1794532134.434019,
-      "status": 404,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/c1overzz/dsh-bili-scroll/main/package.json",
-      "fetched_unix": 1794532134.4544158,
+      "url": "https://raw.githubusercontent.com/freestylefly/awesome-gpt-image-2/main/package.json",
+      "fetched_unix": 1794532134.4411561,
       "status": 200,
       "has_next": false
     },
@@ -65033,9 +65027,9 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Small-tailqwq/dsh-deep-whale/main/package.json",
-      "fetched_unix": 1794532135.515268,
-      "status": 404,
+      "url": "https://raw.githubusercontent.com/c1overzz/dsh-bili-scroll/main/package.json",
+      "fetched_unix": 1794532134.4544158,
+      "status": 200,
       "has_next": false
     },
     {
@@ -65051,14 +65045,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/xmanrui/dsh-im/main/package.json",
-      "fetched_unix": 1794532135.401279,
+      "url": "https://raw.githubusercontent.com/alchaincyf/nuwa-skill/main/package.json",
+      "fetched_unix": 1794532135.4226959,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/alchaincyf/nuwa-skill/main/package.json",
-      "fetched_unix": 1794532135.4226959,
+      "url": "https://raw.githubusercontent.com/xmanrui/dsh-im/main/package.json",
+      "fetched_unix": 1794532135.401279,
       "status": 200,
       "has_next": false
     },
@@ -65069,20 +65063,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/ccch1mneyyy/dsh-TUI/main/package.json",
-      "fetched_unix": 1794532135.6722481,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/strukto-ai/mirage/main/package.json",
       "fetched_unix": 1794532135.337923,
       "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/Ebony-Vinyl/dsh-our-free-model/main/package.json",
-      "fetched_unix": 1794532136.329825,
+      "url": "https://raw.githubusercontent.com/ccch1mneyyy/dsh-TUI/main/package.json",
+      "fetched_unix": 1794532135.6722481,
       "status": 200,
       "has_next": false
     },
@@ -65093,15 +65081,15 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/MemTensor/memmy-agent/main/package.json",
-      "fetched_unix": 1794532136.3943172,
-      "status": 200,
+      "url": "https://raw.githubusercontent.com/Small-tailqwq/dsh-deep-whale/main/package.json",
+      "fetched_unix": 1794532135.515268,
+      "status": 404,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/yikart/AiToEarn/main/package.json",
-      "fetched_unix": 1794532136.460169,
-      "status": 404,
+      "url": "https://raw.githubusercontent.com/Ebony-Vinyl/dsh-our-free-model/main/package.json",
+      "fetched_unix": 1794532136.329825,
+      "status": 200,
       "has_next": false
     },
     {
@@ -65111,8 +65099,20 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/yikart/AiToEarn/main/package.json",
+      "fetched_unix": 1794532136.460169,
+      "status": 404,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/JimLiu/baoyu-design/main/package.json",
       "fetched_unix": 1794532136.350858,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/MemTensor/memmy-agent/main/package.json",
+      "fetched_unix": 1794532136.3943172,
       "status": 200,
       "has_next": false
     },
@@ -65189,15 +65189,15 @@
       "has_next": true
     },
     {
-      "url": "https://raw.githubusercontent.com/imrj05/orbit/main/package.json",
-      "fetched_unix": 1794532155.3604228,
-      "status": 404,
-      "has_next": false
-    },
-    {
       "url": "https://raw.githubusercontent.com/minuque/pi-cc-extensions/main/package.json",
       "fetched_unix": 1794532155.400418,
       "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/imrj05/orbit/main/package.json",
+      "fetched_unix": 1794532155.3604228,
+      "status": 404,
       "has_next": false
     },
     {
@@ -65213,8 +65213,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/fitchmultz/pi-cursor-sdk/main/package.json",
-      "fetched_unix": 1794532155.4158962,
+      "url": "https://raw.githubusercontent.com/tintinweb/pi-manage-todo-list/master/package.json",
+      "fetched_unix": 1794532155.409478,
       "status": 200,
       "has_next": false
     },
@@ -65225,14 +65225,8 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/pranshuchittora/simvyn/main/package.json",
-      "fetched_unix": 1794532156.4087858,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/tintinweb/pi-manage-todo-list/master/package.json",
-      "fetched_unix": 1794532155.409478,
+      "url": "https://raw.githubusercontent.com/tintinweb/pi-supervisor/master/package.json",
+      "fetched_unix": 1794532156.445441,
       "status": 200,
       "has_next": false
     },
@@ -65243,20 +65237,20 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/tintinweb/pi-supervisor/master/package.json",
-      "fetched_unix": 1794532156.445441,
+      "url": "https://raw.githubusercontent.com/fitchmultz/pi-cursor-sdk/main/package.json",
+      "fetched_unix": 1794532155.4158962,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pranshuchittora/simvyn/main/package.json",
+      "fetched_unix": 1794532156.4087858,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://raw.githubusercontent.com/trefeon/pi-freeflow/main/package.json",
       "fetched_unix": 1794532156.4204202,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/package.json",
-      "fetched_unix": 1794532156.377393,
       "status": 200,
       "has_next": false
     },
@@ -65273,6 +65267,12 @@
       "has_next": false
     },
     {
+      "url": "https://raw.githubusercontent.com/keli-wen/agy-staff/master/package.json",
+      "fetched_unix": 1794532156.377393,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://raw.githubusercontent.com/ronnieops/pi-search-hub/main/package.json",
       "fetched_unix": 1794532156.3931441,
       "status": 200,
@@ -65285,14 +65285,20 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/tmustier/codex-computer-use-mcp/main/package.json",
-      "fetched_unix": 1794532157.619254,
+      "url": "https://raw.githubusercontent.com/dodo-reach/pi-clarify/main/package.json",
+      "fetched_unix": 1794532157.4331,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/dodo-reach/pi-clarify/main/package.json",
-      "fetched_unix": 1794532157.4331,
+      "url": "https://raw.githubusercontent.com/diegopetrucci/the-last-harness/main/package.json",
+      "fetched_unix": 1794532157.686622,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://raw.githubusercontent.com/tmustier/codex-computer-use-mcp/main/package.json",
+      "fetched_unix": 1794532157.619254,
       "status": 200,
       "has_next": false
     },
@@ -65309,20 +65315,14 @@
       "has_next": false
     },
     {
-      "url": "https://raw.githubusercontent.com/diegopetrucci/the-last-harness/main/package.json",
-      "fetched_unix": 1794532157.686622,
+      "url": "https://raw.githubusercontent.com/joelhooks/pi-tools/main/package.json",
+      "fetched_unix": 1794532157.616731,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://raw.githubusercontent.com/injaneity/pi-cua/main/package.json",
       "fetched_unix": 1794532157.659956,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://raw.githubusercontent.com/joelhooks/pi-tools/main/package.json",
-      "fetched_unix": 1794532157.616731,
       "status": 200,
       "has_next": false
     },
@@ -65567,14 +65567,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=4",
-      "fetched_unix": 1794532327.0978749,
+      "url": "https://pi.dev/packages?page=2",
+      "fetched_unix": 1794532327.072882,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=2",
-      "fetched_unix": 1794532327.072882,
+      "url": "https://pi.dev/packages?page=4",
+      "fetched_unix": 1794532327.0978749,
       "status": 200,
       "has_next": false
     },
@@ -65597,12 +65597,6 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=9",
-      "fetched_unix": 1794532328.904735,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=7",
       "fetched_unix": 1794532328.873479,
       "status": 200,
@@ -65611,6 +65605,12 @@
     {
       "url": "https://pi.dev/packages?page=8",
       "fetched_unix": 1794532329.102386,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=9",
+      "fetched_unix": 1794532328.904735,
       "status": 200,
       "has_next": false
     },
@@ -65633,20 +65633,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=13",
-      "fetched_unix": 1794532330.8353422,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=16",
-      "fetched_unix": 1794532332.4669719,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=14",
       "fetched_unix": 1794532332.503731,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=13",
+      "fetched_unix": 1794532330.8353422,
       "status": 200,
       "has_next": false
     },
@@ -65657,14 +65651,20 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=17",
-      "fetched_unix": 1794532332.594618,
+      "url": "https://pi.dev/packages?page=16",
+      "fetched_unix": 1794532332.4669719,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://pi.dev/packages?page=18",
       "fetched_unix": 1794532334.3432162,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=17",
+      "fetched_unix": 1794532332.594618,
       "status": 200,
       "has_next": false
     },
@@ -65705,12 +65705,6 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=27",
-      "fetched_unix": 1794532338.0186791,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=25",
       "fetched_unix": 1794532336.2316349,
       "status": 200,
@@ -65723,14 +65717,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=28",
-      "fetched_unix": 1794532338.009259,
+      "url": "https://pi.dev/packages?page=27",
+      "fetched_unix": 1794532338.0186791,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=30",
-      "fetched_unix": 1794532339.8287292,
+      "url": "https://pi.dev/packages?page=28",
+      "fetched_unix": 1794532338.009259,
       "status": 200,
       "has_next": false
     },
@@ -65741,14 +65735,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=31",
-      "fetched_unix": 1794532339.86659,
+      "url": "https://pi.dev/packages?page=30",
+      "fetched_unix": 1794532339.8287292,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=33",
-      "fetched_unix": 1794532339.814684,
+      "url": "https://pi.dev/packages?page=31",
+      "fetched_unix": 1794532339.86659,
       "status": 200,
       "has_next": false
     },
@@ -65759,14 +65753,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=35",
-      "fetched_unix": 1794532341.684763,
+      "url": "https://pi.dev/packages?page=34",
+      "fetched_unix": 1794532341.5919292,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=34",
-      "fetched_unix": 1794532341.5919292,
+      "url": "https://pi.dev/packages?page=33",
+      "fetched_unix": 1794532339.814684,
       "status": 200,
       "has_next": false
     },
@@ -65777,14 +65771,20 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=38",
-      "fetched_unix": 1794532343.394878,
+      "url": "https://pi.dev/packages?page=37",
+      "fetched_unix": 1794532341.8927538,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=37",
-      "fetched_unix": 1794532341.8927538,
+      "url": "https://pi.dev/packages?page=35",
+      "fetched_unix": 1794532341.684763,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=38",
+      "fetched_unix": 1794532343.394878,
       "status": 200,
       "has_next": false
     },
@@ -65795,14 +65795,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=40",
-      "fetched_unix": 1794532343.45906,
+      "url": "https://pi.dev/packages?page=41",
+      "fetched_unix": 1794532343.642499,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=41",
-      "fetched_unix": 1794532343.642499,
+      "url": "https://pi.dev/packages?page=40",
+      "fetched_unix": 1794532343.45906,
       "status": 200,
       "has_next": false
     },
@@ -65813,26 +65813,26 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=45",
-      "fetched_unix": 1794532345.391284,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=44",
       "fetched_unix": 1794532345.3252459,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=43",
-      "fetched_unix": 1794532345.1795352,
+      "url": "https://pi.dev/packages?page=45",
+      "fetched_unix": 1794532345.391284,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://pi.dev/packages?page=46",
       "fetched_unix": 1794532346.861575,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=43",
+      "fetched_unix": 1794532345.1795352,
       "status": 200,
       "has_next": false
     },
@@ -65849,20 +65849,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=47",
-      "fetched_unix": 1794532346.965269,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=48",
       "fetched_unix": 1794532347.091576,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=52",
-      "fetched_unix": 1794532348.870131,
+      "url": "https://pi.dev/packages?page=47",
+      "fetched_unix": 1794532346.965269,
       "status": 200,
       "has_next": false
     },
@@ -65873,8 +65867,8 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=55",
-      "fetched_unix": 1794532350.565135,
+      "url": "https://pi.dev/packages?page=52",
+      "fetched_unix": 1794532348.870131,
       "status": 200,
       "has_next": false
     },
@@ -65891,6 +65885,18 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=55",
+      "fetched_unix": 1794532350.565135,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=57",
+      "fetched_unix": 1794532350.727026,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=56",
       "fetched_unix": 1794532350.688909,
       "status": 200,
@@ -65903,20 +65909,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=60",
-      "fetched_unix": 1794532352.751074,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=57",
-      "fetched_unix": 1794532350.727026,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=58",
       "fetched_unix": 1794532352.2457569,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=60",
+      "fetched_unix": 1794532352.751074,
       "status": 200,
       "has_next": false
     },
@@ -65927,8 +65927,8 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=64",
-      "fetched_unix": 1794532354.277419,
+      "url": "https://pi.dev/packages?page=63",
+      "fetched_unix": 1794532354.4386308,
       "status": 200,
       "has_next": false
     },
@@ -65939,20 +65939,20 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=63",
-      "fetched_unix": 1794532354.4386308,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=65",
-      "fetched_unix": 1794532354.518646,
+      "url": "https://pi.dev/packages?page=64",
+      "fetched_unix": 1794532354.277419,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://pi.dev/packages?page=66",
       "fetched_unix": 1794532355.713676,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=65",
+      "fetched_unix": 1794532354.518646,
       "status": 200,
       "has_next": false
     },
@@ -65969,26 +65969,8 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=70",
-      "fetched_unix": 1794532357.4625971,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=69",
       "fetched_unix": 1794532356.258917,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=71",
-      "fetched_unix": 1794532357.761318,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=72",
-      "fetched_unix": 1794532357.9622002,
       "status": 200,
       "has_next": false
     },
@@ -65999,20 +65981,26 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=70",
+      "fetched_unix": 1794532357.4625971,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=72",
+      "fetched_unix": 1794532357.9622002,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=71",
+      "fetched_unix": 1794532357.761318,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=74",
       "fetched_unix": 1794532359.244054,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=76",
-      "fetched_unix": 1794532360.022933,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=78",
-      "fetched_unix": 1794532361.000889,
       "status": 200,
       "has_next": false
     },
@@ -66023,14 +66011,20 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=76",
+      "fetched_unix": 1794532360.022933,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=77",
       "fetched_unix": 1794532359.7739232,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=82",
-      "fetched_unix": 1794532362.80814,
+      "url": "https://pi.dev/packages?page=78",
+      "fetched_unix": 1794532361.000889,
       "status": 200,
       "has_next": false
     },
@@ -66041,20 +66035,26 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=81",
-      "fetched_unix": 1794532361.7854688,
-      "status": 200,
-      "has_next": false
-    },
-    {
       "url": "https://pi.dev/packages?page=80",
       "fetched_unix": 1794532361.547179,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=85",
-      "fetched_unix": 1794532363.6062899,
+      "url": "https://pi.dev/packages?page=81",
+      "fetched_unix": 1794532361.7854688,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=82",
+      "fetched_unix": 1794532362.80814,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=83",
+      "fetched_unix": 1794532363.1640792,
       "status": 200,
       "has_next": false
     },
@@ -66065,8 +66065,8 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=83",
-      "fetched_unix": 1794532363.1640792,
+      "url": "https://pi.dev/packages?page=85",
+      "fetched_unix": 1794532363.6062899,
       "status": 200,
       "has_next": false
     },
@@ -66089,8 +66089,8 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=89",
-      "fetched_unix": 1794532365.337358,
+      "url": "https://pi.dev/packages?page=91",
+      "fetched_unix": 1794532366.681049,
       "status": 200,
       "has_next": false
     },
@@ -66101,20 +66101,14 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=89",
+      "fetched_unix": 1794532365.337358,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=92",
       "fetched_unix": 1794532366.906032,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=91",
-      "fetched_unix": 1794532366.681049,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=94",
-      "fetched_unix": 1794532368.153837,
       "status": 200,
       "has_next": false
     },
@@ -66125,20 +66119,14 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=94",
+      "fetched_unix": 1794532368.153837,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=95",
       "fetched_unix": 1794532368.44335,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=97",
-      "fetched_unix": 1794532368.8480241,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=98",
-      "fetched_unix": 1794532369.9495711,
       "status": 200,
       "has_next": false
     },
@@ -66155,14 +66143,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=102",
-      "fetched_unix": 1794532371.7403672,
+      "url": "https://pi.dev/packages?page=97",
+      "fetched_unix": 1794532368.8480241,
       "status": 200,
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=101",
-      "fetched_unix": 1794532370.6698601,
+      "url": "https://pi.dev/packages?page=98",
+      "fetched_unix": 1794532369.9495711,
       "status": 200,
       "has_next": false
     },
@@ -66173,8 +66161,14 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=104",
-      "fetched_unix": 1794532372.299532,
+      "url": "https://pi.dev/packages?page=101",
+      "fetched_unix": 1794532370.6698601,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=102",
+      "fetched_unix": 1794532371.7403672,
       "status": 200,
       "has_next": false
     },
@@ -66185,20 +66179,14 @@
       "has_next": false
     },
     {
+      "url": "https://pi.dev/packages?page=104",
+      "fetched_unix": 1794532372.299532,
+      "status": 200,
+      "has_next": false
+    },
+    {
       "url": "https://pi.dev/packages?page=106",
       "fetched_unix": 1794532373.480413,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=105",
-      "fetched_unix": 1794532372.405264,
-      "status": 200,
-      "has_next": false
-    },
-    {
-      "url": "https://pi.dev/packages?page=109",
-      "fetched_unix": 1794532374.136606,
       "status": 200,
       "has_next": false
     },
@@ -66209,14 +66197,26 @@
       "has_next": false
     },
     {
-      "url": "https://pi.dev/packages?page=108",
-      "fetched_unix": 1794532374.0589561,
+      "url": "https://pi.dev/packages?page=105",
+      "fetched_unix": 1794532372.405264,
       "status": 200,
       "has_next": false
     },
     {
       "url": "https://pi.dev/packages?page=110",
       "fetched_unix": 1794532375.204632,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=108",
+      "fetched_unix": 1794532374.0589561,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages?page=109",
+      "fetched_unix": 1794532374.136606,
       "status": 200,
       "has_next": false
     },

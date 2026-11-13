@@ -1,0 +1,1 @@
+{"url": "https://raw.githubusercontent.com/alexeyw/lot-map/main/.claude-plugin/marketplace.json", "fetched_unix": 1794531952.059354, "status": 200, "body": "{\n  \"name\": \"lot-map\",\n  \"owner\": {\n    \"name\": \"alexeyw\"\n  },\n  \"plugins\": [\n    {\n      \"name\": \"lot-map\",\n      \"source\": \"./\"\n    }\n  ]\n}\n", "has_next": false, "last_page": null}
