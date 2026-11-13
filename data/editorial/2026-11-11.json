@@ -1,0 +1,86 @@
+{
+  "window_end": "2026-11-11",
+  "prepared_at": "2026-11-13",
+  "note": "编辑内容：features（本周新功能要点摘要）、insight（值得同行借鉴的价值点/共性需求）、takeaways（最值得精细化研究或借鉴的1-2点）、feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。features从官方Releases/CHANGELOG原文总结挑选，insight基于新增功能分析、不评述数据波动，feature_summary均已对照官方原文核实。",
+  "takeaways": [
+    "「请求瘦身」两例值得深研：Claude Code 按区域自动回退的 Vertex fast mode、Codex 增量工具声明",
+    "DSH AgentTeam 多agent协作面板与 Pi 空闲缓存保温，可直接借鉴"
+  ],
+  "general_sources": [
+    "https://github.com/anthropics/claude-code/releases",
+    "https://github.com/openai/codex/releases",
+    "https://github.com/deepseek-ai/deepseek-harness/releases",
+    "https://github.com/earendil-works/pi/releases",
+    "https://pi.dev/changelog"
+  ],
+  "products": {
+    "claude": {
+      "features": [
+        "Fable 5.2 成为默认 Fable 模型：1M 上下文，$8/$40 每百万Token（2.1.321）",
+        "Vertex 上线 fast mode（global/us/eu），拒绝时自动回退标准速度（2.1.322）",
+        "claude remote-control 新增 --settings，为每个会话套用统一设置文件",
+        "MCP 任务后台化与 denyInsteadOfPrompting 无人值守权限策略（2.1.319）"
+      ],
+      "insight": [
+        "fast mode 按区域自动回退：模型加速与渠道解耦的多云降级范式",
+        "remote-control --settings：远程批量会话统一配置，企业集中管理共性需求"
+      ],
+      "feature_summary": "网络检索与CHANGELOG.md一致：2.1.321引入Fable 5.2为默认Fable模型（1M上下文，$8/$40每百万Token）并修复MCP OAuth；2.1.322在Vertex（global/us/eu）上线fast mode；2.1.319（11-06）含MCP任务后台化与denyInsteadOfPrompting。第三方统计2.1.321共118项变更，以修复为主。",
+      "sources": [
+        "https://github.com/anthropics/claude-code/releases",
+        "https://code.claude.com/docs/en/changelog",
+        "https://ramadigital.id/en/blog/claude-code-2-1-321-fable-5-2-celah-oauth-mcp"
+      ]
+    },
+    "codex": {
+      "features": [
+        "Agent Command Center（codex agents --no-daemon）集中管理多个 agent，未读结果标记（0.167.0）",
+        "会话级后端切换保留草稿；本地图片预览与 Vertex AI 配置向导（0.167.0）",
+        "0.167.2：Vertex AI 默认增量发送工具声明，请求更轻量，可配置回退"
+      ],
+      "insight": [
+        "增量工具声明：随工具数增长只发 diff，是请求瘦身的通用解法",
+        "Command Center 与草稿保留持续打磨多 agent 并行的体验细节"
+      ],
+      "feature_summary": "网络检索与GitHub Releases及官方公告一致：0.167.2将Google Cloud Vertex AI的增量工具声明设为默认（incremental_tools_legacy_gcp=false 可回退）；0.167.0（11-06）为本周大头（Agent Command Center、后端切换保留草稿等）；0.167.1为小幅修复；窗口内另有16个alpha发布，说明为占位文本，未单独核实。",
+      "sources": [
+        "https://github.com/openai/codex/releases",
+        "https://x.com/CodexReleases/status/2120671830738407883",
+        "https://openai.com/products/release-notes"
+      ]
+    },
+    "pi": {
+      "features": [
+        "pi auth login/logout：免启动会话即可登录登出，支持 API key（1.5.1）",
+        "空闲提示词缓存保温至30分钟，跨运行降低重复任务成本（1.5.1）",
+        "Anthropic 消息线程：只发送新增消息续接对话（1.5.1）",
+        "原目录被移动/删除的会话可 fork 到新位置（1.5.2）"
+      ],
+      "insight": [
+        "空闲缓存保温30分钟：小改动直接降低重复任务成本，值得借鉴",
+        "消息线程只发增量：长会话带宽与延迟优化的共性思路"
+      ],
+      "feature_summary": "网络检索与pi.dev官方changelog一致：1.5.1新增pi auth login/logout（免开会话、支持API key）、空闲缓存保温至30分钟、Anthropic消息线程（只发新消息）、更丰富的Mermaid图与扩展包更新摘要；1.5.2支持fork原目录已丢失的会话到新位置。",
+      "sources": [
+        "https://pi.dev/changelog/releases/1.5.1",
+        "https://pi.dev/changelog/releases/1.5.2",
+        "https://github.com/earendil-works/pi/releases"
+      ]
+    },
+    "dsh": {
+      "features": [
+        "Git Worktree：按分支/提交/文件类型审阅改动，直连 GitHub 评审并同步进度",
+        "SubAgent 具名与多层协作；AgentTeam 按会话开启，共用成员与任务面板",
+        "桌面端支持切换正式版与开发版更新渠道"
+      ],
+      "insight": [
+        "AgentTeam 按会话共享成员与任务面板：多agent协作编排的直观实现",
+        "Worktree 评审直连 GitHub 并同步状态：把审查工作流嵌入 harness"
+      ],
+      "feature_summary": "网络检索与GitHub Release一致：0.2.2-rc.2新增Git Worktree按分支/提交/文件类型审阅并直连GitHub评审同步进度、SubAgent具名多层协作与AgentTeam（按会话开启、共用成员与任务面板）、桌面端正式/开发版更新渠道切换。",
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/releases"
+      ]
+    }
+  }
+}
