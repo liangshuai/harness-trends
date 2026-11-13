@@ -17,6 +17,7 @@ from harness_trends.models_v2 import collect_inputs, apply as apply_models_v2
 from harness_trends.pipeline import check_historical_sources, inventory
 from harness_trends.user_disclosures import collect_user_disclosures, apply_population_scope
 from harness_trends.marketplaces import collect_marketplaces
+from harness_trends.plugin_rankings import collect_plugin_rankings
 from harness_trends.changelog import collect_product_updates
 from harness_trends.markdown_report import render_markdown
 from harness_trends.executive import NAMES
@@ -219,6 +220,8 @@ def main():
     apply_population_scope(run,config)
     print('采集插件市场目录计数、官方仓库贡献者与窗口内发布…',flush=True)
     run['marketplaces']=collect_marketplaces(client,config)
+    print('采集四家插件 Top 10（安装量 / 下载量 / 共享目录位置）…',flush=True)
+    run['plugin_rankings']=collect_plugin_rankings(client,config)
     run['official_repos']={p['id']:official_repo(client,p) for p in config['products']}
     run['product_updates']=collect_product_updates(client,config['products'],run['window'])
     for pid,row in run['official_repos'].items():

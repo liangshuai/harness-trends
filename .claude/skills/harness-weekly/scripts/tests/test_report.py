@@ -400,7 +400,8 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('1. 方向A\\|B值得深研',page)
         html_page=render(run,config)
         self.assertIn('1）借鉴A|B<br>2）共性C',html_page)
-        self.assertIn('1）方向A|B值得深研',html_page)
+        # HTML takeaways render as a real ordered list.
+        self.assertIn('<ol class="takeaways"><li>方向A|B值得深研</li></ol>',html_page)
 
     def test_markdown_without_editorial_keeps_features_and_blanks_insight(self):
         run,config=self.markdown_run();run['editorial']=None
@@ -465,9 +466,29 @@ class MarkdownReportTests(unittest.TestCase):
             self.assertIn('  - 集成视角：可方便地整合为执行引擎',page)
             self.assertIn('——CLI：终端编码agent',page)
             html_page=render(run,config)
-            self.assertIn('<span class="badge" title="可直接调度">CLI</span>',html_page)
-            self.assertIn('<span class="badge" title="可方便地整合为执行引擎">SDK</span>',html_page)
-            self.assertIn('类型标签',html_page)
+            # The label is a dedicated tag column in the Top10 legend and a pill in the moves panel.
+            self.assertIn('<span class="type-tag t-cli" title="可直接调度">CLI</span>',html_page)
+            self.assertIn('<span class="type-tag t-sdk" title="可方便地整合为执行引擎">SDK</span>',html_page)
+            self.assertIn('class="legend-row tags"',html_page)
+            self.assertIn('<h3>Top 10 动向</h3>',html_page)
+            self.assertIn('新进入 Top 10</b>：New App',html_page)
+            self.assertIn('集成视角：可方便地整合为执行引擎',html_page)
+            self.assertIn('退出 Top 10</b>：Old App（上期第3名）',html_page)
+
+    def test_summary_table_orders_rows_by_market_share(self):
+        run,config=self.markdown_run()
+        # Uneven tokens make market shares distinct: claude 40%, pi 30%, dsh 20%, codex 10%.
+        for pid,tokens in (('claude',40),('pi',30),('dsh',20),('codex',10)):
+            run['openrouter_current']['products'][pid]['tokens']=tokens
+        compute(run,config)
+        page=render_markdown(run,config)
+        order=[line.split('|')[1].strip() for line in page.splitlines() if line.startswith('| ') and not line.startswith('|--')]
+        summary=order[1:5]
+        self.assertEqual(summary,['Claude Code','Pi','DeepSeek Harness','Codex'])
+        html_page=render(run,config)
+        start=html_page.find('table-scroll summary-table');seg=html_page[start:html_page.find('</table>',start)]
+        positions=[seg.find(name) for name in ('Claude Code','Pi','DeepSeek Harness','Codex')]
+        self.assertEqual(positions,sorted(positions))
 
     def test_reports_are_archived_per_window_before_each_run(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -491,9 +512,10 @@ class MarkdownReportTests(unittest.TestCase):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','takeaways':['研究权限分级设计'],
             'products':{
-            'claude':{'feature_summary':'与CHANGELOG一致',
+            'claude':{'features':['权限提示改为策略化拒绝并继续执行','MCP长任务后台化'],
+                      'feature_summary':'与CHANGELOG一致',
                       'sources':['https://github.com/anthropics/claude-code/releases']},
-            'codex':{},'pi':{},'dsh':{}}}
+            'codex':{'features':['多agent集中管理中心']},'pi':{},'dsh':{}}}
         page=render(run,config)
         self.assertIn('summary-table',page)
         self.assertIn('>本周新功能</th>',page)
@@ -502,8 +524,15 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('548万MAU / 154万DAU（官方披露，2026-11-04）',page)
         self.assertIn('>洞察</th>',page)
         self.assertIn('本周最值得深入研究或借鉴',page)
-        self.assertIn('研究权限分级设计',page)
+        self.assertIn('<ol class="takeaways"><li>研究权限分级设计</li></ol>',page)
         self.assertIn('不反映数据变化情况',page)
+        # The rankings panel got a plain title and the Top 10 moves panel sits in the same section.
+        self.assertIn('公开应用榜单Top10',page)
+        self.assertNotIn('放到公开应用榜单中看',page)
+        self.assertIn('<h3>Top 10 动向</h3>',page)
+        # Features lead with editorial Chinese summaries; scripted原文 stays archived in a fold.
+        self.assertIn('<ol class="feature-cn"><li>权限提示改为策略化拒绝并继续执行</li>',page)
+        self.assertIn('官方发布原文（脚本采集，核对用）',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
         self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)

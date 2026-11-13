@@ -136,7 +136,9 @@ def top10_changes(run):
 
 
 def summary_rows(run):
-    """One raw-value row per harness for the shared summary table; renderers format their own cells."""
+    """One raw-value row per harness for the shared summary table; renderers format their own cells.
+    Rows are ordered by OpenRouter market share, largest first; rows without share keep briefing order at the end."""
+    views = (run.get('editorial') or {}).get('products', {})
     views = (run.get('editorial') or {}).get('products', {})
     rows = []
     slice_total = (run.get('openrouter_current') or {}).get('slice_total_tokens')
@@ -163,6 +165,7 @@ def summary_rows(run):
                      'plugins':plugins,
                      'features':view.get('features'),
                      'insight':view.get('insight')})
+    rows.sort(key=lambda r: (r['share_market'] is None, -(r['share_market'] or 0)))
     return rows
 
 
