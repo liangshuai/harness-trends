@@ -1,7 +1,7 @@
 {
   "window_end": "2026-11-11",
   "prepared_at": "2026-11-13",
-  "note": "编辑内容：features（本周新功能要点摘要）、insight（值得同行借鉴的价值点/共性需求）、action（行动：本周功能启发了哪些可借鉴到企业级Agent通用底座的点，一句话）、takeaways（最值得精细化研究或借鉴的1-2点）、feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。features从官方Releases/CHANGELOG原文总结挑选，insight与action基于新增功能分析、不评述数据波动。",
+  "note": "编辑内容：features（本周新功能要点摘要）、insight（值得同行借鉴的价值点/共性需求）、action（行动：可借鉴到企业级Agent通用底座的点，一句话）、takeaways（最值得精细化研究或借鉴的1-2点）、feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。features从官方Releases/CHANGELOG原文总结挑选，insight与action基于新增功能分析、不评述数据波动。",
   "takeaways": [
     "「请求瘦身」两例值得深研：Claude Code 按区域自动回退的 Vertex fast mode、Codex 增量工具声明",
     "DSH AgentTeam 多agent协作面板与 Pi 空闲缓存保温，可直接借鉴"
@@ -31,7 +31,7 @@
         "https://code.claude.com/docs/en/changelog",
         "https://ramadigital.id/en/blog/claude-code-2-1-321-fable-5-2-celah-oauth-mcp"
       ],
-      "action": "受 remote-control --settings 与 denyInsteadOfPrompting 启发：底座可借鉴做集中配置下发与可审计的无人值守权限管理"
+      "action": "可借鉴会话统一配置（--settings）与无人值守权限策略，做底座的集中配置下发与可审计的权限管理"
     },
     "codex": {
       "features": [
@@ -49,7 +49,7 @@
         "https://x.com/CodexReleases/status/2120671830738407883",
         "https://openai.com/products/release-notes"
       ],
-      "action": "受增量工具声明与 Command Center 启发：底座可借鉴按会话缓存工具定义只发 diff，并做多agent集中调度与结果回收"
+      "action": "可借鉴增量工具声明与 Command Center，做底座按会话缓存工具定义只发 diff，以及多agent集中调度与结果回收"
     },
     "pi": {
       "features": [
@@ -68,7 +68,7 @@
         "https://pi.dev/changelog/releases/1.5.2",
         "https://github.com/earendil-works/pi/releases"
       ],
-      "action": "受缓存保温与增量消息线程启发：底座可借鉴内置提示词缓存保温与只发增量的消息续接，降低重复任务成本"
+      "action": "可借鉴空闲缓存保温与增量消息线程，降低底座内重复任务的推理成本"
     },
     "dsh": {
       "features": [
@@ -84,7 +84,7 @@
       "sources": [
         "https://github.com/deepseek-ai/deepseek-harness/releases"
       ],
-      "action": "受 AgentTeam 与 Worktree 评审启发：底座可借鉴按会话共享成员与任务面板的多agent编排，并把评审工作流嵌入"
+      "action": "可借鉴 AgentTeam 按会话共享成员与任务面板的多agent编排，以及 Worktree 评审直连代码托管平台"
     }
   }
 }
