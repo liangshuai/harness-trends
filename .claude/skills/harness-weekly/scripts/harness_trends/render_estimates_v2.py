@@ -38,11 +38,11 @@ def render_scales(run,config):
         s+=('<a href="'+esc(secondary['source'])+'">Peter Gostev</a>将其表述为周活，年底7000万和次年3月1亿是其预测，不计入已观测数据。' if secondary else '原帖未说明活跃窗口。')+'</p>'
     s+='<p class="footnote">月活不是日活。DSH桌面、源码等使用途径不会完整表现为npm下载，故不能拿npm用户等效量直接与披露人数排名。Pi全渠道覆盖率尚未取得证据。</p></div><div class="grid">'
     for field,title in [('developers','公开插件作者 / 维护者估算'),('plugins','公开插件数量估算')]:
-        maximum=max([p['scale_estimates'][field]['high'] or 0 for p in products.values()]+[1])
-        s+=f'<div class="panel"><h3>{title}</h3><p class="sub">彩色：参考值；灰色：情景上界</p>'
+        maximum=max([p['scale_estimates'][field]['reference'] or 0 for p in products.values()]+[1])
+        s+=f'<div class="panel"><h3>{title}</h3><p class="sub">彩色条：参考值</p>'
         for pid,p in sorted(products.items(),key=lambda x:x[1]['scale_estimates'][field]['reference'] or -1,reverse=True):
             e=p['scale_estimates'][field]
-            s+=f'<div class="rank-row"><div class="rank-name">{dot(pid)}{esc(NAMES[pid])}</div><div class="bar-pair"><div class="bar-old" style="width:{(e["high"] or 0)/maximum*100:.3f}%"></div><div class="bar-current" style="width:{(e["reference"] or 0)/maximum*100:.3f}%;background:{COLORS[pid]}"></div></div><div class="rank-number"><strong>{number(e["reference"])}</strong><small class="muted">{esc(e["confidence"])}</small></div></div>'
+            s+=f'<div class="rank-row"><div class="rank-name">{dot(pid)}{esc(NAMES[pid])}</div><div class="bar-pair"><div class="bar-current" style="width:{(e["reference"] or 0)/maximum*100:.3f}%;background:{COLORS[pid]}"></div></div><div class="rank-number"><strong>{number(e["reference"])}</strong><small class="muted">{esc(e["confidence"])}</small></div></div>'
         s+='</div>'
     s+='<div class="panel"><h3>跨仓库去重依据</h3><p class="sub">发布者ID取并集，已将同一发布者的多个仓库折叠；不再按contributors密度放大。</p>'
     rows=[]
