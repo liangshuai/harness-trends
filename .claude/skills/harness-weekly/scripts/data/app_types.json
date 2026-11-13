@@ -1,0 +1,76 @@
+{
+  "_note": "编辑维护（Class C）：OpenRouter Top 10 应用的类型标注与一句话定位，键为数据集 app_id（字符串）。报告用其渲染类型标签与新增应用介绍；数字仍全部由脚本采集。type 取值：CLI=命令行引擎 / SDK=可嵌入开发库 / IDE插件=依附IDE宿主 / 产品=面向终端用户的完整产品 / 工具=领域专用工具 / 服务=托管API服务 / 未标注。fit 描述其作为 agent 执行引擎集成的可行性。信息经网络检索核实，来源见 sources。",
+  "_updated": "2026-11-13",
+  "apps": {
+    "3067167": {
+      "name": "Hermes Agent",
+      "type": "产品",
+      "note": "Nous Research 开源自主 agent：持久记忆、自我沉淀技能，桌面端+CLI 双形态，支持 OpenRouter/自托管模型",
+      "fit": "开源可自托管，但定位常驻个人 agent，作为嵌入式引擎需二次封装",
+      "sources": ["https://hermes-agent.nousresearch.com/docs/getting-started/quickstart", "https://github.com/NousResearch/hermes-agent"]
+    },
+    "2627404": {
+      "name": "Claude Code",
+      "type": "CLI",
+      "note": "Anthropic 官方编码 agent，npm CLI + Agent SDK 双形态",
+      "fit": "可直接作为执行引擎调用或经 SDK 编程嵌入",
+      "sources": ["https://github.com/anthropics/claude-code"]
+    },
+    "2262242": {
+      "name": "Kilo Code",
+      "type": "IDE插件",
+      "note": "VS Code 等主流 IDE 的开源编码 agent 扩展",
+      "fit": "依附 IDE 宿主运行，无独立引擎形态",
+      "sources": ["https://kilocode.ai"]
+    },
+    "2853275": {
+      "name": "pi",
+      "type": "SDK",
+      "note": "开源编码 agent，官方 TypeScript SDK 可编程嵌入，npm 分发、扩展生态完善",
+      "fit": "SDK 可方便地整合为执行引擎",
+      "sources": ["https://pi.dev"]
+    },
+    "2725608": {
+      "name": "OpenClaw",
+      "type": "产品",
+      "note": "开源个人 AI 助理产品（网关+多端客户端），面向终端用户常驻使用",
+      "fit": "产品形态，不适合作为执行引擎整合",
+      "sources": ["https://openclaw.ai"]
+    },
+    "2668297": {
+      "name": "Codex",
+      "type": "CLI",
+      "note": "OpenAI 开源 Rust CLI（npm @openai/codex），另有 SDK",
+      "fit": "CLI 可被上层系统直接调度",
+      "sources": ["https://github.com/openai/codex"]
+    },
+    "3682314": {
+      "name": "omp",
+      "type": "CLI",
+      "note": "Oh My Pi（omp.sh），Rust 内核终端编码 agent，LSP/DAP 为一等工具，兼容 pi 扩展生态",
+      "fit": "终端 agent，可直接作为执行引擎调度",
+      "sources": ["https://omp.sh", "https://github.com/can1357/oh-my-pi"]
+    },
+    "4706207": {
+      "name": "DeepSeek Harness",
+      "type": "SDK",
+      "note": "官方 SDK 可编程嵌入，另有桌面端产品形态",
+      "fit": "有 SDK，可方便地整合为执行引擎",
+      "sources": ["https://github.com/deepseek-ai/deepseek-harness"]
+    },
+    "3003505": {
+      "name": "Strix",
+      "type": "工具",
+      "note": "开源 AI 渗透测试 agent（strix.ai），Docker 沙箱多 agent 协作执行安全验证，模型消耗大",
+      "fit": "安全测试领域专用，非通用执行引擎",
+      "sources": ["https://strix.ai", "https://github.com/usestrix/strix"]
+    },
+    "4913981": {
+      "name": "Minds by Authentic Intelligence",
+      "type": "产品",
+      "note": "App Store 上架的消费级 AI 应用，定位「人与人真实连接」的 AI 实验室，非开发者工具",
+      "fit": "消费级产品，不适合作为执行引擎整合",
+      "sources": ["https://apps.apple.com/gb/app/minds-authentic-intelligence/id6720765000"]
+    }
+  }
+}

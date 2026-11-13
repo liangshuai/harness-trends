@@ -19,10 +19,12 @@ python3 run_report.py --refresh
 
 ## 输出与周更
 
-- `reports/latest.html`：当前汇报版，开头核心数据区即主流Harness汇总表（周Token、周下载量、开源贡献者、插件数量、活跃用户、本周新功能、洞察），随后是份额图、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
-- `reports/latest.md`：Markdown 版周报，正式汇报文案（不带格式标签与实现细节），开篇即同一张主流Harness汇总表，第二节为用量与生态指标汇总（KPI、用量份额表、四周趋势表、用户规模公开信息）；新功能特性不在 Markdown 版中，见 HTML 完整版。
+- `reports/latest.html`：当前汇报版，开头核心数据区即主流Harness汇总表（周Token、周下载量、开源贡献者、插件数量、活跃用户、本周新功能、洞察），随后是份额图（Top 10 应用带类型标签，用于评估能否整合为 agent 执行引擎）、四周趋势、本周新功能特性、规模估算及数据附录；断网可阅读。
+- `reports/latest.md`：Markdown 版周报（标题「AI Harness 市场观察周报」），正式汇报文案（不带格式标签与实现细节），开篇即主流Harness汇总表（周 Token 使用量、OpenRouter市场份额、周下载量、开源贡献者、插件数量、本周新功能、洞察），表下为「官方披露」分组要点与「行动」列表，第二节为模型使用与生态规模（KPI、使用量及占比表、近四周趋势表），第三节为 OpenRouter Top 10 动向（新进榜应用定位、增长最多应用）；新功能特性详解不在 Markdown 版中，见 HTML 完整版。
+- `reports/archive/<窗口结束日>/`：每轮报告按周期归档（本轮副本 `<run_id>.*` 与该窗口最新版 `report.*`），开跑前自动归档旧 latest，历史轮次不丢失。
 - `data/latest.json`、`data/runs/`：当前及历史结构化快照。
 - `data/raw/`、`data/cache/`：公开原始响应、请求来源和缓存。
+- `data/app_types.json`：编辑维护的 OpenRouter Top 10 应用类型标注（CLI/SDK/IDE插件/产品/工具/服务）与一句话定位，供 MD「Top 10 动向」模块与 HTML 类型标签使用；未收录应用显示「未标注」。
 - `config.json`：产品、来源、采样上限及所有情景参数。
 
 已配置的 Codex 自动任务每周一纽约时间上午9点运行同一命令。机器和执行环境需要可用。默认检查npm日结；两个高下载主包同时返回零时，统一回退至最近有有效下载数据的UTC日，避免把结算延迟画成下跌。
@@ -31,9 +33,9 @@ python3 run_report.py --refresh
 
 汇总表数字全部脚本采集：Token与npm来自既有采集；官方仓库Contributors用 GitHub contributors（非匿名账号、与官网UI同口径，per_page=1 时 Link 头 last 页码即精确总数），只反映公开官方仓库，内部开发不计入；插件数量各家指定来源——Claude Code 取 claude.com/marketplace/plugins 公布总数、Codex 取 mcptop.com 所示 ChatGPT 插件目录 Plugins 分类计数（目录全量另存 directory_total）、Pi 取 pi.dev 官方 Package Catalog、DSH 取 dshmarket.com 公布总数，四者口径互不相同，不做横向排名。新功能特性由脚本按窗口提取官方 GitHub Releases 与 CHANGELOG.md 原文条目（`harness_trends/changelog.py`，只认产品发布线标签，占位式发布说明不算要点）。
 
-活跃用户列只放官方披露，口径与 HTML 报告「用户规模公开信息」一致：Codex 用与 ChatGPT Work 的合计披露（4000万，2026-10-07）并保留单品历史 WAU 锚点，DSH 用 154万DAU/548万MAU（2026-11-04）；合计与单品分开、只计一次，不与 npm 下载等效情景混排；Claude Code 与 Pi 无用户数披露，留空。`user_population_policy` 合并口径为分析约定，非产品架构事实。
+活跃用户不设汇总表列：官方披露统一放在汇总表下方的「官方披露」分组要点里，口径与 HTML 报告「用户规模公开信息」一致——Codex 用与 ChatGPT Work 的合计披露（4000万，2026-10-07）并保留单品历史 WAU 锚点，DSH 用 154万DAU/548万MAU 并含单日Token与公开插件数（2026-11-04）；合计与单品分开、只计一次，不与 npm 下载等效情景混排；Claude Code 与 Pi 无用户数披露，整组不出现。`user_population_policy` 合并口径为分析约定，非产品架构事实。
 
-本周新功能列为编辑整理的中文重点摘要、洞察列为编辑分析的值得同行借鉴的价值点与共性需求（基于新增功能、不评述数据波动，表下已注明第三方数据波动无法溯源）、表尾"最值得深入研究或借鉴"为跨产品总结；三者与"网络检索核实"段均为编辑内容，存放在 `data/editorial/<窗口结束日>.json`，运行时嵌入快照留档；文件缺失时洞察列自动降级为脚本提取的窗口内发布要点，不阻塞周更。编辑笔记只写定性判断，不复述精确数值，避免与当轮采集数字漂移；数字仍不允许手工填写。
+本周新功能列为编辑整理的中文重点摘要、洞察列为编辑分析的值得同行借鉴的价值点与共性需求（基于新增功能、不评述数据波动）、表下"行动：本周最值得深入研究或借鉴"为跨产品编号列表总结；三者与"网络检索核实"段均为编辑内容，存放在 `data/editorial/<窗口结束日>.json`，运行时嵌入快照留档；文件缺失时洞察列留空、本周新功能自动降级为脚本提取的窗口内发布原文，不阻塞周更。编辑笔记只写定性判断，不复述精确数值，避免与当轮采集数字漂移；数字仍不允许手工填写。
 
 ```sh
 python3 run_report.py --end 2026-11-05  # 固定窗口

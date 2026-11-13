@@ -8,7 +8,7 @@ import unittest
 from harness_trends.collect import Client, FetchError, is_human, npm_downloads, openrouter_window
 from harness_trends.metrics import compute, package_total, ratio_delta, scale_summary
 from harness_trends.render import esc, render
-from run_report import load_env, previous_snapshot, settled_end, METHOD
+from run_report import archive_current, archive_dir, load_env, previous_snapshot, settled_end, METHOD
 from harness_trends.executive import donut
 from harness_trends.models_v2 import apply as apply_v2, npm_equivalent
 from harness_trends.catalogs import parse_pi_catalog
@@ -237,6 +237,9 @@ class ReportTests(unittest.TestCase):
         for relative in ['run_report.py','deploy_report.py','config.json','.env.example','tests/test_report.py']:
             self.assertEqual((skill/relative).read_text(),Path(relative).read_text(),
                              f'skill 内联脚本与仓库版本不一致：{relative}；执行 .claude/skills/harness-weekly/sync.sh 同步')
+        if Path('data/app_types.json').exists():
+            self.assertEqual((skill/'data/app_types.json').read_text(),Path('data/app_types.json').read_text(),
+                             'skill 内联副本与仓库版本不一致：data/app_types.json；执行 .claude/skills/harness-weekly/sync.sh 同步')
         for module in Path('harness_trends').glob('*.py'):
             self.assertEqual((skill/'harness_trends'/module.name).read_text(),module.read_text(),
                              f'skill 内联脚本与仓库版本不一致：harness_trends/{module.name}；执行 sync.sh 同步')
@@ -272,6 +275,19 @@ class MarkdownReportTests(unittest.TestCase):
         run['official_repos']={p:{'status':'ok','contributors':{'claude':56,'codex':478,'dsh':50,'pi':306}[p],
             'repo':{'claude':'anthropics/claude-code','codex':'openai/codex','dsh':'deepseek-ai/deepseek-harness','pi':'earendil-works/pi'}[p]} for p in run['products']}
         run['model_v2_inputs']={'pi_catalog':{'status':'ok','total':5360,'source':'https://pi.dev/packages'}}
+        # Ranked-slice fixtures back the market-share column, the Top 10 movement module and the HTML badges.
+        run['openrouter_current']['slice_total_tokens']=100
+        run['openrouter_current']['ranked_apps_count']=8
+        run['openrouter_current']['top_apps']=[
+            {'app_id':501,'app_name':'Agent One','rank':1,'total_tokens':40,'total_requests':9},
+            {'app_id':502,'app_name':'Claude Code','rank':2,'total_tokens':10,'total_requests':1},
+            {'app_id':503,'app_name':'New App','rank':3,'total_tokens':8,'total_requests':2}]
+        run['openrouter_previous']['top_apps']=[
+            {'app_id':501,'app_name':'Agent One','rank':1,'total_tokens':30,'total_requests':9},
+            {'app_id':502,'app_name':'Claude Code','rank':2,'total_tokens':5,'total_requests':1},
+            {'app_id':504,'app_name':'Old App','rank':3,'total_tokens':8,'total_requests':2}]
+        run['openrouter_trend']=[{'start':'2026-10-23','end':'2026-10-29','products':{p:{'tokens':5} for p in run['products']}},
+                                 {'start':'2026-10-30','end':'2026-11-05','products':{p:{'tokens':10} for p in run['products']}}]
         run['product_updates']={'codex':{'repo':'openai/codex','status':'ok','changelog':None,'releases':[
             {'tag':'rust-v0.167.0','version':'0.167.0','published_at':'2026-11-06T01:40:00Z','prerelease':False,
              'html_url':'https://github.com/openai/codex/releases/tag/rust-v0.167.0',
@@ -335,7 +351,7 @@ class MarkdownReportTests(unittest.TestCase):
             'codex':{'insight':['多agent集中管理是通用交互范式']},
             'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周Token（OpenRouter） | 周下载量 | 开源贡献者 | 插件数量 | 活跃用户 | 本周新功能 | 洞察 |',page)
+        self.assertIn('| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |',page)
         self.assertNotIn('Markdown 版',page)
         self.assertNotIn('data/editorial',page)
         self.assertNotIn('按用户指定',page)
@@ -345,8 +361,20 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('| 9,463 |',page)
         self.assertNotIn('Claude官方Marketplace）',page)
         self.assertNotIn('dshmarket.com）',page)
-        self.assertIn('478（openai/codex）',page)
-        self.assertIn('56（anthropics/claude-code）',page)
+        # Contributors carry the bare count; repo names stay out of the summary table.
+        self.assertIn('| 478 |',page)
+        self.assertIn('| 56 |',page)
+        self.assertNotIn('（openai/codex）',page)
+        # 活跃用户 column is gone; disclosures moved to the 官方披露 block below the table.
+        self.assertNotIn('| 活跃用户 |',page)
+        self.assertIn('**官方披露**',page)
+        self.assertIn('活跃用户 4,000万+（Codex 与 ChatGPT Work 合计口径，2026-10-07，OpenAI 团队成员公开帖）',page)
+        self.assertIn('单品历史周活 超过500万 WAU（2026-06-02，历史口径，非当前人数）',page)
+        self.assertIn('日活 154万、月活 548万、单日Token 92.10万亿（2026-11-04，厂商披露）',page)
+        self.assertIn('公开第三方插件 3.49万（去重后，2026-11-04）',page)
+        # Market share is computed against the whole ranked slice, arrows mark week-over-week direction.
+        self.assertIn('（↑100.0%）',page)
+        self.assertIn('| 10.0% |',page)
         # Editorial Chinese feature summaries take precedence; scripted fallback keeps version prefixes.
         self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
@@ -355,7 +383,9 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('1）多agent集中管理是通用交互范式',page)
         self.assertNotIn('行动</th>',page)
         self.assertNotIn('| 行动',page)
-        self.assertIn('目录全量 12,404',page)
+        # The old footnote and the mcptop directory note are gone.
+        self.assertNotIn('不反映数据变化情况',page)
+        self.assertNotIn('目录全量 12,404',page)
         self.assertNotIn('\t',page)
 
     def test_insight_cell_and_takeaways_escape_pipes(self):
@@ -365,8 +395,9 @@ class MarkdownReportTests(unittest.TestCase):
             'products':{'claude':{'insight':['借鉴A|B','共性C']},'codex':{},'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
         self.assertIn('1）借鉴A\\|B<br>2）共性C',page)
-        self.assertIn('本周最值得深入研究或借鉴',page)
-        self.assertIn('1）方向A\\|B值得深研',page)
+        self.assertIn('**行动：本周最值得深入研究或借鉴**',page)
+        # Takeaways render as a real numbered list below the table.
+        self.assertIn('1. 方向A\\|B值得深研',page)
         html_page=render(run,config)
         self.assertIn('1）借鉴A|B<br>2）共性C',html_page)
         self.assertIn('1）方向A|B值得深研',html_page)
@@ -384,14 +415,18 @@ class MarkdownReportTests(unittest.TestCase):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
         page=render_markdown(run,config)
-        self.assertIn('## 二、用量与生态指标汇总',page)
-        self.assertIn('| Harness | 本周Token | 四家内部份额 | Token环比 | 份额周变化 | 本周请求 |',page)
+        self.assertIn('# AI Harness 市场观察周报',page)
+        self.assertIn('数据窗口：2026-10-30 — 2026-11-05',page)
+        self.assertNotIn('（UTC）',page)
+        self.assertNotIn('生成于',page)
+        self.assertIn('## 二、模型使用与生态规模',page)
+        self.assertIn('### 模型使用量及占比',page)
+        self.assertIn('| Harness | 周 Token 使用量 | 样本内 Token 占比 | Token 使用量周环比 | 占比周变化（百分点） | 周模型请求量 |',page)
+        self.assertIn('### 近四周 Token 使用量趋势（连续七天窗口，Token）',page)
         self.assertNotIn('### DSH 官方披露',page)
-        self.assertNotIn('单日Token',page)
-        self.assertIn('### 用户规模公开信息',page)
-        self.assertIn('| Codex（含 ChatGPT Work） | 活跃用户（窗口未明确） | 4,000万 | 2026-10-07；合计口径 · 只计一次；活跃窗口未明示 |',page)
-        self.assertIn('| Codex（历史单品数据） | 历史WAU / 周活 | 超过500万 |',page)
-        self.assertIn('单品历史：超过500万WAU（2026-06-02）',page)
+        # User-scale disclosures live under the summary table now, not in the digest.
+        self.assertNotIn('### 用户规模公开信息',page)
+        self.assertIn('**官方披露**',page)
         self.assertNotIn('（合计与单品分开）',page)
         self.assertNotIn('合计口径与单品口径分开列示',page)
         self.assertNotIn('公开插件与参与账号样本',page)
@@ -400,6 +435,57 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertNotIn('窗口内发布：',page)
         self.assertNotIn('网络检索核实（编辑）',page)
         self.assertNotIn('HTML 完整版',page)
+
+    def test_markdown_top10_section_and_market_share_use_whole_slice(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
+        page=render_markdown(run,config)
+        self.assertIn('## 三、OpenRouter Top 10 动向',page)
+        self.assertIn('- **新进入 Top 10**：New App（第3名 · 周 Token 8）——未标注',page)
+        self.assertIn('- **本周增长最多**：Claude Code（第2名 · 周 Token 10，环比↑100.0%）——未标注',page)
+        self.assertIn('- **退出 Top 10**：Old App（上期第3名）',page)
+        # Share is measured against the whole ranked slice, spelled out in 口径与来源.
+        self.assertIn('- **OpenRouter市场份额**：该应用周Token ÷ 榜单全部应用周Token合计，非四家内部占比（本轮已取得 8 个应用）。',page)
+        self.assertIn('## 四、口径与来源',page)
+        self.assertNotIn('本周新功能/洞察',page)
+        # A quiet week still states there were no new entrants.
+        run['openrouter_previous']['top_apps']=run['openrouter_current']['top_apps']
+        page=render_markdown(run,config)
+        self.assertIn('本周 Top 10 无新增应用',page)
+
+    def test_top10_type_labels_come_from_app_types_file(self):
+        run,config=self.markdown_run()
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
+        types={'503':{'type':'SDK','note':'官方SDK可嵌入','fit':'可方便地整合为执行引擎'},
+               '502':{'type':'CLI','note':'终端编码agent','fit':'可直接调度'}}
+        with patch('harness_trends.markdown_report.load_app_types',return_value=types), \
+             patch('harness_trends.executive.load_app_types',return_value=types):
+            page=render_markdown(run,config)
+            self.assertIn('- **新进入 Top 10**：New App（第3名 · 周 Token 8）——SDK：官方SDK可嵌入',page)
+            self.assertIn('  - 集成视角：可方便地整合为执行引擎',page)
+            self.assertIn('——CLI：终端编码agent',page)
+            html_page=render(run,config)
+            self.assertIn('<span class="badge" title="可直接调度">CLI</span>',html_page)
+            self.assertIn('<span class="badge" title="可方便地整合为执行引擎">SDK</span>',html_page)
+            self.assertIn('类型标签',html_page)
+
+    def test_reports_are_archived_per_window_before_each_run(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);reports=root/'reports';reports.mkdir()
+            data=root/'data';data.mkdir()
+            (data/'latest.json').write_text(json.dumps({'window':{'start':'2026-10-30','end':'2026-11-05'}}))
+            archive_current(reports,root)
+            self.assertFalse((reports/'archive').exists())
+            (reports/'latest.md').write_text('# old')
+            (reports/'latest.html').write_text('<html>old</html>')
+            archive_current(reports,root)
+            self.assertEqual((archive_dir(reports,'2026-11-05')/'report.md').read_text(),'# old')
+            self.assertEqual((reports/'archive'/'2026-11-05'/'report.html').read_text(),'<html>old</html>')
+            # A broken snapshot never blocks the run; existing latest files stay untouched.
+            (data/'latest.json').write_text('{oops')
+            (reports/'latest.md').write_text('# newer')
+            archive_current(reports,root)
+            self.assertEqual((reports/'latest.md').read_text(),'# newer')
 
     def test_html_renders_summary_table_and_features_section(self):
         run,config=self.markdown_run()
