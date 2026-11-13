@@ -386,8 +386,8 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
         # 洞察和行动 column: labelled insight lines plus the editorial next action.
-        self.assertIn('洞察：1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点<br>下一步行动：把统一配置与无人值守权限沉淀为底座能力',page)
-        self.assertIn('洞察：1）多agent集中管理是通用交互范式',page)
+        self.assertIn('洞察：<br>1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点<br>行动：<br>把统一配置与无人值守权限沉淀为底座能力',page)
+        self.assertIn('洞察：<br>1）多agent集中管理是通用交互范式',page)
         self.assertNotIn('行动</th>',page)
         self.assertNotIn('| 行动',page)
         # The old footnote and the mcptop directory note are gone.
@@ -401,12 +401,12 @@ class MarkdownReportTests(unittest.TestCase):
             'takeaways':['方向A|B值得深研'],
             'products':{'claude':{'insight':['借鉴A|B','共性C'],'action':'行动X|Y'},'codex':{},'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('洞察：1）借鉴A\\|B<br>2）共性C<br>下一步行动：行动X\\|Y',page)
+        self.assertIn('洞察：<br>1）借鉴A\\|B<br>2）共性C<br>行动：<br>行动X\\|Y',page)
         self.assertIn('**行动：本周最值得深入研究或借鉴**',page)
         # Takeaways render as a real numbered list below the table.
         self.assertIn('1. 方向A\\|B值得深研',page)
         html_page=render(run,config)
-        self.assertIn('<b>洞察：</b><br>1）借鉴A|B<br>2）共性C<br><b>下一步行动：</b>行动X|Y',html_page)
+        self.assertIn('<b>洞察：</b><br>1）借鉴A|B<br>2）共性C<br><b>行动：</b><br>行动X|Y',html_page)
         # HTML takeaways render as a real ordered list.
         self.assertIn('<ol class="takeaways"><li>方向A|B值得深研</li></ol>',html_page)
 
@@ -428,7 +428,7 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('详细报告：https://harness.mise.fun',page)
         self.assertNotIn('（UTC）',page)
         self.assertNotIn('生成于',page)
-        self.assertIn('## 二、Token使用情况',page)
+        self.assertIn('## 二、Token使用情况（行业）',page)
         self.assertNotIn('模型使用与生态规模',page)
         self.assertIn('### 模型使用量及占比',page)
         self.assertIn('| Harness | 周 Token 使用量 | 样本内 Token 占比 | Token 使用量周环比 | 占比周变化（百分点） | 周模型请求量 |',page)

@@ -58,12 +58,12 @@ def _features_cell(run, pid):
 
 
 def _insight_cell(row):
-    """洞察和行动 column: 洞察 numbered lines, then the editorial 下一步行动 (what an
-    enterprise-grade general agent foundation can borrow), each plainly labelled."""
+    """洞察和行动 column: labelled 洞察 numbered lines, then the editorial 行动
+    (what this week's features inspire for an enterprise agent foundation to borrow)."""
     parts = []
     value = row['insight']
     if isinstance(value, list) and value:
-        parts.append('洞察：' + '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1)))
+        parts.append('洞察：<br>' + '<br>'.join(cell(f'{index}）{item}') for index, item in enumerate(value, 1)))
     action = row.get('action')
     if isinstance(action, list) and action:
         action_text = '；'.join(cell(item) for item in action)
@@ -72,7 +72,7 @@ def _insight_cell(row):
     else:
         action_text = None
     if action_text:
-        parts.append('下一步行动：' + action_text)
+        parts.append('行动：<br>' + action_text)
     return '<br>'.join(parts) if parts else '—'
 
 
@@ -142,7 +142,7 @@ def metrics_digest(run, config):
     total = sum(cur['products'][p]['tokens'] for p in products) if complete else None
     prev = run['openrouter_previous']
     oldtotal = sum(prev['products'][p]['tokens'] for p in products) if all(prev.get('products', {}).get(p, {}).get('tokens') is not None for p in products) else None
-    lines = ['## 二、Token使用情况', '']
+    lines = ['## 二、Token使用情况（行业）', '']
     kpi = []
     if total is not None:
         text = f'四家周Token总量 {number(total)}'
