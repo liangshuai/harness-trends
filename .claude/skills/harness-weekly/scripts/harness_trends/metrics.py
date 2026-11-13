@@ -153,7 +153,8 @@ def summary_rows(run):
                      'plugins':plugins,
                      'features':view.get('features'),
                      'insight':view.get('insight'),
-                     'action':view.get('action')})
+                     'action':view.get('action'),
+                     'action_due':view.get('action_due')})
     rows.sort(key=lambda r: (r['share_market'] is None, -(r['share_market'] or 0)))
     return rows
 

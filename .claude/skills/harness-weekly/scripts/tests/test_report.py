@@ -353,7 +353,7 @@ class MarkdownReportTests(unittest.TestCase):
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
             'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],
                       'insight':['无人值守权限策略值得借鉴','工具调用阻塞会话的共性痛点'],
-                      'action':'把统一配置与无人值守权限沉淀为底座能力'},
+                      'action':'把统一配置与无人值守权限沉淀为底座能力','action_due':'2026-11-20'},
             'codex':{'insight':['多agent集中管理是通用交互范式']},
             'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
@@ -386,7 +386,7 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
         # 洞察和行动 column: labelled insight lines plus the editorial next action.
-        self.assertIn('洞察：<br>1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点<br>行动：<br>把统一配置与无人值守权限沉淀为底座能力',page)
+        self.assertIn('洞察：<br>1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点<br>行动：<br>把统一配置与无人值守权限沉淀为底座能力（计划 2026-11-20 前）',page)
         self.assertIn('洞察：<br>1）多agent集中管理是通用交互范式',page)
         self.assertNotIn('行动</th>',page)
         self.assertNotIn('| 行动',page)
