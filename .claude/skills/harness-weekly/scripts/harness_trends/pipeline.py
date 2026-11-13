@@ -34,7 +34,7 @@ def inventory(run):
     for pid,row in run.get('marketplaces',{}).items():
         add(row.get('label',pid)+'插件目录计数','官网落地页解析公布总数',row.get('status','missing'),row.get('source') or '未配置')
     for pid,row in run.get('plugin_rankings',{}).get('products',{}).items():
-        add(row['name']+'插件Top 10','按公开安装量/下载量排序；Codex为共享目录位置替代榜',row['status'],row['source'])
+        add(row['name']+'插件Top 10','按公开安装量/下载量排序；Codex为目录排名',row['status'],row['source'])
     for pid,row in run.get('official_repos',{}).items():
         add(NAMES.get(pid,pid)+'官方仓库贡献者','GitHub contributors 非匿名账号，Link头last页码',row.get('status','missing'),row.get('source') or '未配置')
     for pid,row in run.get('product_updates',{}).items():

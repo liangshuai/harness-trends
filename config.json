@@ -233,5 +233,9 @@
       "anchor_disclosure_id": "codex-work-40m-primary",
       "basis": "本报告按用户要求合并分析，非产品架构事实断言"
     }
+  },
+  "report": {
+    "detail_url": "https://harness.mise.fun",
+    "note": "详细报告固定线上地址；报告头部引用，不随部署别名变化"
   }
 }

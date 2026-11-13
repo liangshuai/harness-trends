@@ -69,18 +69,13 @@ def user_disclosure_rows(run, config):
 
 
 def user_cell(run, config, pid):
-    """Summary-table lines for active users; disclosures only, each figure keeps its own scope.
-    Returns a list of plain-text lines (no markup), or None when nothing is disclosed."""
+    """Summary-table lines for active users: latest official disclosure per harness, one line."""
     if pid == 'codex':
         rows = user_disclosure_rows(run, config)
-        texts = []
         combined = next((r for r in rows if 'Codex' in r['scope'] and '历史' not in r['scope']), None)
-        history = next((r for r in rows if '历史' in r['scope']), None)
         if combined:
-            texts.append(f'{combined["display"]}+（{combined["scope"]}，{combined["as_of"]}）')
-        if history:
-            texts.append(f'单品历史：{history["display"]}WAU（{history["as_of"]}）')
-        return texts or None
+            return [f'{combined["display"]}+（Codex 与 ChatGPT Work 合计，{combined["as_of"]}）']
+        return None
     if pid == 'dsh':
         disclosure = config.get('disclosure') or {}
         if disclosure.get('mau'):
@@ -89,29 +84,22 @@ def user_cell(run, config, pid):
 
 
 def official_disclosure_groups(run, config):
-    """官方披露 grouped per harness for the Markdown summary block: every public figure from
-    news/vendor sources, combined and single-product scopes each labelled, never mixed."""
+    """官方披露 per harness: the latest disclosure date and exactly what it disclosed, one line each."""
     registered = run.get('user_disclosures', config.get('user_disclosures', []))
     primary = next((r for r in registered if r.get('id') == 'codex-work-40m-primary'), None)
     groups = []
     if primary:
-        items = [f'活跃用户 {cn_number(primary["value"])}+（Codex 与 ChatGPT Work 合计口径，'
-                 f'{primary.get("as_of")}，OpenAI 团队成员公开帖）']
-        spec = (config.get('models_v2') or {}).get('codex', {})
-        if spec.get('wau_anchor'):
-            items.append(f'单品历史周活 超过{cn_number(spec["wau_anchor"])} WAU'
-                         f'（{spec.get("as_of")}，历史口径，非当前人数）')
-        groups.append({'pid': 'codex', 'name': 'Codex', 'items': items})
+        groups.append({'pid': 'codex', 'name': 'Codex', 'items': [
+            f'{primary.get("as_of")} 披露活跃用户 {cn_number(primary["value"])}+（Codex 与 ChatGPT Work 合计口径）']})
     d = config.get('disclosure') or {}
     if d.get('dau'):
-        headline = f'日活 {cn_number(d["dau"])}、月活 {cn_number(d["mau"])}'
+        figures = f'日活 {cn_number(d["dau"])}、月活 {cn_number(d["mau"])}'
         if d.get('tokens_daily'):
             tokens = d['tokens_daily']
-            headline += f'、单日Token {tokens/1e12:.2f}万亿' if abs(tokens) >= 1e12 else f'、单日Token {cn_number(tokens)}'
-        groups.append({'pid': 'dsh', 'name': 'DeepSeek Harness',
-                       'items': [headline + f'（{d.get("as_of")}，厂商披露）',
-                                 f'公开第三方插件 {d["plugins_union"]/1e4:.2f}万（去重后，{d.get("as_of")}）']
-                       if d.get('plugins_union') else [headline + f'（{d.get("as_of")}，厂商披露）']})
+            figures += f'、单日Token {tokens/1e12:.2f}万亿' if abs(tokens) >= 1e12 else f'、单日Token {cn_number(tokens)}'
+        if d.get('plugins_union'):
+            figures += f'、公开第三方插件 {d["plugins_union"]/1e4:.2f}万'
+        groups.append({'pid': 'dsh', 'name': 'DeepSeek Harness', 'items': [f'{d.get("as_of")} 披露{figures}']})
     return groups
 
 
@@ -164,7 +152,8 @@ def summary_rows(run):
                      'contributors':repo.get('contributors'), 'repo':repo.get('repo'),
                      'plugins':plugins,
                      'features':view.get('features'),
-                     'insight':view.get('insight')})
+                     'insight':view.get('insight'),
+                     'action':view.get('action')})
     rows.sort(key=lambda r: (r['share_market'] is None, -(r['share_market'] or 0)))
     return rows
 

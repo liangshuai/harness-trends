@@ -52,7 +52,9 @@ class RankingTests(unittest.TestCase):
             self.assertEqual(row['entries'], [])
         page = render_plugin_rankings({'plugin_rankings':result})
         self.assertEqual(page.count('离线缓存缺失'), 4)
-        self.assertIn('不是 Codex 专属活跃 Top 10', page)
+        self.assertIn('Harness Top10 插件观察', page)
+        self.assertNotIn('共享目录', page)
+        self.assertNotIn('替代榜', page)
         self.assertIn('id="plugin-rankings"', render_plugin_rankings({}))
 
     def test_short_list_is_partial_and_html_is_escaped(self):
@@ -65,9 +67,23 @@ class RankingTests(unittest.TestCase):
         rankings = collect_plugin_rankings(Short(), {})
         self.assertEqual(rankings['products']['claude']['status'], 'partial')
         self.assertEqual(rankings['products']['claude']['entries'][0]['value'], 0)
-        page = render_plugin_rankings({'plugin_rankings':rankings})
+        run = {'plugin_rankings': rankings}
+        page = render_plugin_rankings(run)
         self.assertNotIn('<script>bad</script>', page)
         self.assertIn('&lt;script&gt;', page)
+        # The metric column carries the per-product indicator name; untranslated entries fall back to source text.
+        self.assertIn('<th scope="col">累计安装量</th>', page)
+        self.assertIn('功能介绍', page)
+        self.assertNotIn('指标值', page)
+
+    def test_chinese_translations_replace_source_text_by_url(self):
+        run = {'plugin_rankings': {'products': {'pi': {'status': 'ok', 'source': 'https://pi.dev/packages',
+            'entries': [{'rank': 1, 'id': 'pi-mcp-adapter', 'name': 'pi-mcp-adapter', 'value': 1709377,
+                         'url': 'https://pi.dev/packages/pi-mcp-adapter',
+                         'description': 'MCP adapter extension for Pi coding agent'}]}}}}
+        page = render_plugin_rankings(run)
+        self.assertIn('为 Pi 编码 agent 接入 MCP 协议的适配扩展', page)
+        self.assertNotIn('MCP adapter extension', page)
 
 
 if __name__ == '__main__': unittest.main()

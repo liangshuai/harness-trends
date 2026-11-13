@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 import html
 import json
+from pathlib import Path
 import re
 from urllib.parse import urljoin, urlsplit
 
@@ -13,7 +14,7 @@ SPECS = {
                '仅纳入 worksWith 明示 claude-code 且有安装量的插件；累计安装不等于近期活跃。'),
     'pi': ('Pi', 'https://pi.dev/packages', 'npm 月下载量', '来源标注 /mo；滚动月窗口',
            '官方 Most downloads 列表；含 extension、skill、theme、prompt 及组合包；下载包含更新与 CI。'),
-    'codex': ('Codex', 'https://mcptop.com/?source=openai', '共享目录位置（替代榜）', '第三方每日目录快照',
+    'codex': ('Codex', 'https://mcptop.com/?source=openai', '目录排名', '第三方每日目录快照',
               'mcptop 记录 ChatGPT / Codex 共享目录的位置，无公开活跃量或安装量；不是 Codex 专属活跃 Top 10，兼容性以插件详情为准。'),
     'dsh': ('DSH', 'https://dshmarket.com/', 'npm 近 30 天下载量', '滚动 30 天',
             '市场 Most installed 实际按 npm downloads 排序；下载不是独立安装或活跃用户。'),
@@ -128,29 +129,37 @@ def safe_link(url, label):
     return f'<a href="{esc(url)}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
 
 
+def load_plugin_translations():
+    """Editorial Chinese descriptions keyed by plugin URL (data/plugin_rankings/translations.json).
+    Missing entries fall back to the collected source text."""
+    path = Path(__file__).resolve().parent.parent/'data/plugin_rankings/translations.json'
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return {}
+    return data.get('plugins') or {}
+
+
 def render_plugin_rankings(run):
     from .render_methodology import esc, table
     products = run.get('plugin_rankings', {}).get('products', {})
+    translations = load_plugin_translations()
     body = ('<section id="plugin-rankings"><div class="section-head"><div>'
-            '<div class="section-label">PLUGIN POPULARITY / TOP 10</div><h2>插件活跃度观察 · 四家 Top 10</h2>'
-            '<p class="sub">安装与下载是热度代理；Codex 使用共享目录位置替代榜。各榜仅在自身口径内排序，不跨产品比较数值。</p></div></div>')
-    comparison = []
-    for pid, (name, _, metric, window, note) in SPECS.items():
-        row = products.get(pid, {})
-        comparison.append([esc(name), esc(row.get('metric', metric)), esc(row.get('window', window)),
-                           esc(f"{len(row.get('entries', []))}/10 · {row.get('status', 'missing')}"),
-                           esc(row.get('observed_at') or '尚未采集'), esc(row.get('note', note))])
-    body += '<div class="plugin-tables">' + table(['Harness', '排序指标', '统计周期', '完整性', '来源时间 / UTC', '比较说明'], comparison)
+            '<div class="section-label">PLUGIN POPULARITY / TOP 10</div><h2>Harness Top10 插件观察</h2>'
+            '<p class="sub">安装与下载为热度代理，不等于活跃用户；各榜仅在自身口径内排序，不跨产品比较数值。</p></div></div>')
+    body += '<div class="plugin-tables">'
     for pid, (name, url, metric, _, _) in SPECS.items():
         row = products.get(pid, {})
-        title = name + (' · 共享目录位置 Top 10（替代榜）' if pid == 'codex' else ' · 热度 Top 10')
-        body += f'<h3>{esc(title)}</h3><p class="sub">{safe_link(row.get("source", url), "榜单来源")} · {esc(row.get("metric", metric))}</p>'
+        title = name + (' · Top 10' if pid == 'codex' else ' · 热度 Top 10')
+        # The metric label is presentation: always take it from SPECS, not the stored snapshot.
+        body += f'<h3>{esc(title)}</h3><p class="sub">{safe_link(row.get("source", url), "榜单来源")} · {esc(metric)}</p>'
         entries = []
         for entry in row.get('entries', []):
             value = f"#{entry['value']}" if pid == 'codex' else f"{entry['value']:,}"
-            entries.append([str(entry['rank']), safe_link(entry['url'], entry['name']), esc(value), esc(entry['description'])])
+            description = translations.get(entry['url']) or entry['description']
+            entries.append([str(entry['rank']), safe_link(entry['url'], entry['name']), esc(value), esc(description)])
         if entries:
-            body += table(['榜内名次', '插件', '指标值', '功能介绍（来源原文）'], entries)
+            body += table(['榜内名次', '插件', metric, '功能介绍'], entries)
         if row.get('status') != 'ok':
             body += '<p class="alert">' + esc(row.get('reason', '该快照尚未采集插件榜单；下次运行 --refresh 自动采集。')) + '</p>'
     return body + '</div></section>'

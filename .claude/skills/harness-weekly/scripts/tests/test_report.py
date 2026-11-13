@@ -240,6 +240,10 @@ class ReportTests(unittest.TestCase):
         if Path('data/app_types.json').exists():
             self.assertEqual((skill/'data/app_types.json').read_text(),Path('data/app_types.json').read_text(),
                              'skill 内联副本与仓库版本不一致：data/app_types.json；执行 .claude/skills/harness-weekly/sync.sh 同步')
+        if Path('data/plugin_rankings/translations.json').exists():
+            self.assertEqual((skill/'data/plugin_rankings/translations.json').read_text(),
+                             Path('data/plugin_rankings/translations.json').read_text(),
+                             'skill 内联副本与仓库版本不一致：data/plugin_rankings/translations.json；执行 .claude/skills/harness-weekly/sync.sh 同步')
         for module in Path('harness_trends').glob('*.py'):
             self.assertEqual((skill/'harness_trends'/module.name).read_text(),module.read_text(),
                              f'skill 内联脚本与仓库版本不一致：harness_trends/{module.name}；执行 sync.sh 同步')
@@ -347,11 +351,13 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_summary_table_merges_scripted_numbers_and_editorial_views(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{
-            'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],'insight':['无人值守权限策略值得借鉴','工具调用阻塞会话的共性痛点']},
+            'claude':{'features':['denyInsteadOfPrompting：权限提示改为策略化拒绝','MCP任务后台化'],
+                      'insight':['无人值守权限策略值得借鉴','工具调用阻塞会话的共性痛点'],
+                      'action':'把统一配置与无人值守权限沉淀为底座能力'},
             'codex':{'insight':['多agent集中管理是通用交互范式']},
             'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |',page)
+        self.assertIn('| Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察和行动 |',page)
         self.assertNotIn('Markdown 版',page)
         self.assertNotIn('data/editorial',page)
         self.assertNotIn('按用户指定',page)
@@ -368,19 +374,20 @@ class MarkdownReportTests(unittest.TestCase):
         # 活跃用户 column is gone; disclosures moved to the 官方披露 block below the table.
         self.assertNotIn('| 活跃用户 |',page)
         self.assertIn('**官方披露**',page)
-        self.assertIn('活跃用户 4,000万+（Codex 与 ChatGPT Work 合计口径，2026-10-07，OpenAI 团队成员公开帖）',page)
-        self.assertIn('单品历史周活 超过500万 WAU（2026-06-02，历史口径，非当前人数）',page)
-        self.assertIn('日活 154万、月活 548万、单日Token 92.10万亿（2026-11-04，厂商披露）',page)
-        self.assertIn('公开第三方插件 3.49万（去重后，2026-11-04）',page)
-        # Market share is computed against the whole ranked slice, arrows mark week-over-week direction.
-        self.assertIn('（↑100.0%）',page)
+        # One latest disclosure per harness: date + exactly what was disclosed, no second window.
+        self.assertIn('2026-10-07 披露活跃用户 4,000万+（Codex 与 ChatGPT Work 合计口径）',page)
+        self.assertIn('2026-11-04 披露日活 154万、月活 548万、单日Token 92.10万亿、公开第三方插件 3.49万',page)
+        self.assertNotIn('单品历史',page)
+        self.assertNotIn('历史口径',page)
+        # Market share is computed against the whole ranked slice, bolded arrows mark direction.
+        self.assertIn('（**↑100.0%**）',page)
         self.assertIn('| 10.0% |',page)
         # Editorial Chinese feature summaries take precedence; scripted fallback keeps version prefixes.
         self.assertIn('1）denyInsteadOfPrompting：权限提示改为策略化拒绝<br>2）MCP任务后台化',page)
         self.assertIn('1）0.167.0：Open the agent command center with codex agents --no-daemon (#5823…',page)
-        # 洞察 column carries borrowing-value analysis; 行动 column is gone.
-        self.assertIn('1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点',page)
-        self.assertIn('1）多agent集中管理是通用交互范式',page)
+        # 洞察和行动 column: labelled insight lines plus the editorial next action.
+        self.assertIn('洞察：1）无人值守权限策略值得借鉴<br>2）工具调用阻塞会话的共性痛点<br>下一步行动：把统一配置与无人值守权限沉淀为底座能力',page)
+        self.assertIn('洞察：1）多agent集中管理是通用交互范式',page)
         self.assertNotIn('行动</th>',page)
         self.assertNotIn('| 行动',page)
         # The old footnote and the mcptop directory note are gone.
@@ -392,14 +399,14 @@ class MarkdownReportTests(unittest.TestCase):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06',
             'takeaways':['方向A|B值得深研'],
-            'products':{'claude':{'insight':['借鉴A|B','共性C']},'codex':{},'pi':{},'dsh':{}}}
+            'products':{'claude':{'insight':['借鉴A|B','共性C'],'action':'行动X|Y'},'codex':{},'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
-        self.assertIn('1）借鉴A\\|B<br>2）共性C',page)
+        self.assertIn('洞察：1）借鉴A\\|B<br>2）共性C<br>下一步行动：行动X\\|Y',page)
         self.assertIn('**行动：本周最值得深入研究或借鉴**',page)
         # Takeaways render as a real numbered list below the table.
         self.assertIn('1. 方向A\\|B值得深研',page)
         html_page=render(run,config)
-        self.assertIn('1）借鉴A|B<br>2）共性C',html_page)
+        self.assertIn('<b>洞察：</b><br>1）借鉴A|B<br>2）共性C<br><b>下一步行动：</b>行动X|Y',html_page)
         # HTML takeaways render as a real ordered list.
         self.assertIn('<ol class="takeaways"><li>方向A|B值得深研</li></ol>',html_page)
 
@@ -418,9 +425,11 @@ class MarkdownReportTests(unittest.TestCase):
         page=render_markdown(run,config)
         self.assertIn('# AI Harness 市场观察周报',page)
         self.assertIn('数据窗口：2026-10-30 — 2026-11-05',page)
+        self.assertIn('详细报告：https://harness.mise.fun',page)
         self.assertNotIn('（UTC）',page)
         self.assertNotIn('生成于',page)
-        self.assertIn('## 二、模型使用与生态规模',page)
+        self.assertIn('## 二、Token使用情况',page)
+        self.assertNotIn('模型使用与生态规模',page)
         self.assertIn('### 模型使用量及占比',page)
         self.assertIn('| Harness | 周 Token 使用量 | 样本内 Token 占比 | Token 使用量周环比 | 占比周变化（百分点） | 周模型请求量 |',page)
         self.assertIn('### 近四周 Token 使用量趋势（连续七天窗口，Token）',page)
@@ -520,9 +529,13 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('summary-table',page)
         self.assertIn('>本周新功能</th>',page)
         self.assertIn('>活跃用户</th>',page)
-        self.assertIn('4,000万+（Codex（含 ChatGPT Work），2026-10-07）',page)
+        self.assertIn('4,000万+（Codex 与 ChatGPT Work 合计，2026-10-07）',page)
         self.assertIn('548万MAU / 154万DAU（官方披露，2026-11-04）',page)
-        self.assertIn('>洞察</th>',page)
+        # Active users show only the latest disclosure; bolded arrows mark week-over-week direction.
+        self.assertNotIn('单品历史',page)
+        self.assertIn('<b>↑100.0%</b>',page)
+        self.assertIn('详细报告：https://harness.mise.fun',page)
+        self.assertIn('>洞察和行动</th>',page)
         self.assertIn('本周最值得深入研究或借鉴',page)
         self.assertIn('<ol class="takeaways"><li>研究权限分级设计</li></ol>',page)
         self.assertIn('不反映数据变化情况',page)
