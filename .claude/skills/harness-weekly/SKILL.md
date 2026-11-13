@@ -225,7 +225,7 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 ## 一、主流Harness汇总表
 | Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |
-（行序固定：Claude Code → Codex → Pi → DeepSeek Harness）
+（行序：按 OpenRouter市场份额 从大到小，`metrics.summary_rows` 统一排序，MD/HTML 同序；缺份额数据的行保持简报序排最后）
 
 **官方披露**                        ← 汇总表下方，按 Harness 分组的无表格要点列表（仅 Codex / DSH 有）
 - **Codex**：活跃用户 4,000万+（…合计口径，日期，来源）；单品历史周活 超过500万 WAU（…）
@@ -268,16 +268,16 @@ python3 run_report.py          # 缓存模式，把编辑笔记写进快照并�
 
 ### 5.2 HTML（`reports/latest.html`）结构
 
-导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 本周新功能 → 规模估算 → 数据附录。
+导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 插件 Top 10 → 本周新功能 → 规模估算 → 数据附录。
 
-1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期）；
-2. 用量份额（环形图 ×2）。其中「放到公开应用榜单中看 · Top 10」的每个应用名后带**类型标签**（`data/app_types.json`，徽标 hover 显示集成评估；图下脚注说明标签口径），用于评估能否整合为自有产品的 agent 执行引擎；
+1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期）；表尾「行动：本周最值得深入研究或借鉴」为真实 `<ol>` 列表（MD 同款 takeaways）；
+2. 用量份额（环形图 ×2）。其中「公开应用榜单Top10」图例有**专门的类型标签列**（tag 药丸样式，`data/app_types.json`，悬停显示作为 agent 执行引擎的集成评估；图下脚注说明标签口径）；同区下方「Top 10 动向」panel 列出本周新进榜应用（类型+定位+集成视角）、增长最多应用与退出应用（与 MD 第三节同源，共享 `metrics.top10_changes`）；
 3. 规模与增长（Token/请求条形）；四周趋势（折线）；
 4. 生态与用户（npm 下载、GitHub 样本、DSH 披露卡）；
-5. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + 各版本脚本采集要点（原文引用）+ `编辑` 徽标的"网络检索核实"段 + 来源链接；
+5. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + **编辑整理的中文功能摘要**（`<ol>`，取 editorial `features`）+ 折叠的「官方发布原文（脚本采集，核对用）」+ `编辑` 徽标的"网络检索核实"段 + 来源链接；无编辑摘要的周次退回显示脚本采集原文并注明"编辑中文摘要待补"；
 6. 规模估算、数据附录（含全量采集状态清单）。
 
-渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`，MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
+渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`（类型标签样式 `type_tag`+`TYPE_CLASSES`），MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
 
 ### 5.3 报告归档（每轮自动执行）
 
@@ -300,7 +300,7 @@ assert all('releases' in u for u in d['product_updates'].values())
 print('快照校验通过',d['window'])
 EOF
 head -30 reports/latest.md                      # 汇总表4行8列、官方披露块、无内部路径/格式标签
-python3 -c "page=open('reports/latest.html').read();assert 'summary-table' in page and 'id=\"features\"' in page and 'class=\"badge\"' in page;print('HTML校验通过')"
+python3 -c "page=open('reports/latest.html').read();assert 'summary-table' in page and 'id=\"features\"' in page and 'type-tag' in page and 'Top 10 动向' in page;print('HTML校验通过')"
 grep -c '（合计与单品分开）\|配套完整报告\|按用户指定\|不反映数据变化情况' reports/latest.md   # 应为 0
 ls reports/archive/$(python3 -c "import json;print(json.load(open('data/latest.json'))['window']['end'])")/   # 该窗口 html+md 均已归档
 ```
@@ -345,3 +345,10 @@ commit 信息按当轮实际内容写（数据刷新 / 版式修改 / 逻辑修�
 - anthropics/claude-code 公开仓贡献者仅几十人是正常的（闭源镜像开发），口径已注明。
 - `--render-only` 仅供版式/审计，不能当周更命令。
 - 旧快照缺新字段（如 `product_updates`）时渲染器必须优雅降级（有测试覆盖）。
+
+
+## 插件 Top 10 固定模块
+
+全报告 `python3 run_report.py --refresh` 自动采集并在 HTML 中渲染 `plugin_rankings`：Claude Code 官方结构化累计安装量（仅明确支持 claude-code）、Pi 官方月下载量、DSH 近30天 npm 下载量、Codex 共享目录位置替代榜。各取10条，指标不可跨产品横排；Codex来源无活跃量与安装量，不标成专属活跃排名。介绍来自源站原文。缺失显示原因，旧快照显示待采集。
+
+仅刷新此模块：`python3 refresh_plugins.py --update-report`，共用运行锁、留存原始响应/独立榜单快照/运行快照与 HTML 归档，不重写其他模块的统计日期。离线复现追加 `--offline`。新增解析测试 `tests/test_plugin_rankings.py` 随 sync.sh 一同分发。

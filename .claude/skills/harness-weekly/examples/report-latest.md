@@ -47,7 +47,7 @@
 
 - **新进入 Top 10**：Minds by Authentic Intelligence（第10名 · 周 Token 1.40T）——产品：App Store 上架的消费级 AI 应用，定位「人与人真实连接」的 AI 实验室，非开发者工具
   - 集成视角：消费级产品，不适合作为执行引擎整合
-- **本周增长最多**：omp（第7名 · 周 Token 3.21T，环比↑44.7%）——CLI：Oh My Pi（omp.sh）：Rust 内核终端编码 agent，LSP/DAP 为一等工具，兼容 pi 扩展生态
+- **本周增长最多**：omp（第7名 · 周 Token 3.21T，环比↑44.7%）——CLI：Oh My Pi（omp.sh），Rust 内核终端编码 agent，LSP/DAP 为一等工具，兼容 pi 扩展生态
 - **退出 Top 10**：Portkey AI（上期第7名）
 
 ## 四、口径与来源

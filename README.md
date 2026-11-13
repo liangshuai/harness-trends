@@ -85,3 +85,24 @@ OpenRouter固定canonical app ID，排除同名Pi扩展。按指定UTC窗口回�
 线上地址：https://harness-market-observer.vercel.app
 
 每周任务先执行 `python3 run_report.py --refresh`，成功后执行 `python3 deploy_report.py`，同步更新固定线上地址。发布脚本只复制报告到独立 `site/` 目录，上传文件白名单为 `index.html` 与 `vercel.json`；Vercel本地登录及项目关联保留在本机。`.env`、原始采集数据与采集脚本不随站点上传。
+
+## 插件 Top 10（HTML 固定模块）
+
+`python3 run_report.py --refresh` 现在每次同时抓取四家插件榜，写入运行快照的 `plugin_rankings`，HTML 导航和正文固定包含「插件活跃度观察 · 四家 Top 10」。四张介绍表列出榜内名次、插件链接、指标值、来源功能介绍；前置对比表说明指标、周期、完整性及真实来源时间。
+
+- Claude Code：官方目录内明确支持 Claude Code 的插件，按结构化 `installs` 累计安装量降序取 10。
+- Pi：官方 Package Catalog 的 Most downloads，按 npm 月下载量取 10；包含扩展、技能、主题、提示模板及组合包。
+- DSH：dshmarket.com 的 Most installed，实际指标是 npm 近 30 天下载量。
+- Codex：mcptop.com 记录的 ChatGPT / Codex 共享目录位置前 10，明确标为替代榜；来源没有公开活跃量或安装量，不能声称是 Codex 专属活跃排名，也不保证每个插件的全部能力均适用于 Codex。
+
+这些是各自生态的热度代理，不是插件活跃用户数。不同指标与周期不可合并横排。各来源采集时点独立展示，不冒充报告窗口内历史排名。来源结构变化或请求失败时保留 missing/partial 与原因，不补零或虚构 10 条。原始响应、请求时间与结构化结果均留档；`--render-only` 只读快照，旧快照也会显示模块及待采集提示。
+
+仅更新插件榜（不必重新抓取其他模块）：
+
+```sh
+python3 refresh_plugins.py                  # 实时抓榜，保存 data/plugin_rankings/latest.json 及时间戳副本
+python3 refresh_plugins.py --update-report  # 同时更新当前 HTML 和运行快照，自动归档；其他数据日期不变
+python3 refresh_plugins.py --offline --update-report  # 使用缓存重放，显示缓存真实来源时间
+```
+
+独立脚本与全报告任务共用互斥锁，四家均取得 10 条时退出码为 0，缺失或不足时为 2。定时任务继续执行原有 `python3 run_report.py --refresh` 即可；无需另设抓榜任务。榜单解析与渲染位于 `harness_trends/plugin_rankings.py`，来源地址可通过 `config.json` 的 `plugin_rankings.<产品ID>.url` 覆盖。

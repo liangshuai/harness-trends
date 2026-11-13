@@ -1,0 +1,402 @@
+{
+  "plugin_rankings": {
+    "version": 1,
+    "collected_at": "2026-11-13T03:24:00.049423+00:00",
+    "products": {
+      "claude": {
+        "name": "Claude Code",
+        "source": "https://claude.com/marketplace/plugins",
+        "metric": "累计安装量",
+        "window": "累计；截至来源采集时点",
+        "note": "仅纳入 worksWith 明示 claude-code 且有安装量的插件；累计安装不等于近期活跃。",
+        "status": "ok",
+        "entries": [
+          {
+            "id": "frontend-design",
+            "name": "frontend-design",
+            "description": "Frontend design skill for UI/UX implementation",
+            "value": 1134112,
+            "url": "https://claude.com/marketplace/plugins/frontend-design",
+            "rank": 1
+          },
+          {
+            "id": "superpowers",
+            "name": "Superpowers",
+            "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
+            "value": 1009371,
+            "url": "https://claude.com/marketplace/plugins/superpowers",
+            "rank": 2
+          },
+          {
+            "id": "code-review",
+            "name": "code-review",
+            "description": "Automated code review for pull requests using multiple specialized agents with confidence-based scoring",
+            "value": 438525,
+            "url": "https://claude.com/marketplace/plugins/code-review",
+            "rank": 3
+          },
+          {
+            "id": "context7",
+            "name": "context7",
+            "description": "Upstash Context7 MCP server for up-to-date documentation lookup. Connects to Context7's hosted remote MCP server (https://mcp.context7.com/mcp) — no local Node.js or npx required — to pull version-specific documentation and code examples directly from source repositories into your LLM context. Authenticate with Context7 when prompted.",
+            "value": 417801,
+            "url": "https://claude.com/marketplace/plugins/context7",
+            "rank": 4
+          },
+          {
+            "id": "code-simplifier",
+            "name": "code-simplifier",
+            "description": "Agent that simplifies and refines code for clarity, consistency, and maintainability while preserving functionality",
+            "value": 346763,
+            "url": "https://claude.com/marketplace/plugins/code-simplifier",
+            "rank": 5
+          },
+          {
+            "id": "playwright",
+            "name": "playwright",
+            "description": "Browser automation and end-to-end testing MCP server by Microsoft. Enables Claude to interact with web pages, take screenshots, fill forms, click elements, and perform automated browser testing workflows.",
+            "value": 319887,
+            "url": "https://claude.com/marketplace/plugins/playwright",
+            "rank": 6
+          },
+          {
+            "id": "github",
+            "name": "github",
+            "description": "Official GitHub MCP server for repository management. Create issues, manage pull requests, review code, search repositories, and interact with GitHub's full API directly from Claude Code.",
+            "value": 319381,
+            "url": "https://claude.com/marketplace/plugins/github",
+            "rank": 7
+          },
+          {
+            "id": "claude-md-management",
+            "name": "claude-md-management",
+            "description": "Tools to maintain and improve CLAUDE.md files - audit quality, capture session learnings, and keep project memory current.",
+            "value": 287247,
+            "url": "https://claude.com/marketplace/plugins/claude-md-management",
+            "rank": 8
+          },
+          {
+            "id": "feature-dev",
+            "name": "feature-dev",
+            "description": "Comprehensive feature development workflow with specialized agents for codebase exploration, architecture design, and quality review",
+            "value": 256017,
+            "url": "https://claude.com/marketplace/plugins/feature-dev",
+            "rank": 9
+          },
+          {
+            "id": "security-guidance",
+            "name": "Security Guidance",
+            "description": "Security review for Claude-generated code. Pattern-based warnings on edits, LLM-powered diff review on Stop, and an agentic commit reviewer that catches injection, XSS, SSRF, hardcoded secrets, and 25+ other vulnerability classes.",
+            "value": 241800,
+            "url": "https://claude.com/marketplace/plugins/security-guidance",
+            "rank": 10
+          }
+        ],
+        "observed_at": "2026-11-13T03:21:49.928240+00:00",
+        "ranking_kind": "popularity_proxy"
+      },
+      "pi": {
+        "name": "Pi",
+        "source": "https://pi.dev/packages",
+        "metric": "npm 月下载量",
+        "window": "来源标注 /mo；滚动月窗口",
+        "note": "官方 Most downloads 列表；含 extension、skill、theme、prompt 及组合包；下载包含更新与 CI。",
+        "status": "ok",
+        "entries": [
+          {
+            "id": "billion-context",
+            "name": "billion-context",
+            "description": "A context-compression plugin — small context windows (a 100K context is enough), 5x fewer tokens, month-long single sessions (billions of tokens), and compression quality — for all agents: pi, OpenCode, Codex, Claude Code, and more. billion-context is all",
+            "value": 3292065,
+            "url": "https://pi.dev/packages/billion-context",
+            "rank": 1
+          },
+          {
+            "id": "pi-mcp-adapter",
+            "name": "pi-mcp-adapter",
+            "description": "MCP (Model Context Protocol) adapter extension for Pi coding agent",
+            "value": 1709377,
+            "url": "https://pi.dev/packages/pi-mcp-adapter",
+            "rank": 2
+          },
+          {
+            "id": "pi-web-access",
+            "name": "pi-web-access",
+            "description": "Web search, URL fetching, GitHub repo cloning, PDF extraction, YouTube video understanding, and local video analysis for Pi coding agent. Supports OpenAI, Brave, Parallel, TinyFish, Search1API, Searchinfinity, Querit, Tavily, Firecrawl, Crawl4AI, Jina, SE",
+            "value": 1339776,
+            "url": "https://pi.dev/packages/pi-web-access",
+            "rank": 3
+          },
+          {
+            "id": "pi-mcp-extension",
+            "name": "pi-mcp-extension",
+            "description": "Full-featured, lightweight MCP extension for the Pi coding agent: stdio, SSE & Streamable HTTP transports, OAuth 2.1 (PKCE + DCR), lazy/eager lifecycles — minimal dependencies, zero bloat.",
+            "value": 1056351,
+            "url": "https://pi.dev/packages/pi-mcp-extension",
+            "rank": 4
+          },
+          {
+            "id": "pi-subagents",
+            "name": "pi-subagents",
+            "description": "Pi extension for single-agent delegation and scripted multi-agent workflows",
+            "value": 931710,
+            "url": "https://pi.dev/packages/pi-subagents",
+            "rank": 5
+          },
+          {
+            "id": "@postman/postman-plugin",
+            "name": "@postman/postman-plugin",
+            "description": "Postman's API engineering skills for coding agents: a Pi package, and an npx installer that sets up Claude Code, Codex, Cursor, Kimi Code, Factory Droid, OpenCode and Pi.",
+            "value": 716171,
+            "url": "https://pi.dev/packages/@postman/postman-plugin",
+            "rank": 6
+          },
+          {
+            "id": "openwiki",
+            "name": "openwiki",
+            "description": "A CLI that uses a DeepAgents documentation agent to generate and maintain an OpenWiki for a codebase.",
+            "value": 272855,
+            "url": "https://pi.dev/packages/openwiki",
+            "rank": 7
+          },
+          {
+            "id": "@juicesharp/rpiv-ask-user-question",
+            "name": "@juicesharp/rpiv-ask-user-question",
+            "description": "Pi extension. A structured questionnaire the model can put to you when it would otherwise guess, with typed options instead of free-form replies.",
+            "value": 180175,
+            "url": "https://pi.dev/packages/@juicesharp/rpiv-ask-user-question",
+            "rank": 8
+          },
+          {
+            "id": "context-mode",
+            "name": "context-mode",
+            "description": "Context window saver for 10 coding agents. Local and free: sandboxed code execution, FTS5 search, session continuity.",
+            "value": 164068,
+            "url": "https://pi.dev/packages/context-mode",
+            "rank": 9
+          },
+          {
+            "id": "@onkernel/browser-loop",
+            "name": "@onkernel/browser-loop",
+            "description": "Browser tools for your agent: framework-neutral tool catalog, per-model compilation, Kernel-browser execution, and a pi binding + extension",
+            "value": 162307,
+            "url": "https://pi.dev/packages/@onkernel/browser-loop",
+            "rank": 10
+          }
+        ],
+        "observed_at": "2026-11-13T03:21:46.427593+00:00",
+        "ranking_kind": "popularity_proxy"
+      },
+      "codex": {
+        "name": "Codex",
+        "source": "https://mcptop.com/?source=openai",
+        "metric": "共享目录位置（替代榜）",
+        "window": "第三方每日目录快照",
+        "note": "mcptop 记录 ChatGPT / Codex 共享目录的位置，无公开活跃量或安装量；不是 Codex 专属活跃 Top 10，兼容性以插件详情为准。",
+        "status": "ok",
+        "entries": [
+          {
+            "id": "/server/openai-google-drive",
+            "name": "Google Drive",
+            "description": "Drive, Docs, Sheets or Slides",
+            "value": 1,
+            "url": "https://mcptop.com/server/openai-google-drive",
+            "rank": 1
+          },
+          {
+            "id": "/server/openai-atlassian",
+            "name": "Atlassian",
+            "description": "Jira, Confluence, Loom, & more",
+            "value": 2,
+            "url": "https://mcptop.com/server/openai-atlassian",
+            "rank": 2
+          },
+          {
+            "id": "/server/openai-flaim-fantasy",
+            "name": "Flaim Fantasy",
+            "description": "Your fantasy sports leagues",
+            "value": 3,
+            "url": "https://mcptop.com/server/openai-flaim-fantasy",
+            "rank": 3
+          },
+          {
+            "id": "/server/openai-firecrawl",
+            "name": "Firecrawl",
+            "description": "Search and extract web data",
+            "value": 4,
+            "url": "https://mcptop.com/server/openai-firecrawl",
+            "rank": 4
+          },
+          {
+            "id": "/server/openai-remote-desktop-commander",
+            "name": "Remote Desktop Commander",
+            "description": "Use your computer from chat",
+            "value": 5,
+            "url": "https://mcptop.com/server/openai-remote-desktop-commander",
+            "rank": 5
+          },
+          {
+            "id": "/server/openai-slack",
+            "name": "Slack",
+            "description": "Read and manage Slack",
+            "value": 6,
+            "url": "https://mcptop.com/server/openai-slack",
+            "rank": 6
+          },
+          {
+            "id": "/server/openai-wpvibe",
+            "name": "WPVibe",
+            "description": "AI WordPress tools",
+            "value": 7,
+            "url": "https://mcptop.com/server/openai-wpvibe",
+            "rank": 7
+          },
+          {
+            "id": "/server/openai-granola",
+            "name": "Granola",
+            "description": "Add your meeting context",
+            "value": 8,
+            "url": "https://mcptop.com/server/openai-granola",
+            "rank": 8
+          },
+          {
+            "id": "/server/openai-fathom-ai-notetaker",
+            "name": "Fathom AI Notetaker",
+            "description": "Meeting notes & transcripts",
+            "value": 9,
+            "url": "https://mcptop.com/server/openai-fathom-ai-notetaker",
+            "rank": 9
+          },
+          {
+            "id": "/server/openai-github",
+            "name": "GitHub",
+            "description": "Triage PRs, issues, CI, and publish flows",
+            "value": 10,
+            "url": "https://mcptop.com/server/openai-github",
+            "rank": 10
+          }
+        ],
+        "observed_at": "2026-11-13T03:21:52.970106+00:00",
+        "ranking_kind": "directory_order"
+      },
+      "dsh": {
+        "name": "DSH",
+        "source": "https://dshmarket.com/",
+        "metric": "npm 近 30 天下载量",
+        "window": "滚动 30 天",
+        "note": "市场 Most installed 实际按 npm downloads 排序；下载不是独立安装或活跃用户。",
+        "status": "ok",
+        "entries": [
+          {
+            "id": "https://awesome-dsh-plugin.com/p/ranxianglei/billion-context/",
+            "name": "ranxianglei/billion-context",
+            "url": "https://awesome-dsh-plugin.com/p/ranxianglei/billion-context/",
+            "description": "The official billion-context plugin: a context-compression plugin for small context windows (a 100K context is enough), token savings (5x fewer tokens), and month-long single sessions (billions of tokens).",
+            "value": 3188140,
+            "rank": 1
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/helloHub1212/dsh-windows-mcp/",
+            "name": "helloHub1212/dsh-windows-mcp",
+            "url": "https://awesome-dsh-plugin.com/p/helloHub1212/dsh-windows-mcp/",
+            "description": "Bridges the CursorTouch/Windows-MCP desktop automation server into DSH through the official MCP client bridge, registering its screenshot, UI tree snapshot, mouse and keyboard input, clipboard, process and registry tools as mcp__windows__* tools for the model, and adds a windows_mcp_doctor diagnostic tool. Computer Use is off by default and is switched on from the plugin panel.",
+            "value": 746367,
+            "rank": 2
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/PC2005-cloud/dsh-pet--dsh-pet/",
+            "name": "PC2005-cloud/dsh-pet#dsh-pet",
+            "url": "https://awesome-dsh-plugin.com/p/PC2005-cloud/dsh-pet--dsh-pet/",
+            "description": "Desktop pet for the DSH Web UI on Windows, macOS and Linux: 106 transparent animations in the browser overlay or a transparent always-on-top desktop window, throw-and-bounce drag physics with squash and particle scoring, a work-status bubble driven by live session events, self-talk and chat with persistent memory, balance display, meme-image bubbles, multiple pets on screen, and drop-in custom animations and pet packs.",
+            "value": 543535,
+            "rank": 3
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/bowenliang123/dsh-context/",
+            "name": "bowenliang123/dsh-context",
+            "url": "https://awesome-dsh-plugin.com/p/bowenliang123/dsh-context/",
+            "description": "DSH context insight panel: Context dashboard + /context command + Context browser — one-stop context lifecycle management with categorized composition, content details, evolution trends, compaction/injection events, and stats.",
+            "value": 459383,
+            "rank": 4
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/MeteorNOX/DeepSeek-Balance-Whale-Widget/",
+            "name": "MeteorNOX/DeepSeek-Balance-Whale-Widget",
+            "url": "https://awesome-dsh-plugin.com/p/MeteorNOX/DeepSeek-Balance-Whale-Widget/",
+            "description": "A fixed-corner whale widget for the DSH web GUI — balance, today's usage and per-turn cost with peak/off-peak pricing, editable balance-alert and daily-budget bubbles, a module-based custom bubble queue with A/B weighted choices and random lines or images, 30+ vendor templates (OpenAI, OpenRouter, Kimi, SiliconFlow, Ark, Zhipu, MiniMax and more) with per-model balance and subscription quota, plus task-end sound, imported audio, custom roles and a resource manager. Local-only, no telemetry.",
+            "value": 426708,
+            "rank": 5
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/omdsh-dev/DSH-better-sidebar/",
+            "name": "omdsh-dev/DSH-better-sidebar",
+            "url": "https://awesome-dsh-plugin.com/p/omdsh-dev/DSH-better-sidebar/",
+            "description": "Full sidebar workbench with file rendering and editing, terminal, Git, and subagents; third-party plugins can register new tabs.",
+            "value": 317535,
+            "rank": 6
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/liustack/modlens/",
+            "name": "liustack/modlens",
+            "url": "https://awesome-dsh-plugin.com/p/liustack/modlens/",
+            "description": "Vision bridge for text-only models: paste an image, get structured JSON evidence (OCR, layout, semantics).",
+            "value": 289197,
+            "rank": 7
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/T-Auto/dsh-ops/",
+            "name": "T-Auto/dsh-ops",
+            "url": "https://awesome-dsh-plugin.com/p/T-Auto/dsh-ops/",
+            "description": "Provides bash, PowerShell 7, and high-performance Rust tools for DSH on Windows to reduce token usage.",
+            "value": 203150,
+            "rank": 8
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/MichengAI/dsh-skills-manager/",
+            "name": "MichengAI/dsh-skills-manager",
+            "url": "https://awesome-dsh-plugin.com/p/MichengAI/dsh-skills-manager/",
+            "description": "Manages local DeepSeek Harness skills in Settings and shows shared Agent skills as read-only.",
+            "value": 156933,
+            "rank": 9
+          },
+          {
+            "id": "https://awesome-dsh-plugin.com/p/zhu1090093659/dsh-web--packages-dsh-skill-explorer/",
+            "name": "zhu1090093659/dsh-web#packages/dsh-skill-explorer",
+            "url": "https://awesome-dsh-plugin.com/p/zhu1090093659/dsh-web--packages-dsh-skill-explorer/",
+            "description": "Skill center for the dsh web GUI: browse all loaded skills grouped by source, enable or disable model invocation, create new skills, and delete into a recoverable trash.",
+            "value": 151661,
+            "rank": 10
+          }
+        ],
+        "observed_at": "2026-11-13T03:21:47.994364+00:00",
+        "ranking_kind": "popularity_proxy"
+      }
+    }
+  },
+  "requests": [
+    {
+      "url": "https://claude.com/marketplace/plugins",
+      "fetched_unix": 1794540109.92824,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://pi.dev/packages",
+      "fetched_unix": 1794540106.427593,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://mcptop.com/?source=openai",
+      "fetched_unix": 1794540112.9701061,
+      "status": 200,
+      "has_next": false
+    },
+    {
+      "url": "https://dshmarket.com/",
+      "fetched_unix": 1794540107.994364,
+      "status": 200,
+      "has_next": false
+    }
+  ]
+}

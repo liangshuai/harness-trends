@@ -7,8 +7,8 @@
 | Harness | 周 Token 使用量（万亿） | OpenRouter市场份额 | 周下载量 | 开源贡献者 | 插件数量 | 本周新功能 | 洞察 |
 |---|---|---|---|---|---|---|---|
 | Claude Code | 10.56T（↑1.1%） | 16.5% | 1,625.4万（↑22.1%） | 56 | 531 | 1）Fable 5.2 成为默认 Fable 模型：1M 上下文，$8/$40 每百万Token（2.1.321）<br>2）Vertex 上线 fast mode（global/us/eu），拒绝时自动回退标准速度（2.1.322）<br>3）claude remote-control 新增 --settings，为每个会话套用统一设置文件<br>4）MCP 任务后台化与 denyInsteadOfPrompting 无人值守权限策略（2.1.319） | 1）fast mode 按区域自动回退：模型加速与渠道解耦的多云降级范式<br>2）remote-control --settings：远程批量会话统一配置，企业集中管理共性需求 |
-| Codex | 3.34T（↓33.3%） | 5.2% | 2,623.4万（↓1.1%） | 477 | 1,269 | 1）Agent Command Center（codex agents --no-daemon）集中管理多个 agent，未读结果标记（0.167.0）<br>2）会话级后端切换保留草稿；本地图片预览与 Vertex AI 配置向导（0.167.0）<br>3）0.167.2：Vertex AI 默认增量发送工具声明，请求更轻量，可配置回退 | 1）增量工具声明：随工具数增长只发 diff，是请求瘦身的通用解法<br>2）Command Center 与草稿保留持续打磨多 agent 并行的体验细节 |
 | Pi | 4.04T（↑2.3%） | 6.3% | 678.8万（↑7.9%） | 308 | 5,502 | 1）pi auth login/logout：免启动会话即可登录登出，支持 API key（1.5.1）<br>2）空闲提示词缓存保温至30分钟，跨运行降低重复任务成本（1.5.1）<br>3）Anthropic 消息线程：只发送新增消息续接对话（1.5.1）<br>4）原目录被移动/删除的会话可 fork 到新位置（1.5.2） | 1）空闲缓存保温30分钟：小改动直接降低重复任务成本，值得借鉴<br>2）消息线程只发增量：长会话带宽与延迟优化的共性思路 |
+| Codex | 3.34T（↓33.3%） | 5.2% | 2,623.4万（↓1.1%） | 477 | 1,269 | 1）Agent Command Center（codex agents --no-daemon）集中管理多个 agent，未读结果标记（0.167.0）<br>2）会话级后端切换保留草稿；本地图片预览与 Vertex AI 配置向导（0.167.0）<br>3）0.167.2：Vertex AI 默认增量发送工具声明，请求更轻量，可配置回退 | 1）增量工具声明：随工具数增长只发 diff，是请求瘦身的通用解法<br>2）Command Center 与草稿保留持续打磨多 agent 并行的体验细节 |
 | DeepSeek Harness | 2.27T（↑9.4%） | 3.5% | 83.7万（↑5.0%） | 52 | 10,581 | 1）Git Worktree：按分支/提交/文件类型审阅改动，直连 GitHub 评审并同步进度<br>2）SubAgent 具名与多层协作；AgentTeam 按会话开启，共用成员与任务面板<br>3）桌面端支持切换正式版与开发版更新渠道 | 1）AgentTeam 按会话共享成员与任务面板：多agent协作编排的直观实现<br>2）Worktree 评审直连 GitHub 并同步状态：把审查工作流嵌入 harness |
 
 **官方披露**
