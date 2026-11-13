@@ -203,13 +203,8 @@ def render_markdown(run, config):
     lines.append(summary_table(run, editorial, config))
     lines.append('')
     lines += official_disclosure_block(run, config)
-    if editorial:
-        takeaways = editorial.get('takeaways') or []
-        if takeaways:
-            lines += ['', '**行动：本周最值得深入研究或借鉴**', '']
-            lines += [f'{index}. {cell(item)}' for index, item in enumerate(takeaways, 1)]
-    else:
-        lines += ['', '> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察与结尾总结待补；数字均由脚本采集。']
+    if not editorial:
+        lines += ['', '> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察和行动列待补；数字均由脚本采集。']
     lines += ['', *metrics_digest(run, config)]
     lines += top10_section(run)
     lines.append('## 四、口径与来源')
