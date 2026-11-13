@@ -402,13 +402,12 @@ class MarkdownReportTests(unittest.TestCase):
             'products':{'claude':{'insight':['借鉴A|B','共性C'],'action':'行动X|Y'},'codex':{},'pi':{},'dsh':{}}}
         page=render_markdown(run,config)
         self.assertIn('洞察：<br>1）借鉴A\\|B<br>2）共性C<br>行动：<br>行动X\\|Y',page)
-        self.assertIn('**行动：本周最值得深入研究或借鉴**',page)
-        # Takeaways render as a real numbered list below the table.
-        self.assertIn('1. 方向A\\|B值得深研',page)
+        # The standalone takeaways block is gone: 行动 lives inside the summary table now.
+        self.assertNotIn('本周最值得深入研究或借鉴',page)
+        self.assertNotIn('1. 方向A\\|B值得深研',page)
         html_page=render(run,config)
         self.assertIn('<b>洞察：</b><br>1）借鉴A|B<br>2）共性C<br><b>行动：</b><br>行动X|Y',html_page)
-        # HTML takeaways render as a real ordered list.
-        self.assertIn('<ol class="takeaways"><li>方向A|B值得深研</li></ol>',html_page)
+        self.assertNotIn('本周最值得深入研究或借鉴',html_page)
 
     def test_markdown_without_editorial_keeps_features_and_blanks_insight(self):
         run,config=self.markdown_run();run['editorial']=None
@@ -537,8 +536,7 @@ class MarkdownReportTests(unittest.TestCase):
         # The page itself is the detailed report: no self-referential detail link in HTML.
         self.assertNotIn('详细报告：',page)
         self.assertIn('>洞察和行动</th>',page)
-        self.assertIn('本周最值得深入研究或借鉴',page)
-        self.assertIn('<ol class="takeaways"><li>研究权限分级设计</li></ol>',page)
+        self.assertNotIn('本周最值得深入研究或借鉴',page)
         self.assertIn('不反映数据变化情况',page)
         # The rankings panel got a plain title and the Top 10 moves panel sits in the same section.
         self.assertIn('公开应用榜单Top10',page)

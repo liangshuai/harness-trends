@@ -18,11 +18,6 @@
 - **Codex**：2026-10-07 披露活跃用户 4,000万+（Codex 与 ChatGPT Work 合计口径）
 - **DeepSeek Harness**：2026-11-04 披露日活 154万、月活 548万、单日Token 92.10万亿、公开第三方插件 3.49万
 
-**行动：本周最值得深入研究或借鉴**
-
-1. 「请求瘦身」两例值得深研：Claude Code 按区域自动回退的 Vertex fast mode、Codex 增量工具声明
-2. DSH AgentTeam 多agent协作面板与 Pi 空闲缓存保温，可直接借鉴
-
 ## 二、Token使用情况（行业）
 
 - 四家周Token总量 20.21T（环比-5.9%）；周请求总量 2.21亿；份额第一 Claude Code 52.2%；Token环比变化最大 DSH +9.4%
