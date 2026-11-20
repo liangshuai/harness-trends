@@ -114,6 +114,30 @@
       "sources": [
         "https://github.com/github/spec-kit/releases"
       ]
+    },
+    {
+      "text": "Anthropic 11-16披露Claude Code验证方法论：约90%代码由Claude写并评审，靠E2E/属性/差分测试与39项可靠性清单兜底；建议底座把验证层当独立系统建设",
+      "sources": [
+        "https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/"
+      ]
+    },
+    {
+      "text": "Anthropic 11-14 升级Claude Code Projects：单个项目内并行运行多个AI worker分工执行；并行编排正成产品标配，底座应支持工作区级多agent分工与结果聚合",
+      "sources": [
+        "https://claude.com/resources/articles/projects-redesigned"
+      ]
+    },
+    {
+      "text": "社区11-16起热议Windows 11遥测采集编码agent与开发工具使用情况（HN 732分）；企业引入编码agent时建议把终端遥测与数据合规纳入采购评估项",
+      "sources": [
+        "https://xusheng.dev/posts/windows-coding-agent-telemetry/"
+      ]
+    },
+    {
+      "text": "Harvard/NBER瓶颈研究本周再成社区焦点（HN 325分）：655企业PR产出+36%、代码评审耗时+56%，瓶颈移到评审环节；建议把评审吞吐设为agent推广健康度指标；论文为今秋发布",
+      "sources": [
+        "https://news.ycombinator.com/item?id=50538303"
+      ]
     }
   ]
 }
