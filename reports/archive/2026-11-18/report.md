@@ -59,6 +59,14 @@
 
 6）GitHub spec-kit本周三连发v1.4.1–1.4.3（11-16/17/19）：社区目录新增Jira生命周期与多仓工作区编排扩展；SDD正走向企业工具链集成，可借鉴「spec为源」的流程位（来源：https://github.com/github/spec-kit/releases）
 
+7）Anthropic 11-16披露Claude Code验证方法论：约90%代码由Claude写并评审，靠E2E/属性/差分测试与39项可靠性清单兜底；建议底座把验证层当独立系统建设（来源：https://claude.dev/blog/how-the-claude-code-team-thinks-about-verification/）
+
+8）Anthropic 11-14 升级Claude Code Projects：单个项目内并行运行多个AI worker分工执行；并行编排正成产品标配，底座应支持工作区级多agent分工与结果聚合（来源：https://claude.com/resources/articles/projects-redesigned）
+
+9）社区11-16起热议Windows 11遥测采集编码agent与开发工具使用情况（HN 732分）；企业引入编码agent时建议把终端遥测与数据合规纳入采购评估项（来源：https://xusheng.dev/posts/windows-coding-agent-telemetry/）
+
+10）Harvard/NBER瓶颈研究本周再成社区焦点（HN 325分）：655企业PR产出+36%、代码评审耗时+56%，瓶颈移到评审环节；建议把评审吞吐设为agent推广健康度指标；论文为今秋发布（来源：https://news.ycombinator.com/item?id=50538303）
+
 ## 五、口径与来源
 
 - **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 2026-11-12 — 2026-11-18；只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.

@@ -224,7 +224,8 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
   - `text`：**50–100 字单句** = 谁 + 日期 + 事件 + 关键数字/做法 + 一句指引（「建议…」），不用分点、不写补充段；
   - `sources`：该条核实用到的 URL（渲染时取第一条附尾）；
   - 旧快照的 `headline/points/note` 长格式自动降级渲染，新周次一律写紧凑格式。
-- **检索关键词参考**：中文「AI Coding 实践 / 研发效能 报告 / 代码生成 度量」；英文「AI coding productivity report / agentic coding case study / coding agent release」；限定词 `site:官方博客`、发布时间限定。优先微软/谷歌/OpenAI/Anthropic/GitHub 等官方一手发布与 Postman/DORA/GitClear 等量化报告。
+- **检索关键词参考**：中文「AI Coding 实践 / 研发效能 报告 / 代码生成 度量」；英文「AI coding productivity report / agentic coding case study / coding agent release」。
+- **渠道要求（每期至少覆盖3类，条目目标5–10条）**：Hacker News（Algolia API 按窗口+points>30 精确检索，可脚本化）、X 官方与从业者账号、Reddit（r/ClaudeAI、r/ChatGPTCoding）、arXiv 量化研究、官方工程博客（claude.dev/github.blog/microsoft.ai 等）、Postman/DORA/GitClear 类报告、中文媒体（量子位/机器之心/InfoQ，区分转述与原文）。
 - **内容构成=新闻+方法论混排**（方法论按 tech-briefing 的五层分类每周挑有动静的：需求/规格层（SDD、spec-kit/Kiro）、执行层（agentic 工作流、subagent 编排、skills/rules 工程化、多仓工作区）、上下文层（context engineering、记忆管理）、质量层（AI 代码评审、属性测试与形式化验证）、团队层（知名团队/从业者规模化实践及其交付/回滚数据））。从业者分享标注「实践分享」，量化与可落地步骤必须有，概念不复读；无本周新发布的方法论主题可标「方法论背景，非本周新闻」收录。
 - 优先覆盖：新编码模型发布与定价、平台汰换、量化生产力研究、大厂 AI Coding 实践、当周方法论动态。数字必须来自来源原文，不自行推算。
 - 无合适材料时整组留空（`[]` 或缺省），报告自动省略该节，不阻塞。
