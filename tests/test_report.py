@@ -5,7 +5,8 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from harness_trends.collect import Client, FetchError, is_human, npm_downloads, openrouter_window
+from harness_trends.collect import (Client, FetchError, is_human, npm_downloads,
+                                    npm_weekly_downloads, openrouter_window)
 from harness_trends.metrics import compute, package_total, ratio_delta, scale_summary
 from harness_trends.render import esc, render
 from run_report import archive_current, archive_dir, load_env, previous_snapshot, settled_end, METHOD
@@ -128,6 +129,19 @@ class ReportTests(unittest.TestCase):
     def test_failed_source_not_zero(self):
         self.assertIsNone(package_total([{'status':'missing','total':None}]))
         self.assertIsNone(ratio_delta(2,0))
+
+    def test_npm_weekly_uses_range_point_and_fails_closed(self):
+        class Range:
+            def json(self,url):
+                assert '/downloads/point/2026-11-12:2026-11-18/' in url
+                return {'start':'2026-11-12','end':'2026-11-18','downloads':22881136}
+        row=npm_weekly_downloads(Range(),'@openai/codex',date(2026,11,12),date(2026,11,18))
+        self.assertEqual(row['status'],'ok');self.assertEqual(row['total'],22881136)
+        self.assertEqual(row['basis'],'npm周区间聚合');self.assertIsNone(row['daily'])
+        class Wrong:
+            def json(self,url): return {'start':'2026-11-12','end':'2026-11-17','downloads':10}
+        row=npm_weekly_downloads(Wrong(),'@openai/codex',date(2026,11,12),date(2026,11,18))
+        self.assertEqual(row['status'],'missing');self.assertIn('起止日',row['reason'])
 
     def test_npm_rejects_duplicate_or_missing_days(self):
         payload={'downloads':[{'day':'2026-11-01','downloads':3}]*2}

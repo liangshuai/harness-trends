@@ -14,7 +14,7 @@ SPECS = {
                '仅纳入 worksWith 明示 claude-code 且有安装量的插件；累计安装不等于近期活跃。'),
     'pi': ('Pi', 'https://pi.dev/packages', 'npm 月下载量', '来源标注 /mo；滚动月窗口',
            '官方 Most downloads 列表；含 extension、skill、theme、prompt 及组合包；下载包含更新与 CI。'),
-    'codex': ('Codex', 'https://mcptop.com/?source=openai', '目录排名', '第三方每日目录快照',
+    'codex': ('Codex', 'https://mcptop.com/chatgpt?source=openai', '目录排名', '第三方每日目录快照',
               'mcptop 记录 ChatGPT / Codex 共享目录的位置，无公开活跃量或安装量；不是 Codex 专属活跃 Top 10，兼容性以插件详情为准。'),
     'dsh': ('DSH', 'https://dshmarket.com/', 'npm 近 30 天下载量', '滚动 30 天',
             '市场 Most installed 实际按 npm downloads 排序；下载不是独立安装或活跃用户。'),
