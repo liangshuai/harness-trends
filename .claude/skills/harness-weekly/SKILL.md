@@ -10,8 +10,8 @@ description: 生成或更新 Harness 市场观察周报（Codex/Claude Code/Pi/D
 | 类别 | 内容 | 谁来做 | 章节 |
 |---|---|---|---|
 | A 脚本采集 | 报告里**所有数字**：Token、下载、贡献者、插件数、活跃用户披露、新功能原文 | `run_report.py` 一条命令 | §2 |
-| B 网络检索 | 四家本周新功能的第三方报道与官方发布说明交叉材料；Top 10 新应用的定位核实 | Agent 联网搜索 | §3 |
-| C Agent 生成 | 本周新功能中文摘要（features）、洞察（借鉴价值/共性需求）、takeaways（结尾总结）、网络检索核实结论 → `data/editorial/<窗口结束日>.json`；Top 10 应用类型标注 → `data/app_types.json` | Agent 按规则撰写 | §4 |
+| B 网络检索 | 四家本周新功能的第三方报道与官方发布说明交叉材料；Top 10 新应用的定位核实；AI Coding 行业资讯（tech-briefing 方法论） | Agent 联网搜索 | §3 |
+| C Agent 生成 | 本周新功能中文摘要（features）、洞察（借鉴价值/共性需求）、takeaways（结尾总结）、网络检索核实结论 → `data/editorial/<窗口结束日>.json`；Top 10 应用类型标注 → `data/app_types.json`；AI Coding 行业资讯 → `industry_briefing` | Agent 按规则撰写 | §4 |
 
 每周流程固定顺序：**A 采集 → B 检索 → C 写笔记 → A' 重跑嵌入 → 校验 → 提交推送**。
 换机器跑同样报告：先做 §1 初始化，再按 §2→§6 顺序执行，任何一步都不允许跳过或改序。
@@ -213,7 +213,23 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 - 未收录的条目自动回退显示来源原文，不阻塞报告；
 - 插件排名每周变化，旧条目保留（同一插件 URL 稳定），只增量补新进榜的。
 
-### 4.6 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
+### 4.6 AI Coding 行业资讯（editorial 顶层字段 `industry_briefing`，按 tech-briefing 方法论撰写）
+
+「AI Coding 行业资讯」模块的内容由 Agent 按 `tech-briefing` 技能的方法论联网检索撰写（方法要义已内化如下，独立副本无该技能也可执行）：
+
+- **只收报告窗口内发布的材料**；超窗的剔除，或明确标注「超窗，供参考」。
+- **时间必须核实到原文发布日**，不把解读文章日期当原报告日期；二手解读标注「据 XX 解读」。
+- **不虚构时间承诺**：指引用「建议优先对标 X」「应增加 Y 检查」等可执行动作，不写「本周可做」。
+- **条目结构**（写进 editorial 顶层 `industry_briefing` 数组，建议 3–5 条）：
+  - `headline`：一句话简述 = 发布方 + 日期 + 事件 + 为什么值得看；
+  - `points`：`["① 核心数据/判断（带数字）", "② 案例与量化结果（谁+做了什么+结果多少）", "③ 对我们的启发/指引（具体动作）"]`；
+  - `note`：补充（原文/解读时间区分、数据出入提示）；
+  - `sources`：核实用到的 URL。
+- **检索关键词参考**：中文「AI Coding 实践 / 研发效能 报告 / 代码生成 度量」；英文「AI coding productivity report / agentic coding case study / coding agent release」；限定词 `site:官方博客`、发布时间限定。优先微软/谷歌/OpenAI/Anthropic/GitHub 等官方一手发布与 Postman/DORA/GitClear 等量化报告。
+- 优先覆盖：新编码模型发布与定价、平台汰换、量化生产力研究、大厂 AI Coding 实践。数字必须来自来源原文，不自行推算。
+- 无合适材料时整组留空（`[]` 或缺省），报告自动省略该节，不阻塞。
+
+### 4.7 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
 
 「OpenRouter Top 10 动向」模块与 HTML 榜单类型标签依赖编辑维护的 `data/app_types.json`（键=数据集 `app_id` 字符串）：
 
@@ -254,7 +270,15 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 - **本周增长最多**：<app>（第N名 · 周 Token X，环比↑x%）——<类型>：<定位>
 - **退出 Top 10**：<app>（上期第N名）        ← 无新增应用时写"本周 Top 10 无新增应用。"
 
-## 四、口径与来源
+## 四、AI Coding 行业资讯                      ← editorial.industry_briefing（§4.6，tech-briefing 方法论）
+1）<一句话简述：发布方+日期+事件+为什么值得看>
+- ① 核心数据/判断（带数字）
+- ② 案例与量化结果
+- ③ 对我们的启发/指引（具体动作，不虚构时间承诺）
+- 补充：<原文/解读时间区分、数据出入>；来源：URL
+（无资讯时整节省略，编号顺延）
+
+## 五、口径与来源                              ← 有行业资讯时为「五」，无时为「四」
 - 周 Token 使用量 / OpenRouter市场份额 / 周下载量 / 开源贡献者 / 插件数量 各一条
 ```
 
@@ -276,15 +300,16 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 
 ### 5.2 HTML（`reports/latest.html`）结构
 
-导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 插件 Top 10 → 本周新功能 → 规模估算 → 数据附录。
+导航：核心数据 → 用量份额 → 规模与增长 → 四周趋势 → 生态与用户 → 插件 Top 10 → 本周新功能 → 行业资讯 → 规模估算 → 数据附录。
 
 1. **核心数据**：4 张 KPI 卡（周Token总量/请求总量/份额第一/增长最快）+ **主流Harness汇总表**（与 MD 同源，共享 `metrics.summary_rows`；列含 活跃用户，与 MD 版列集不同属预期；洞察和行动列含加粗 ↑↓ 箭头与「洞察：/下一步行动：」标注，活跃用户列只显示各家最新一次披露）；
 2. 用量份额（环形图 ×2）。其中「公开应用榜单Top10」图例有**专门的类型标签列**（tag 药丸样式，`data/app_types.json`，悬停显示作为 agent 执行引擎的集成评估；图下脚注说明标签口径）；同区下方「Top 10 动向」panel 列出本周新进榜应用（类型+定位+集成视角）、增长最多应用与退出应用（与 MD 第三节同源，共享 `metrics.top10_changes`）；
 3. 规模与增长（Token/请求条形）；四周趋势（折线）；
 4. 生态与用户（npm 下载条形、DSH 披露卡；GitHub 样本明细表已去掉，仅数据附录保留采集状态）；
 5. **Harness Top10 插件观察**：四家各一张同构表（榜内名次/插件/指标列名随产品：累计安装量、npm 月下载量、目录排名、npm 近30天下载量/功能介绍），无跨产品对比总表；功能介绍优先用 `data/plugin_rankings/translations.json` 中文简介（§4.5），未收录回退源站原文；
-6. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + **编辑整理的中文功能摘要**（`<ol>`，取 editorial `features`）+ 折叠的「官方发布原文（脚本采集，核对用）」+ `编辑` 徽标的"网络检索核实"段 + 来源链接；无编辑摘要的周次退回显示脚本采集原文并注明"编辑中文摘要待补"；
-7. 规模估算、数据附录（含全量采集状态清单）。
+6. **AI Coding 行业资讯**（06）：每条一个 panel（一句话简述 + ①②③分点 + 补充 + 来源链接），取 editorial `industry_briefing`（§4.6），无内容整节省略；
+7. **本周新功能特性**（05）：每家一个 panel = 窗口内发布版本行 + **编辑整理的中文功能摘要**（`<ol>`，取 editorial `features`）+ 折叠的「官方发布原文（脚本采集，核对用）」+ `编辑` 徽标的"网络检索核实"段 + 来源链接；无编辑摘要的周次退回显示脚本采集原文并注明"编辑中文摘要待补"；
+8. 规模估算、数据附录（含全量采集状态清单）。
 
 渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`（类型标签样式 `type_tag`+`TYPE_CLASSES`），MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
 
@@ -299,7 +324,7 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 ## 6. 校验清单（换机零偏差验证，全过才算完成）
 
 ```sh
-python3 -m unittest discover -s tests          # 46 项全 OK
+python3 -m unittest discover -s tests          # 47 项全 OK
 python3 - <<'EOF'
 import json;d=json.load(open('data/latest.json'))
 assert d['openrouter_current']['status']=='ok'

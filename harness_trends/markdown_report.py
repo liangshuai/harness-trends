@@ -136,6 +136,26 @@ def top10_section(run):
     return lines
 
 
+def industry_section(run):
+    """AI Coding 行业资讯：编辑按 tech-briefing 技能检索核实并写入 editorial.industry_briefing，
+    每条=一句话简述 + ①②③分点详细解读 + 补充；无内容时整节省略。"""
+    items = (run.get('editorial') or {}).get('industry_briefing') or []
+    if not items:
+        return []
+    lines = ['## 四、AI Coding 行业资讯', '']
+    for index, item in enumerate(items, 1):
+        lines.append(f'{index}）{cell(item.get("headline", ""))}')
+        lines.append('')
+        for point in item.get('points') or []:
+            lines.append(f'- {cell(point)}')
+        if item.get('note'):
+            lines.append(f'- 补充：{cell(item["note"])}')
+        for source in item.get('sources') or []:
+            lines.append(f'- 来源：{cell(source)}')
+        lines.append('')
+    return lines
+
+
 def metrics_digest(run, config):
     """Markdown mirror of the HTML report's core metric sections."""
     products = run['products']
@@ -210,7 +230,10 @@ def render_markdown(run, config):
         lines += ['', '> 本轮无编辑笔记：本周新功能列为脚本提取的官方发布原文摘录，洞察和行动列待补；数字均由脚本采集。']
     lines += ['', *metrics_digest(run, config)]
     lines += top10_section(run)
-    lines.append('## 四、口径与来源')
+    industry = industry_section(run)
+    lines += industry
+    # 口径与来源编号跟随前文小节（行业资讯有则五、无则四）
+    lines.append('## 五、口径与来源' if industry else '## 四、口径与来源')
     lines.append('')
     lines.append(f'- **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 {start} — {end}；'
                  '只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.')

@@ -434,8 +434,17 @@ class MarkdownReportTests(unittest.TestCase):
 
     def test_markdown_replaces_features_with_html_sourced_metrics_digest(self):
         run,config=self.markdown_run()
-        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{}}
+        run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{},
+            'industry_briefing':[{'headline':'某厂发布某模型','points':['① 数据','② 结果','③ 指引'],
+                                  'note':'原文11-17发布','sources':['https://example.org/x']}]}
         page=render_markdown(run,config)
+        # 行业资讯 module renders from editorial (tech-briefing format) and 口径 renumbers to 五.
+        self.assertIn('## 四、AI Coding 行业资讯',page)
+        self.assertIn('1）某厂发布某模型',page)
+        self.assertIn('- ① 数据',page)
+        self.assertIn('- 补充：原文11-17发布',page)
+        self.assertIn('- 来源：https://example.org/x',page)
+        self.assertIn('## 五、口径与来源',page)
         self.assertIn('# AI Harness 市场观察周报',page)
         self.assertIn('数据窗口：2026-10-30 — 2026-11-05',page)
         self.assertIn('详细报告：https://harness.mise.fun',page)
@@ -561,8 +570,17 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('官方发布原文（脚本采集，核对用）',page)
         self.assertIn('id="features"',page)
         self.assertIn('href="#features"',page)
+        # 行业资讯 section mirrors the Markdown module when editorial carries the briefing.
+        self.assertNotIn('id="industry"',page)
         self.assertIn('Open the agent command center with codex agents --no-daemon (#58238).',page)
         self.assertIn('网络检索核实：与CHANGELOG一致',page)
+        run3,config3=self.markdown_run()
+        run3['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{},
+            'industry_briefing':[{'headline':'某厂发布某模型','points':['① 数据'],'sources':['https://example.org/x']}]}
+        page3=render(run3,config3)
+        self.assertIn('id="industry"',page3)
+        self.assertIn('href="#industry"',page3)
+        self.assertIn('AI Coding 行业资讯',page3)
         # Old snapshots without product_updates skip the section instead of crashing.
         run2,config2=self.markdown_run();run2.pop('product_updates')
         page2=render(run2,config2)
