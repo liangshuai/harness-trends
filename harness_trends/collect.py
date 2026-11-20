@@ -119,6 +119,22 @@ def npm_downloads(client, package, start, end):
         return {'package':package, 'status':'missing', 'total':None, 'reason':str(exc), 'source':url}
 
 
+def npm_weekly_downloads(client, package, start, end):
+    """npm 周区间聚合（point/{start}:{end}）：一个窗口一次请求，不逐日校验。
+    与逐日加总同源同值，但不要求逐日明细齐备——用于末日结算前按周口径出报。"""
+    url = f'https://api.npmjs.org/downloads/point/{start}:{end}/' + quote(package, safe='@')
+    try:
+        payload = client.json(url)
+        if payload.get('start') != str(start) or payload.get('end') != str(end):
+            raise FetchError('npm周区间返回的起止日与请求不一致')
+        if not isinstance(payload.get('downloads'), int) or payload['downloads'] < 0:
+            raise FetchError('npm周区间下载量无效')
+        return {'package':package, 'status':'ok', 'total':payload['downloads'], 'daily':None,
+                'source':url, 'start':str(start), 'end':str(end), 'basis':'npm周区间聚合'}
+    except FetchError as exc:
+        return {'package':package, 'status':'missing', 'total':None, 'reason':str(exc), 'source':url}
+
+
 def is_human(account):
     return bool(account.get('id')) and account.get('type') == 'User' and not account.get('login', '').lower().endswith('[bot]')
 

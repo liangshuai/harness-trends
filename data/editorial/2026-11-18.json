@@ -1,0 +1,81 @@
+{
+  "window_end": "2026-11-18",
+  "prepared_at": "2026-11-20",
+  "note": "编辑内容：features（本周新功能要点摘要）、insight（值得同行借鉴的价值点/共性需求）、action（行动：可借鉴到企业级Agent通用底座的点，一句话）+ action_due（时间计划日期，按难易在窗口结束后7~30天内选定，渲染为「（计划 日期 前）」，一次选定不随渲染变化）、feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。features从官方Releases/CHANGELOG原文总结挑选，insight与action基于新增功能分析、不评述数据波动，feature_summary均已对照官方原文核实。",
+  "general_sources": [
+    "https://github.com/anthropics/claude-code/releases",
+    "https://github.com/openai/codex/releases",
+    "https://github.com/deepseek-ai/deepseek-harness/releases",
+    "https://github.com/earendil-works/pi/releases",
+    "https://pi.dev/changelog"
+  ],
+  "products": {
+    "claude": {
+      "features": [
+        "Code Mode 实验特性上线：Claude 通过编写 JavaScript 调用工具，并可与 agent teams 同开（2.1.323/2.1.326）",
+        "claude mcp add-json - 从 stdin 读取服务器 JSON，令牌不再暴露在命令行（2.1.327）",
+        "/status 列出损坏的 agent、技能、命令与输出样式文件及快捷键错误（2.1.327）",
+        "/install-github-app 变更仓库前增加确认（2.1.327）"
+      ],
+      "insight": [
+        "Code Mode 与 agent teams 打通：代码化工具编排进入多agent协作主流程",
+        "mcp 配置走 stdin 传递：凭据不落命令行与进程列表，企业部署的共性安全需求"
+      ],
+      "action": "可借鉴 Code Mode 与 agent teams 的组合方式，在底座多agent编排中统一代码化工具调用，并把敏感配置改为 stdin/文件传递",
+      "action_due": "2026-12-05",
+      "feature_summary": "网络检索与CHANGELOG.md一致：2.1.323（11-12）上线实验性 Code Mode（Claude 写 JavaScript 调用工具）；2.1.326（11-16）允许 Code Mode 与 agent teams 同开（agent-team 会话默认进入 Code Mode）并加固沙箱到凭据的路径，第三方统计该版共367项变更；2.1.327（11-17）新增 claude mcp add-json -（stdin 传入）、/status 列出损坏配置文件、/install-github-app 确认与网关 managed settings 校验头；2.1.325（11-13）为终端提示与报错说明类小改进。",
+      "sources": [
+        "https://code.claude.com/docs/en/changelog",
+        "https://github.com/anthropics/claude-code/releases",
+        "https://x.com/ClaudeCodeLog/status/2122821446602780783"
+      ]
+    },
+    "codex": {
+      "features": [
+        "TUI 内 WebRTC 实时语音通话（0.170.0，11-18）",
+        "终端工作区多 side-chat 标签；Command Center 按名称/提示/目录检索历史任务（0.169.0）",
+        "Sessions → Model Providers 浏览并选默认模型；终端内增改自定义模型供应商（0.168.0/0.169.0）",
+        "跨环境同名 MCP 服务器实验支持（0.170.0）"
+      ],
+      "insight": [
+        "终端内实时语音（WebRTC）：语音交互进入 CLI 编码 agent 的主流形态",
+        "同名 MCP 服务器跨环境并存：按环境隔离同名工具服务的配置组织方式"
+      ],
+      "action": "可借鉴 Codex 的多环境 MCP 配置隔离与终端内模型供应商管理，为底座补齐多租户/多环境的工具与模型配置面",
+      "action_due": "2026-12-10",
+      "feature_summary": "网络检索与GitHub Releases一致：0.170.0（11-18）新增TUI实时语音WebRTC协商、OTel导出器自动刷新认证头、同名MCP服务器跨环境实验支持，第三方报道另有TUI侧栏布局与焦点管理；0.169.0（11-13）终端工作区多侧聊标签、任务中心检索、折叠回合详情、终端内自定义供应商与Cloud连接发图选模型；0.168.0（11-13）模型供应商浏览、tui_workspace侧边对话、录音附件与GIF生成；0.169.1（11-17）为修复版。",
+      "sources": [
+        "https://github.com/openai/codex/releases",
+        "https://x.com/CodexReleases/status/2123034898076201300",
+        "https://ai-tldr.dev/releases/openai-codex-cli-0-170"
+      ]
+    },
+    "pi": {
+      "features": [],
+      "insight": [],
+      "action": "",
+      "feature_summary": "本周（11-13—11-19）pi 无新版本发布：官方 changelog 最新为 1.5.1/1.5.2（11-09/11-10，上期已覆盖），GitHub Releases 与 npm @earendil-works/pi-coding-agent 窗口内均无 stable 发布。",
+      "sources": [
+        "https://pi.dev/changelog",
+        "https://github.com/earendil-works/pi/releases"
+      ]
+    },
+    "dsh": {
+      "features": [
+        "实验性「DeepSeek 会话导入」插件：把 DeepSeek App/网页版历史会话导入工作区继续对话（rc.3，11-13）",
+        "DeepSeek 模型改用服务端搜索且不按次收费，其他模型默认 DeepSeek Search API（rc.5，11-18）",
+        "修复 LiveShare 桌面端无法创建分享与异常响应处理（rc.4，11-17）"
+      ],
+      "insight": [
+        "会话导入插件：把存量用户从 App/网页无摩擦迁入本地 harness，是低摩擦获客思路",
+        "服务端搜索不计次收费：把搜索成本内化到模型服务侧的定价设计"
+      ],
+      "action": "可借鉴会话导入的迁移思路，为底座提供从主流 Chat 产品的会话迁移入口，降低用户切换成本",
+      "action_due": "2026-11-30",
+      "feature_summary": "网络检索与GitHub Release一致：0.2.2-rc.3（11-13）新增实验性DeepSeek会话导入插件并修复Windows桌面端应用内更新失败；rc.4（11-17）优化异常消息响应处理、修复LiveShare桌面端创建分享；rc.5（11-18）DeepSeek模型使用服务端搜索不按次收费、其他模型默认DeepSeek Search API。",
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/releases"
+      ]
+    }
+  }
+}

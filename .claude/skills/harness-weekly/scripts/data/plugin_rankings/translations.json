@@ -1,6 +1,6 @@
 {
   "_note": "编辑维护（Class C）：四家插件榜 Top 10 的中文功能介绍，键为插件详情页 URL（与采集条目对应）。报告优先使用此处中文；未收录的条目回退显示来源原文，核实后补录即可。",
-  "_updated": "2026-11-13",
+  "_updated": "2026-11-20",
   "plugins": {
     "https://claude.com/marketplace/plugins/frontend-design": "面向 UI/UX 实现的前端设计技能包",
     "https://claude.com/marketplace/plugins/superpowers": "Claude Code 核心技能库：TDD、调试、协作模式与成熟实践方法",
@@ -41,6 +41,9 @@
     "https://awesome-dsh-plugin.com/p/liustack/modlens/": "纯文本模型的视觉桥：贴入图片返回结构化 JSON 证据（OCR、布局、语义）",
     "https://awesome-dsh-plugin.com/p/T-Auto/dsh-ops/": "为 Windows 上的 DSH 提供 bash、PowerShell 7 与高性能 Rust 工具，降低 Token 消耗",
     "https://awesome-dsh-plugin.com/p/MichengAI/dsh-skills-manager/": "在设置中管理本地技能，只读展示共享 Agent 技能",
-    "https://awesome-dsh-plugin.com/p/zhu1090093659/dsh-web--packages-dsh-skill-explorer/": "技能中心：按来源浏览已加载技能、启停模型调用、新建技能，删除进可恢复回收站"
+    "https://awesome-dsh-plugin.com/p/zhu1090093659/dsh-web--packages-dsh-skill-explorer/": "技能中心：按来源浏览已加载技能、启停模型调用、新建技能，删除进可恢复回收站",
+    "https://pi.dev/packages/cc-safety-net": "编码agent CLI 钩子：拦截破坏性命令与密钥文件访问",
+    "https://awesome-dsh-plugin.com/p/flymysql/dsh-remote/": "SSH 远程工作区：跨主机并行项目、远程文件编辑、递归搜索、终端与 Git diff，可远程构建测试",
+    "https://awesome-dsh-plugin.com/p/kenryu42/cc-safety-net/": "执行前守卫：工具调用前拦截破坏性 Git/文件系统命令与 SSH 私钥、.env 等敏感文件访问"
   }
 }

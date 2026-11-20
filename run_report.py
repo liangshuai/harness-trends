@@ -10,7 +10,8 @@ import os
 from pathlib import Path
 import sys
 
-from harness_trends.collect import Client, FetchError, github_ecosystem, npm_downloads, openrouter_window, official_repo
+from harness_trends.collect import (Client, FetchError, github_ecosystem, npm_downloads,
+                                    npm_weekly_downloads, openrouter_window, official_repo)
 from harness_trends.metrics import compute, package_total
 from harness_trends.render import render
 from harness_trends.models_v2 import collect_inputs, apply as apply_models_v2
@@ -122,6 +123,8 @@ def main():
     parser.add_argument('--candidate-limit',type=int,help='每家从搜索前100条内检查的候选数')
     parser.add_argument('--contributor-limit',type=int,help='每家读取贡献者的仓库上限')
     parser.add_argument('--render-only',type=Path,help='从一份已有run JSON重建HTML，不联网')
+    parser.add_argument('--npm-weekly',action='store_true',
+                        help='npm下载改用周区间聚合（point/{start}:{end}），不逐日校验；用于末日结算前按周口径出报')
     args=parser.parse_args()
     config=json.loads((ROOT/'config.json').read_text())
     load_env(ROOT/'.env')
@@ -163,14 +166,18 @@ def main():
     client=Client(ROOT,raw_dir,settings['github_request_budget'],0 if args.refresh else settings['cache_hours'],args.offline)
     signature=hashlib.sha256(json.dumps({'settings':settings,'queries':[(p['id'],p['query']) for p in config['products']],
         'method':METHOD,'models':config.get('models_v2'),'catalogs':config.get('catalogs')},sort_keys=True).encode()).hexdigest()
-    run={'id':run_id,'method_version':METHOD,'generated_at':now.isoformat(),'collection_signature':signature,'settlement_note':settlement_note,'refresh_mode':'live' if args.refresh else ('offline' if args.offline else 'cached'),
+    if args.npm_weekly:
+        settlement_note+=' 本轮npm下载按周区间聚合口径（--npm-weekly），不做逐日校验。'
+    run={'id':run_id,'method_version':METHOD,'generated_at':now.isoformat(),'collection_signature':signature,'settlement_note':settlement_note,
+         'npm_mode':'weekly-range' if args.npm_weekly else 'daily-sum','refresh_mode':'live' if args.refresh else ('offline' if args.offline else 'cached'),
          'window':{'start':str(start),'end':str(end)},'previous_window':{'start':str(previous_start),'end':str(previous_end)},
          'anchor_window':{'start':str(disclosure_start),'end':str(disclosure_end)},'configuration':config,'products':{}}
     for product in config['products']:
         print(f'采集 {product["name"]}：npm窗口与公开插件样本…',flush=True)
         p={'name':product['name'], 'npm_current':[], 'npm_previous':[]}
+        npm_current_fn = npm_weekly_downloads if args.npm_weekly else npm_downloads
         for package in product['npm']:
-            p['npm_current'].append(npm_downloads(client,package,start,end))
+            p['npm_current'].append(npm_current_fn(client,package,start,end))
             p['npm_previous'].append(npm_downloads(client,package,previous_start,previous_end))
         if product['id']=='dsh':
             p['npm_anchor']=[npm_downloads(client,package,disclosure_start,disclosure_end) for package in product['npm']]
