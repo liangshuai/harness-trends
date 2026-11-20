@@ -83,6 +83,22 @@
 - 来源：https://github.com/orgs/community/discussions
 - 来源：https://github.blog/changelog
 
+5）Grok 核心工程师土豆姐（Lauren Tan）11-17 分享 AI Coding 实战：以代码库维护+规则约束+自动化测试与形式化验证为主线，团队月交付 1.1 万个 PR、回滚率约 0.5%
+
+- ① 量化结果：其团队月交付 11000 个 PR，回滚率仅约 0.5%（量子位 11-17 报道，原文为实践分享访谈）
+- ② 方法主线：不追求一次性生成好代码，而是持续维护代码库、用规则文件约束 agent 行为、自动化测试加形式化验证兜底质量
+- ③ 指引：为底座建「规则即代码」层——把团队规范写成 RULES/CLAUDE.md 类约束文件并纳入评审；在 CI 为 agent 生成的代码加属性测试/形式化验证关卡，用回滚率而非产量考核
+- 补充：实践分享类条目（作者个人经验+团队数据，非同行评审研究）；报道由量子位发布于腾讯新闻（11-17），数据为转述，采用前建议对照其原始分享。
+- 来源：https://news.qq.com/rain/a/20261117V0B3AO00
+
+6）GitHub spec-kit 本周三连发（v1.4.1–v1.4.3，11-16/17/19）：SDD 生态从单仓模板走向扩展目录与多仓编排
+
+- ① 版本动态：三天三个版本，社区目录新增 Jira 生命周期扩展、Multi-Repo Workspace Orchestration（多仓工作区编排）扩展、OKR Bet Spec 预设与 Elephant-Goldfish 模型扩展
+- ② 信号：扩展机制增强（扩展技能可携带声明资源）、对 PowerShell 与非 ASCII 分支等工程细节持续修复，SDD 工具链在向企业既有研发流程（Jira 等）和多仓场景渗透
+- ③ 指引：底座可借鉴「spec 为源」的流程位——需求先落 spec 再驱动 agent 实现；并预留与外部工具链（需求管理）的生命周期集成点和多仓工作区编排能力
+- 补充：版本与变更来自 GitHub Releases 原文（11-16/17/19），均为官方发布；扩展目录条目以仓库 community catalog 为准。
+- 来源：https://github.com/github/spec-kit/releases
+
 ## 五、口径与来源
 
 - **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 2026-11-12 — 2026-11-18；只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.
