@@ -137,21 +137,29 @@ def top10_section(run):
 
 
 def industry_section(run):
-    """AI Coding 行业资讯：编辑按 tech-briefing 技能检索核实并写入 editorial.industry_briefing，
-    每条=一句话简述 + ①②③分点详细解读 + 补充；无内容时整节省略。"""
+    """AI Coding 行业资讯：编辑按 tech-briefing 技能检索核实并写入 editorial.industry_briefing。
+    每条 50–100 字单句（谁+日期+事件+关键数字+一句指引），来源 URL 附尾；无内容时整节省略。
+    旧快照的 headline/points 长格式自动降级渲染。"""
     items = (run.get('editorial') or {}).get('industry_briefing') or []
     if not items:
         return []
     lines = ['## 四、AI Coding 行业资讯', '']
     for index, item in enumerate(items, 1):
-        lines.append(f'{index}）{cell(item.get("headline", ""))}')
-        lines.append('')
-        for point in item.get('points') or []:
-            lines.append(f'- {cell(point)}')
-        if item.get('note'):
-            lines.append(f'- 补充：{cell(item["note"])}')
-        for source in item.get('sources') or []:
-            lines.append(f'- 来源：{cell(source)}')
+        text = item.get('text')
+        if text:
+            entry = f'{index}）{cell(text)}'
+            sources = item.get('sources') or []
+            if sources:
+                entry += f'（来源：{cell(sources[0])}）'
+            lines.append(entry)
+        else:
+            lines.append(f'{index}）{cell(item.get("headline", ""))}')
+            for point in item.get('points') or []:
+                lines.append(f'- {cell(point)}')
+            if item.get('note'):
+                lines.append(f'- 补充：{cell(item["note"])}')
+            for source in item.get('sources') or []:
+                lines.append(f'- 来源：{cell(source)}')
         lines.append('')
     return lines
 

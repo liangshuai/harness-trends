@@ -435,15 +435,12 @@ class MarkdownReportTests(unittest.TestCase):
     def test_markdown_replaces_features_with_html_sourced_metrics_digest(self):
         run,config=self.markdown_run()
         run['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{},
-            'industry_briefing':[{'headline':'某厂发布某模型','points':['① 数据','② 结果','③ 指引'],
-                                  'note':'原文11-17发布','sources':['https://example.org/x']}]}
+            'industry_briefing':[{'text':'某厂11-17发布某模型：关键数字X；建议做Y',
+                                  'sources':['https://example.org/x']}]}
         page=render_markdown(run,config)
-        # 行业资讯 module renders from editorial (tech-briefing format) and 口径 renumbers to 五.
+        # 行业资讯 renders as one compact 50–100字 line per item with a trailing source, 口径 renumbers to 五.
         self.assertIn('## 四、AI Coding 行业资讯',page)
-        self.assertIn('1）某厂发布某模型',page)
-        self.assertIn('- ① 数据',page)
-        self.assertIn('- 补充：原文11-17发布',page)
-        self.assertIn('- 来源：https://example.org/x',page)
+        self.assertIn('1）某厂11-17发布某模型：关键数字X；建议做Y（来源：https://example.org/x）',page)
         self.assertIn('## 五、口径与来源',page)
         self.assertIn('# AI Harness 市场观察周报',page)
         self.assertIn('数据窗口：2026-10-30 — 2026-11-05',page)
@@ -576,11 +573,19 @@ class MarkdownReportTests(unittest.TestCase):
         self.assertIn('网络检索核实：与CHANGELOG一致',page)
         run3,config3=self.markdown_run()
         run3['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{},
-            'industry_briefing':[{'headline':'某厂发布某模型','points':['① 数据'],'sources':['https://example.org/x']}]}
+            'industry_briefing':[{'text':'某厂11-17发布某模型：关键数字X；建议做Y','sources':['https://example.org/x']}]}
         page3=render(run3,config3)
         self.assertIn('id="industry"',page3)
         self.assertIn('href="#industry"',page3)
         self.assertIn('AI Coding 行业资讯',page3)
+        self.assertIn('industry-briefs',page3)
+        # Legacy long-format snapshots (headline/points) still render instead of crashing.
+        run4,config4=self.markdown_run()
+        run4['editorial']={'window_end':'2026-11-05','prepared_at':'2026-11-06','products':{},
+            'industry_briefing':[{'headline':'旧格式条目','points':['① 数据'],'sources':['https://example.org/y']}]}
+        page4=render(run4,config4)
+        self.assertIn('旧格式条目',page4)
+        self.assertIn('① 数据',page4)
         # Old snapshots without product_updates skip the section instead of crashing.
         run2,config2=self.markdown_run();run2.pop('product_updates')
         page2=render(run2,config2)
