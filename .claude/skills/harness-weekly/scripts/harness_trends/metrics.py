@@ -159,6 +159,14 @@ def summary_rows(run):
     return rows
 
 
+def share_ordered_pids(run):
+    """Single source of row order for every four-harness table: OpenRouter market share
+    (= weekly tokens, slice denominator is constant), largest first. Renderers must
+    reuse this instead of SUMMARY_ORDER or ad-hoc sorts, so tables stay consistent."""
+    cur = (run.get('openrouter_current') or {}).get('products', {})
+    return sorted(run['products'], key=lambda p: cur.get(p, {}).get('tokens') or -1, reverse=True)
+
+
 def feature_lines(run, pid, limit=5, width=66):
     """Lines for the「本周新功能」column: editorial Chinese summaries when present,
     else scripted release highlights (newest version first) as the fallback."""

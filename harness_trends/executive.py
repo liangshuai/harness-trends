@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 from .render_methodology import esc, table, render as methodology
 from .changelog import summarize
 from .plugin_rankings import render_plugin_rankings
-from .metrics import SUMMARY_ORDER, feature_lines, load_app_types, scale_summary, summary_rows, top10_changes, user_cell
+from .metrics import SUMMARY_ORDER, feature_lines, load_app_types, scale_summary, share_ordered_pids, summary_rows, top10_changes, user_cell
 
 COLORS={'codex':'#305aef','claude':'#d77653','dsh':'#318e80','pi':'#9d7ad4','other':'#dbe0e9'}
 NAMES={'codex':'Codex','claude':'Claude Code','dsh':'DSH','pi':'Pi'}
@@ -203,7 +203,7 @@ def features_section(run):
         return ''
     views=(run.get('editorial') or {}).get('products',{})
     s='<section id="features">'+heading('05 / WEEKLY FEATURES','本周新功能特性','编辑整理的中文功能摘要 · 官方发布原文留档核对')
-    for pid in SUMMARY_ORDER:
+    for pid in share_ordered_pids(run):
         product=run['products'].get(pid)
         update=updates.get(pid)
         if product is None or update is None:
@@ -309,7 +309,7 @@ def render(run,config):
     total=sum(cur[p]['tokens'] for p in products) if complete else None
     oldtotal=sum(prev[p]['tokens'] for p in products) if all(prev.get(p,{}).get('tokens') is not None for p in products) else None
     requests=sum(cur[p]['requests'] for p in products) if complete and all(cur[p].get('requests') is not None for p in products) else None
-    ordered=sorted(products,key=lambda p:cur.get(p,{}).get('tokens') or -1,reverse=True)
+    ordered=share_ordered_pids(run)
     leader=ordered[0] if complete else None
     share=cur[leader]['tokens']/total if leader and total else None
     growths={p:growth(cur.get(p,{}).get('tokens'),prev.get(p,{}).get('tokens')) for p in products}

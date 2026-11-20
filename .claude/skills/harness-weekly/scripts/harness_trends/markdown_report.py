@@ -1,7 +1,7 @@
 """Markdown weekly report: summary table first, then a digest of the HTML report's metrics."""
 from .executive import NAMES, number
-from .metrics import (SUMMARY_ORDER, feature_lines, load_app_types, official_disclosure_groups,
-                      ratio_delta, summary_rows, top10_changes)
+from .metrics import (feature_lines, load_app_types, official_disclosure_groups, ratio_delta,
+                      share_ordered_pids, summary_rows, top10_changes)
 
 
 def cell(text):
@@ -150,7 +150,8 @@ def industry_section(run):
             entry = f'{index}）{cell(text)}'
             sources = item.get('sources') or []
             if sources:
-                entry += f'（来源：{cell(sources[0])}）'
+                # Trailing space keeps the closing paren out of the autolinked URL (avoids 404s).
+                entry += f'（来源：{cell(sources[0])} ）'
             lines.append(entry)
         else:
             lines.append(f'{index}）{cell(item.get("headline", ""))}')
@@ -168,7 +169,7 @@ def metrics_digest(run, config):
     """Markdown mirror of the HTML report's core metric sections."""
     products = run['products']
     cur = run['openrouter_current']
-    ordered = sorted(products, key=lambda p: cur.get('products', {}).get(p, {}).get('tokens') or -1, reverse=True)
+    ordered = share_ordered_pids(run)
     complete = cur['status'] == 'ok' and all(cur.get('products', {}).get(p, {}).get('tokens') is not None for p in products)
     total = sum(cur['products'][p]['tokens'] for p in products) if complete else None
     prev = run['openrouter_previous']
@@ -209,9 +210,7 @@ def metrics_digest(run, config):
         lines += ['### 近四周 Token 使用量趋势（连续七天窗口，Token）', '',
                   '| Harness | ' + ' | '.join(w['end'][5:] for w in windows) + ' |',
                   '|' + '---|' * (len(windows) + 1)]
-        for pid in SUMMARY_ORDER:
-            if pid not in products:
-                continue
+        for pid in ordered:
             cells = [NAMES[pid]] + [number(w.get('products', {}).get(pid, {}).get('tokens')) for w in windows]
             lines.append('| ' + ' | '.join(cells) + ' |')
         lines.append('')
