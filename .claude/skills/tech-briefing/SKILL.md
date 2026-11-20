@@ -85,6 +85,10 @@ description: 为大厂技术实践与 AI Coding 方法论撰写老板可审阅�
 - 方法论/实践（按五层组合检索）：`SDD spec-driven development`、`spec-kit release`、`Kiro spec`、`agentic workflow`、`subagent 编排`、`skills rules 工程化`、`context engineering`、`memory management agent`、`AI code review`、`property-based testing AI`、`formal verification AI code`、`AI coding 团队实践/回滚率`（从业者名 + 工具名，如 `土豆姐 Claude Code`、`Lauren Tan AI coding`）
 - 限定词：`site:arxiv.org`、`site:infoq.cn`、`公司名 + 官方博客`、`发布时间限定`
 
+## 紧凑模式（嵌入周报等载体时）
+
+当简报要嵌入周报等篇幅受限的载体时，每条压缩为 **50–100 字单句**：谁 + 日期 + 事件 + 关键数字/做法 + 一句指引（「建议…」），来源 URL 附于句尾；每期 3–10 条。分点模板（一句话简述+①②③）用于独立交付的完整简报。
+
 ## 方法论/实践条目的额外要求
 
 1. **区分个人经验与可复现方法**：从业者分享标注「实践分享」（注明作者与平台）；官方工具/框架标注版本与出处。
