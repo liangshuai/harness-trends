@@ -440,7 +440,7 @@ class MarkdownReportTests(unittest.TestCase):
         page=render_markdown(run,config)
         # 行业资讯 renders as one compact 50–100字 line per item with a trailing source, 口径 renumbers to 五.
         self.assertIn('## 四、AI Coding 行业资讯',page)
-        self.assertIn('1）某厂11-17发布某模型：关键数字X；建议做Y（来源：https://example.org/x）',page)
+        self.assertIn('1）某厂11-17发布某模型：关键数字X；建议做Y（来源：https://example.org/x ）',page)
         self.assertIn('## 五、口径与来源',page)
         self.assertIn('# AI Harness 市场观察周报',page)
         self.assertIn('数据窗口：2026-10-30 — 2026-11-05',page)
@@ -502,6 +502,28 @@ class MarkdownReportTests(unittest.TestCase):
             self.assertIn('新进入 Top 10</b>：New App',html_page)
             self.assertIn('集成视角：可方便地整合为执行引擎',html_page)
             self.assertIn('退出 Top 10</b>：Old App（上期第3名）',html_page)
+
+    def test_all_four_harness_tables_share_the_market_share_row_order(self):
+        run,config=self.markdown_run()
+        for pid,tokens in (('claude',40),('pi',30),('dsh',20),('codex',10)):
+            run['openrouter_current']['products'][pid]['tokens']=tokens
+        compute(run,config)
+        page=render_markdown(run,config)
+        # 表1 汇总表用产品全名；表2/表3 与 HTML 用量表用 NAMES 缩写，但四表行序必须一致（份额降序）。
+        self.assertEqual([r.split('|')[1].strip() for r in page.splitlines() if r.startswith('| ')][1:5],
+                         ['Claude Code','Pi','DeepSeek Harness','Codex'])
+        expected_short=['Claude Code','Pi','DSH','Codex']
+        digest=page[page.find('### 模型使用量及占比'):]
+        self.assertEqual([l.split('|')[1].strip() for l in digest.splitlines()[:9] if l.startswith('| ')][1:5],
+                         expected_short)
+        trend=page[page.find('### 近四周 Token 使用量趋势'):]
+        self.assertEqual([l.split('|')[1].strip() for l in trend.splitlines()[:9] if l.startswith('| ')][1:5],
+                         expected_short)
+        # HTML 用量表同序
+        html_page=render(run,config)
+        seg=html_page[html_page.find('id="usage"'):]
+        positions=[seg.find(f'>{n}</td>') for n in expected_short]
+        self.assertEqual(positions,sorted(positions))
 
     def test_summary_table_orders_rows_by_market_share(self):
         run,config=self.markdown_run()

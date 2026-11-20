@@ -272,13 +272,15 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 - **退出 Top 10**：<app>（上期第N名）        ← 无新增应用时写"本周 Top 10 无新增应用。"
 
 ## 四、AI Coding 行业资讯                      ← editorial.industry_briefing（§4.6，tech-briefing 方法论）
-1）<谁+日期+事件+关键数字/做法+一句指引，50–100字>（来源：URL）
+1）<谁+日期+事件+关键数字/做法+一句指引，50–100字>（来源：URL ）← URL后必须留一个空格再闭合括号，防止渲染器把）并入链接导致404
 2）…（每期3–10条，新闻限窗口内，方法论取近一月动态）
 （无资讯时整节省略，编号顺延）
 
 ## 五、口径与来源                              ← 有行业资讯时为「五」，无时为「四」
 - 周 Token 使用量 / OpenRouter市场份额 / 周下载量 / 开源贡献者 / 插件数量 各一条
 ```
+
+**表格行序硬约束**：报告中所有四家 Harness 的表格/面板（汇总表、模型使用量及占比、近四周趋势、HTML用量表、本周新功能面板等）**必须统一按 OpenRouter 市场份额降序**，一律复用 `metrics.share_ordered_pids(run)`；禁止在渲染器里写死 `SUMMARY_ORDER` 或临时排序新增表格。`tests.test_all_four_harness_tables_share_the_market_share_row_order` 会跨表校验一致性，新增任何四家表格必须挂进该测试。
 
 **每列单元格格式**（汇总表，number() 规则：≥1e12→`x.xxT`；≥1e9→`x.xxB`；≥1e8→`x.xx亿`；≥1e4→`x.x万`）：
 
