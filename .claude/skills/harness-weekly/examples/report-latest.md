@@ -45,7 +45,61 @@
 - 本周 Top 10 无新增应用。
 - **本周增长最多**：Kilo Code（第3名 · 周 Token 8.32T，环比↑59.6%）——IDE插件：VS Code 等主流 IDE 的开源编码 agent 扩展
 
-## 四、口径与来源
+## 四、AI Coding 行业资讯
+
+1）微软 11-17 在 Ignite 2026 发布 MAI Code 2 与 Code 2 Flash（共七款新模型），以远低于头部的价格逼近其编码质量，编码模型进入性价比竞争阶段
+
+- ① 核心数据：官方称达到 GPT-6.1 Sol 编码质量的 98%、约 40% 价格；Claude Opus 5.5 的 96%、约 5% 价格
+- ② 量化结果：四项编码基准均值通过率 63.2%，单任务成本 $0.309（对比 $0.761 与 $6.306）；定价 $0.50/百万输入、$2.50/百万输出（2027-05-17 前介绍价），已进入 GitHub Copilot
+- ③ 指引：建议把「单任务成本（$/task）」而非 $/Mtok 纳入底座模型选型指标；在模型路由层建质量-成本二维评估，用同一基准集自测新模型再决定流量比例
+- 补充：数据来自微软官方发布（11-17）；基准与价格细节经第三方 felloai 整理（11-17 后），介绍价可能调整，采用前以官方定价页为准。
+- 来源：https://microsoft.ai/news/introducing-mai-code-2-and-mai-code-2-flash
+- 来源：https://microsoft.ai/news/microsoft-ignite-2026
+- 来源：https://felloai.com/mai-code-2
+
+2）Postman 11-18 发布《2026 State of the API》：四分之一组织已在生产环境经 API 运行 AI agents，API 就绪度成为落地瓶颈
+
+- ① 核心数据：25% 的受访组织已在生产环境通过 API 运行 AI agents
+- ② 判断：报告指出 agent 采纳速度与 API 治理/就绪度脱节——agent 在扩、API 的配额、版本与审计没跟上
+- ③ 指引：建议对自有产品输出面做 API 清单与分级（明确哪些可被 agent 调用），为 agent 流量单设配额与审计端点；底座侧应补齐 agent-API 网关能力
+- 补充：BusinessWire 通稿发布于 11-18，结论以 Postman 官方报告全文为准。
+- 来源：https://www.businesswire.com/news/home/20261118374573/en/One-in-Four-Organizations-Now-Run-AI-Agents-on-APIs-in-Production-Postmans-2026-State-of-the-API-Report-Finds
+
+3）字节 TRAE CN 个人版账号 11-18 起自动并入豆包飞书账号体系，AI 编程工具账号向集团统一 ID 收拢
+
+- ① 生效范围：11-18 起仅 CN 个人版自动升级，企业版不在范围内
+- ② 迁移承诺：代码、项目、历史记录与会员权益全量保留，无需用户操作
+- ③ 指引：统一账号与数据体系是 AI 编程工具留存和生态导流的基础设施；底座侧应支持组织级 SSO 与工作区数据可迁移（导入/导出）能力
+- 补充：官方公告发布于 11 月上旬（docs.trae.cn），生效日 11-18 在本周窗口内；IT之家等 11-06 起报道，注意区分公告时间与生效时间。
+- 来源：https://docs.trae.cn/ide_important-notice-for-trae-account-upgrade-and-integration
+- 来源：https://www.ithome.com/1/023/552.htm
+
+4）GitHub 11-16 起 Copilot 下架多款旧模型（含 Claude Opus 4.8 退役），与 MAI Code 2 低价上市同周，编码模型供给加速换血
+
+- ① 变更：多款模型从多数 Copilot 体验中 deprecated；Claude Opus 4.8 退役，仅年付个人订户保留
+- ② 组合判断：旧模型退场与新模型低价入市同周发生，平台侧在用便宜的新编码模型替换贵的旧模型
+- ③ 指引：底座模型层必须可插拔且可回退——建立模型清单版本化与灰度切换，对上游汰换预留缓冲期配置，避免「上游下架即断供」
+- 补充：来自 GitHub 官方变更公告与社区讨论（11-16），具体模型清单以 Copilot 文档为准。
+- 来源：https://github.com/orgs/community/discussions
+- 来源：https://github.blog/changelog
+
+5）Grok 核心工程师土豆姐（Lauren Tan）11-17 分享 AI Coding 实战：以代码库维护+规则约束+自动化测试与形式化验证为主线，团队月交付 1.1 万个 PR、回滚率约 0.5%
+
+- ① 量化结果：其团队月交付 11000 个 PR，回滚率仅约 0.5%（量子位 11-17 报道，原文为实践分享访谈）
+- ② 方法主线：不追求一次性生成好代码，而是持续维护代码库、用规则文件约束 agent 行为、自动化测试加形式化验证兜底质量
+- ③ 指引：为底座建「规则即代码」层——把团队规范写成 RULES/CLAUDE.md 类约束文件并纳入评审；在 CI 为 agent 生成的代码加属性测试/形式化验证关卡，用回滚率而非产量考核
+- 补充：实践分享类条目（作者个人经验+团队数据，非同行评审研究）；报道由量子位发布于腾讯新闻（11-17），数据为转述，采用前建议对照其原始分享。
+- 来源：https://news.qq.com/rain/a/20261117V0B3AO00
+
+6）GitHub spec-kit 本周三连发（v1.4.1–v1.4.3，11-16/17/19）：SDD 生态从单仓模板走向扩展目录与多仓编排
+
+- ① 版本动态：三天三个版本，社区目录新增 Jira 生命周期扩展、Multi-Repo Workspace Orchestration（多仓工作区编排）扩展、OKR Bet Spec 预设与 Elephant-Goldfish 模型扩展
+- ② 信号：扩展机制增强（扩展技能可携带声明资源）、对 PowerShell 与非 ASCII 分支等工程细节持续修复，SDD 工具链在向企业既有研发流程（Jira 等）和多仓场景渗透
+- ③ 指引：底座可借鉴「spec 为源」的流程位——需求先落 spec 再驱动 agent 实现；并预留与外部工具链（需求管理）的生命周期集成点和多仓工作区编排能力
+- 补充：版本与变更来自 GitHub Releases 原文（11-16/17/19），均为官方发布；扩展目录条目以仓库 community catalog 为准。
+- 来源：https://github.com/github/spec-kit/releases
+
+## 五、口径与来源
 
 - **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 2026-11-12 — 2026-11-18；只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.
 - **OpenRouter市场份额**：该应用周Token ÷ 榜单全部应用周Token合计，非四家内部占比（本轮已取得 200 个应用）。

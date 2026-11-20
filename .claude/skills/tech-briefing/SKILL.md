@@ -1,6 +1,6 @@
 ---
 name: tech-briefing
-description: 为大厂技术实践撰写老板可审阅的行业动态简报。当用户要求检索阿里、腾讯、字节、谷歌、微软、亚马逊等公司在某技术领域（如 AICoding、Agent 平台、研发效能）的近期报告或实践，并按统一格式输出简报时使用。强制核实发布时间、区分原文与解读、要求量化数据与可操作指引，禁止虚构时间承诺。
+description: 为大厂技术实践与 AI Coding 方法论撰写老板可审阅的行业动态简报。当用户要求检索阿里、腾讯、字节、谷歌、微软、亚马逊等公司在某技术领域（如 AICoding、Agent 平台、研发效能）的近期报告或实践，以及 SDD（规格驱动开发）、知名从业者（如土豆姐/Lauren Tan）工作流方法论等内容，并按统一格式输出简报时使用。强制核实发布时间、区分原文与解读、要求量化数据与可操作指引，禁止虚构时间承诺。
 ---
 
 # 大厂技术实践简报撰写
@@ -8,6 +8,16 @@ description: 为大厂技术实践撰写老板可审阅的行业动态简报。�
 ## 适用场景
 
 为老板撰写某技术领域（如 AICoding）的行业动态简报，要求：来源可追溯、时间在指定窗口内、格式统一、有量化干货、指引可落地但不虚构时间承诺。
+
+简报内容分两类，可混排：
+- **新闻类**：模型/产品发布、平台变更、量化报告——严格限定指定时间窗口；
+- **方法论/实践类**：AI Coding 方法论与工程实践的当周动态。覆盖面按五层检索，**每周从各层挑真正有动静的主题**（有新发布、新实践、新量化结果的才收，不做概念复读；SDD、知名从业者实践等只是示例，不是固定清单）：
+  1. 需求/规格层：SDD 规格驱动开发（spec-kit/Kiro）、spec 模板与验收标准工程；
+  2. 执行层：agentic 工作流、subagent 编排、skills/rules 工程化、多仓工作区；
+  3. 上下文层：context engineering、记忆与缓存管理、长会话压缩；
+  4. 质量层：AI 代码评审、测试生成、属性测试与形式化验证；
+  5. 团队层：知名团队/从业者的规模化实践（如土豆姐/Lauren Tan 类实践分享）、度量与回滚率等结果数据。
+  取近一个月内新发布或新解读的材料；若主题持续演进且本周无新发布，可作为「方法论速览」条目收录，但必须标注「方法论背景，非本周新闻」，且内容要有可落地步骤。
 
 ## 核心原则
 
@@ -70,6 +80,13 @@ description: 为大厂技术实践撰写老板可审阅的行业动态简报。�
 
 ## 检索关键词参考
 
-- 中文：`AI Coding 实践`、`研发范式`、`AI 研发效能 报告`、`代码生成 度量`、`Agent 交付 案例`、`AI 编码 缺陷率`
-- 英文：`AI coding productivity report`、`agentic coding case study`、`developer productivity AI`、`AI code review benchmark`
+- 中文（新闻）：`AI Coding 实践`、`研发范式`、`AI 研发效能 报告`、`代码生成 度量`、`Agent 交付 案例`、`AI 编码 缺陷率`
+- 英文（新闻）：`AI coding productivity report`、`agentic coding case study`、`developer productivity AI`、`AI code review benchmark`
+- 方法论/实践（按五层组合检索）：`SDD spec-driven development`、`spec-kit release`、`Kiro spec`、`agentic workflow`、`subagent 编排`、`skills rules 工程化`、`context engineering`、`memory management agent`、`AI code review`、`property-based testing AI`、`formal verification AI code`、`AI coding 团队实践/回滚率`（从业者名 + 工具名，如 `土豆姐 Claude Code`、`Lauren Tan AI coding`）
 - 限定词：`site:arxiv.org`、`site:infoq.cn`、`公司名 + 官方博客`、`发布时间限定`
+
+## 方法论/实践条目的额外要求
+
+1. **区分个人经验与可复现方法**：从业者分享标注「实践分享」（注明作者与平台）；官方工具/框架标注版本与出处。
+2. **尽量带量化**：如团队交付量、回滚率、评审时长变化；没有量化时，写清可复现的操作步骤（第一步做什么、用什么工具、在哪配置）。
+3. **指引落到工程动作**：如「把需求先写成 spec 再让 agent 实现」「在 CI 中加形式化验证/属性测试关卡」「为仓库维护 RULES/CLAUDE.md 约束文件并纳入评审」。

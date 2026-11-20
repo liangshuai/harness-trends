@@ -226,7 +226,8 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
   - `note`：补充（原文/解读时间区分、数据出入提示）；
   - `sources`：核实用到的 URL。
 - **检索关键词参考**：中文「AI Coding 实践 / 研发效能 报告 / 代码生成 度量」；英文「AI coding productivity report / agentic coding case study / coding agent release」；限定词 `site:官方博客`、发布时间限定。优先微软/谷歌/OpenAI/Anthropic/GitHub 等官方一手发布与 Postman/DORA/GitClear 等量化报告。
-- 优先覆盖：新编码模型发布与定价、平台汰换、量化生产力研究、大厂 AI Coding 实践。数字必须来自来源原文，不自行推算。
+- **内容构成=新闻+方法论混排**（方法论按 tech-briefing 的五层分类每周挑有动静的：需求/规格层（SDD、spec-kit/Kiro）、执行层（agentic 工作流、subagent 编排、skills/rules 工程化、多仓工作区）、上下文层（context engineering、记忆管理）、质量层（AI 代码评审、属性测试与形式化验证）、团队层（知名团队/从业者规模化实践及其交付/回滚数据））。从业者分享标注「实践分享」，量化与可落地步骤必须有，概念不复读；无本周新发布的方法论主题可标「方法论背景，非本周新闻」收录。
+- 优先覆盖：新编码模型发布与定价、平台汰换、量化生产力研究、大厂 AI Coding 实践、当周方法论动态。数字必须来自来源原文，不自行推算。
 - 无合适材料时整组留空（`[]` 或缺省），报告自动省略该节，不阻塞。
 
 ### 4.7 Top 10 应用类型标注（`data/app_types.json`，随窗口增量维护）
