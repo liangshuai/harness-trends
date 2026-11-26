@@ -21,6 +21,7 @@ from harness_trends.marketplaces import collect_marketplaces
 from harness_trends.plugin_rankings import collect_plugin_rankings
 from harness_trends.changelog import collect_product_updates
 from harness_trends.markdown_report import render_markdown
+from harness_trends.report_index import render_report_index
 from harness_trends.executive import NAMES
 
 ROOT=Path(__file__).resolve().parent
@@ -57,6 +58,29 @@ def archive_dir(reports, end):
     folder=reports/'archive'/str(end)
     folder.mkdir(parents=True,exist_ok=True)
     return folder
+
+
+def rewrite_issue_links(html, archived):
+    """Issue pages live at two depths: reports/latest.html (root) and reports/archive/<end>/.
+    The renderer emits root-relative links; archived copies get rewritten to climb two levels,
+    and the MD link points at the copy sitting next to the page."""
+    if not archived:
+        return html.replace('href="report.md"', 'href="latest.md"')
+    return html.replace('href="index.html"', 'href="../../index.html"')
+
+
+def publish_reports(reports, run, page, markdown, run_id):
+    """Write the latest copies, per-window archive copies (links depth-fixed) and the index page."""
+    end = run['window']['end']
+    temp = reports/'latest.html.tmp'; temp.write_text(rewrite_issue_links(page, False)); temp.replace(reports/'latest.html')
+    temp = reports/'latest.md.tmp'; temp.write_text(markdown); temp.replace(reports/'latest.md')
+    folder = archive_dir(reports, end)
+    archived = rewrite_issue_links(page, True)
+    (folder/f'{run_id}.html').write_text(archived)
+    (folder/'report.html').write_text(archived)
+    (folder/f'{run_id}.md').write_text(markdown)
+    (folder/'report.md').write_text(markdown)
+    render_report_index(reports, run['window'])
 
 
 def archive_current(reports, root):
@@ -131,14 +155,9 @@ def main():
     reports=ROOT/'reports'; reports.mkdir(exist_ok=True)
     if args.render_only:
         run=json.loads(args.render_only.read_text())
-        folder=archive_dir(reports,run['window']['end'])
-        page=render(run,run.get('configuration',config))
-        (folder/'report.html').write_text(page)
-        (reports/'latest.html').write_text(page)
-        markdown=render_markdown(run,run.get('configuration',config))
-        (folder/'report.md').write_text(markdown)
-        (reports/'latest.md').write_text(markdown)
-        print('已重建 reports/latest.html 与 reports/latest.md')
+        publish_reports(reports,run,render(run,run.get('configuration',config)),
+                        render_markdown(run,run.get('configuration',config)),'render_only')
+        print('已重建 reports/latest.html、reports/latest.md 与 reports/index.html')
         return 0
     if args.offline and args.refresh:parser.error('--offline 与 --refresh 不能同时使用')
     settings=config['collection'].copy()
@@ -264,15 +283,9 @@ def main():
     atomic_json(ROOT/'data/runs'/f'{run_id}.json',run)
     atomic_json(ROOT/'data/latest.json',run)
     page=render(run,config)
-    folder=archive_dir(reports,end)
-    (folder/f'{run_id}.html').write_text(page)
-    (folder/'report.html').write_text(page)
-    temp=reports/'latest.html.tmp';temp.write_text(page);temp.replace(reports/'latest.html')
     markdown=render_markdown(run,config)
-    (folder/f'{run_id}.md').write_text(markdown)
-    (folder/'report.md').write_text(markdown)
-    temp=reports/'latest.md.tmp';temp.write_text(markdown);temp.replace(reports/'latest.md')
-    print(f'完成：{reports/"latest.html"} 与 {reports/"latest.md"}；归档：{folder}',flush=True)
+    publish_reports(reports,run,page,markdown,run_id)
+    print(f'完成：{reports/"latest.html"}、{reports/"latest.md"} 与 {reports/"index.html"}；归档：{reports/"archive"/end}',flush=True)
     print(f'运行快照：data/runs/{run_id}.json；GitHub实时请求 {client.github_calls} 次',flush=True)
     return 0 if any(p['downloads_current'] is not None or p['a_observed'] is not None for p in run['products'].values()) else 2
 

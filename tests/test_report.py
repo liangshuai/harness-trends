@@ -9,7 +9,8 @@ from harness_trends.collect import (Client, FetchError, is_human, npm_downloads,
                                     npm_weekly_downloads, openrouter_window)
 from harness_trends.metrics import compute, package_total, ratio_delta, scale_summary
 from harness_trends.render import esc, render
-from run_report import archive_current, archive_dir, load_env, previous_snapshot, settled_end, METHOD
+from run_report import archive_current, archive_dir, load_env, previous_snapshot, rewrite_issue_links, settled_end, METHOD
+from harness_trends.report_index import collect_windows, render_report_index
 from harness_trends.executive import donut
 from harness_trends.models_v2 import apply as apply_v2, npm_equivalent
 from harness_trends.catalogs import parse_pi_catalog
@@ -539,6 +540,36 @@ class MarkdownReportTests(unittest.TestCase):
         start=html_page.find('table-scroll summary-table');seg=html_page[start:html_page.find('</table>',start)]
         positions=[seg.find(name) for name in ('Claude Code','Pi','DeepSeek Harness','Codex')]
         self.assertEqual(positions,sorted(positions))
+
+    def test_report_index_lists_every_window_with_relative_links(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            reports=Path(tmp)/'reports';archive=reports/'archive'
+            for end,start in (('2026-11-25','2026-11-19'),('2026-11-18','2026-11-12')):
+                folder=archive/end;folder.mkdir(parents=True)
+                (folder/'report.html').write_text('<h1>x</h1>')
+                (folder/'report.md').write_text(f'# t\n\n数据窗口：{start} — {end}\n')
+            (archive/'2026-11-19').mkdir();(archive/'2026-11-19'/'report.html').write_text('x')  # 仅HTML的窗口也应列出
+            rows=collect_windows(reports)
+            self.assertEqual([r['end'] for r in rows],['2026-11-25','2026-11-19','2026-11-18'])
+            self.assertIsNone(rows[1]['md'])
+            self.assertEqual(rows[0]['html'],'archive/2026-11-25/report.html')
+            home=render_report_index(reports,{'start':'2026-11-19','end':'2026-11-25'})
+            body=(reports/'index.html').read_text()
+            self.assertIn('href="latest.html"',body)
+            self.assertIn('href="archive/2026-11-18/report.md"',body)
+            self.assertIn('共 3 期',body)
+            self.assertIn('2026-11-25',body)
+
+    def test_issue_links_are_depth_fixed_between_root_and_archive(self):
+        page='<nav><a href="index.html">查看历史</a><a href="report.md">MD 版</a></nav>'
+        root=rewrite_issue_links(page,False)
+        self.assertIn('href="latest.md"',root) and self.assertNotIn('href="report.md"',root)
+        self.assertIn('href="index.html"',root)
+        archived=rewrite_issue_links(page,True)
+        self.assertIn('href="../../index.html"',archived)
+        self.assertIn('href="report.md"',archived)
+        html_page=render(*self.markdown_run())
+        self.assertIn('查看历史',html_page) and self.assertIn('MD 版',html_page)
 
     def test_reports_are_archived_per_window_before_each_run(self):
         with tempfile.TemporaryDirectory() as tmp:

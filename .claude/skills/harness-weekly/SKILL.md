@@ -313,11 +313,13 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 
 渲染代码约束：汇总行构建与降级在 `metrics.py`（`summary_rows/feature_lines/user_cell/official_disclosure_groups/top10_changes/load_app_types`），HTML 渲染 `executive.py`（类型标签样式 `type_tag`+`TYPE_CLASSES`），MD 渲染 `markdown_report.py`；**executive 与 markdown_report 不得互相 import**（共享逻辑一律放 metrics.py，否则循环依赖；MD 只从 executive 取 `NAMES/number` 常量与格式函数）。
 
-### 5.3 报告归档（每轮自动执行）
+### 5.3 报告归档与目录首页（每轮自动执行）
 
 - 每轮渲染后，两份报告同时写入 `reports/archive/<窗口结束日>/`：本轮副本 `<run_id>.html|.md` 与该窗口最新版 `report.html|.md`；`reports/latest.*` 始终是最近一轮。
 - 每次开跑前 `run_report.archive_current` 会先把现存 `latest.*` 归档进其所属窗口文件夹（取 `data/latest.json` 的窗口；快照损坏时跳过不阻塞），任何一轮都不会被覆盖丢失。
-- `--render-only` 重建同样写入归档目录。
+- **目录首页 `reports/index.html`**（`harness_trends.report_index`，随发布每轮重建）：最新一期卡片（latest.html/latest.md/存档副本）+ 全部历史期数表（每期 HTML 与 Markdown 链接，早期仅 HTML 的期 MD 列为 —），全部相对链接，`reports/` 目录可直接作为静态站点部署。
+- **期页导航**：每期 HTML 导航尾部有「查看历史」（回首页）与「MD 版」（看该期 Markdown）；根目录 latest 版链接指向 `index.html`/`latest.md`，存档副本由 `run_report.rewrite_issue_links` 自动改写为 `../../index.html`/同目录 `report.md`。
+- `--render-only` 重建同样写入归档目录并刷新首页。
 
 ---
 
@@ -343,8 +345,9 @@ ls reports/archive/$(python3 -c "import json;print(json.load(open('data/latest.j
 
 ```sh
 git add -A && git commit -m "update: 刷新周报数据至<窗口>窗口" && git push origin main
-python3 deploy_report.py    # 可选，发布 https://harness-market-observer.vercel.app
-                            # 白名单仅 index.html + vercel.json；MD 与数据目录不上线
+python3 deploy_report.py    # 可选，发布 https://harness.mise.fun
+                            # 上传 reports 目录静态站点：首页 index.html + latest.* + 每期 archive/**/report.{html,md}
+                            # 逐轮副本与数据目录不上线；所有待发布文件均过密钥扫描
 ```
 
 commit 信息按当轮实际内容写（数据刷新 / 版式修改 / 逻辑修改 分开描述）。
