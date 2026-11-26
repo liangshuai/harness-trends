@@ -39,8 +39,11 @@ class RankingTests(unittest.TestCase):
         self.assertEqual(parse_dsh(page)[0]['value'], 1234)
 
     def test_codex_uses_position_not_daily_movement(self):
-        page = 'publishes no scores<tbody><tr><td>999</td><td><a class="rank-link" href="/server/a"><span class="rank-name">A</span><span class="rank-blurb">Tools</span></a></td><td><span>#2</span></td></tr></tbody>'
-        self.assertEqual(parse_codex(page)[0]['value'], 2)
+        # 2026-11 起榜单排名为 tnum 数字样式；旧版 >#N</span> 仍兼容。
+        new = 'publishes no scores<tbody><tr><td><span class="tnum text-[13px]">2</span></td><td><a class="rank-link" href="/server/a"><span class="rank-name">A</span><span class="rank-blurb">Tools</span></a></td></tr></tbody>'
+        old = 'publishes no scores<tbody><tr><td>999</td><td><a class="rank-link" href="/server/a"><span class="rank-name">A</span><span class="rank-blurb">Tools</span></a></td><td><span>#2</span></td></tr></tbody>'
+        self.assertEqual(parse_codex(new)[0]['value'], 2)
+        self.assertEqual(parse_codex(old)[0]['value'], 2)
 
     def test_failure_is_visible_for_all_four_and_legacy_render_has_module(self):
         class Offline:

@@ -89,9 +89,11 @@ def parse_codex(markup):
     rows = []
     for card in re.findall(r'<tr\b[^>]*>(.*?)</tr>', tbody, re.S):
         name = clean(capture(r'<span class="rank-name">(.*?)</span>', card))
+        # 2026-11 起榜单排名改为 tnum 数字样式（旧版为 >#N</span>），两种格式都兼容。
+        rank = capture(r'<span class="tnum[^"]*">#?(\d+)</span>', card) if 'tnum' in card else capture(r'>#(\d+)</span>', card)
         rows.append({'id': capture(r'class="rank-link" href="([^"]+)"', card), 'name': name,
                      'description': clean(capture(r'<span class="rank-blurb">(.*?)</span>', card)),
-                     'value': int(capture(r'>#(\d+)</span>', card)),
+                     'value': int(rank),
                      'url': urljoin('https://mcptop.com', capture(r'class="rank-link" href="([^"]+)"', card))})
     return sorted(rows, key=lambda r: (r['value'], r['id']))[:10]
 

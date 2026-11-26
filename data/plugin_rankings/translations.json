@@ -1,6 +1,6 @@
 {
   "_note": "编辑维护（Class C）：四家插件榜 Top 10 的中文功能介绍，键为插件详情页 URL（与采集条目对应）。报告优先使用此处中文；未收录的条目回退显示来源原文，核实后补录即可。",
-  "_updated": "2026-11-20",
+  "_updated": "2026-11-26",
   "plugins": {
     "https://claude.com/marketplace/plugins/frontend-design": "面向 UI/UX 实现的前端设计技能包",
     "https://claude.com/marketplace/plugins/superpowers": "Claude Code 核心技能库：TDD、调试、协作模式与成熟实践方法",
@@ -44,6 +44,10 @@
     "https://awesome-dsh-plugin.com/p/zhu1090093659/dsh-web--packages-dsh-skill-explorer/": "技能中心：按来源浏览已加载技能、启停模型调用、新建技能，删除进可恢复回收站",
     "https://pi.dev/packages/cc-safety-net": "编码agent CLI 钩子：拦截破坏性命令与密钥文件访问",
     "https://awesome-dsh-plugin.com/p/flymysql/dsh-remote/": "SSH 远程工作区：跨主机并行项目、远程文件编辑、递归搜索、终端与 Git diff，可远程构建测试",
-    "https://awesome-dsh-plugin.com/p/kenryu42/cc-safety-net/": "执行前守卫：工具调用前拦截破坏性 Git/文件系统命令与 SSH 私钥、.env 等敏感文件访问"
+    "https://awesome-dsh-plugin.com/p/kenryu42/cc-safety-net/": "执行前守卫：工具调用前拦截破坏性 Git/文件系统命令与 SSH 私钥、.env 等敏感文件访问",
+    "https://pi.dev/packages/modern-web-guidance": "让 agent 始终掌握最新 Web 最佳实践的指引包",
+    "https://pi.dev/packages/pi-deltabox": "agent 原生沙箱会话扩展，内置 diff 与提交流程",
+    "https://awesome-dsh-plugin.com/p/lijiaqi-AI-Product-Manager/dsh-agent-compare/": "在 DSH 桌面端并排对比 2–4 个回答、文件或网页",
+    "https://awesome-dsh-plugin.com/p/WNLUO/dsh-mobile-plugin/": "在手机上使用 DeepSeek Harness 的移动端配套插件"
   }
 }
