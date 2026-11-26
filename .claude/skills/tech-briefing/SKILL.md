@@ -83,13 +83,16 @@ description: 为大厂技术实践与 AI Coding 方法论撰写老板可审阅�
 - 中文（新闻）：`AI Coding 实践`、`研发范式`、`AI 研发效能 报告`、`代码生成 度量`、`Agent 交付 案例`、`AI 编码 缺陷率`
 - 英文（新闻）：`AI coding productivity report`、`agentic coding case study`、`developer productivity AI`、`AI code review benchmark`
 - 方法论/实践（按五层组合检索）：`SDD spec-driven development`、`spec-kit release`、`Kiro spec`、`agentic workflow`、`subagent 编排`、`skills rules 工程化`、`context engineering`、`memory management agent`、`AI code review`、`property-based testing AI`、`formal verification AI code`、`AI coding 团队实践/回滚率`（从业者名 + 工具名，如 `土豆姐 Claude Code`、`Lauren Tan AI coding`）
-- **渠道清单**（多渠道交叉，避免单一信息源；每期至少覆盖 3 类渠道）：
-  - Hacker News：Algolia API 可按窗口精确检索（`hn.algolia.com/api/v1/search?query=…&tags=story&numericFilters=created_at_i>…,points>30`），按 points 排序取热点，原文链接在条目 `url` 字段；
-  - X/Twitter：官方账号（@AnthropicAI、@OpenAI、@GitHub、@微软官方）与从业者账号的发布/长文；用 `site:x.com` + 账号名检索；
-  - Reddit：r/ClaudeAI、r/ChatGPTCoding、r/LocalLLaMA 的本周热帖（`site:reddit.com` + 子版名）；
-  - arXiv：量化研究（`site:arxiv.org` + cs.SE/cs.AI）；
-  - 官方工程博客：anthropic.com/claude.dev、openai.com、github.blog、microsoft.ai、google developers；
-  - 中文渠道：量子位、机器之心、InfoQ、腾讯新闻科技等（注意区分转述与原文）。
+- **渠道清单**（多渠道交叉，避免单一信息源；每期至少覆盖 3 类渠道、来源至少 5 个不同域名）：
+  - **Hacker News**（可脚本化）：Algolia API 按窗口精确检索（`hn.algolia.com/api/v1/search?query=…&tags=story&numericFilters=created_at_i>…,points>30`），按 points 排序，原文链接在条目 `url` 字段；
+  - **X/Twitter**（一等渠道）：官方账号 @AnthropicAI/@ClaudeCodeLog/@OpenAI/@CodexReleases/@Codex_Changelog/@GitHub/@githubchangelog/@GoogleDeepMind/@MicrosoftAI/@PiChangelog/@deepseek_ai；从业者 @swyx/@simonw/@addyosmani/@emollick 等；检索式 `site:x.com <账号或关键词>`，X 趋势页（x.com/i/trending/…）可看开发者情绪与话题面；
+  - **InfoQ**（中英双语，一等渠道）：infoq.cn 的 AI编程/Agent/研发效能 专题与新闻（`site:infoq.cn AI编程 OR Agent OR 研发效能 + 时间限定`）、infoq.com 英文站；特点是产业与协作范式议题（断供、上市、PR 流程变革、大厂实践长文）；
+  - **Reddit**：r/ClaudeAI、r/ChatGPTCoding、r/CodexAutomation、r/LocalLLaMA、r/programming（`site:reddit.com` + 子版名）；
+  - **官方 changelog/发布页**（多数有 RSS，可脚本化）：code.claude.com/docs/en/changelog、learn.chatgpt.com/docs/changelog、pi.dev/changelog、github.blog/changelog、openai.com/index、anthropic.com/news、microsoft.ai/news、blog.google/developers；
+  - **arXiv 与研究机构**：cs.SE/cs.AI 论文、METR、DORA、GitClear、Stack Overflow 调查、GitHub Octoverse；
+  - **企业工程博客**：Thoughtworks Insights、Netflix/Meta/Uber/Microsoft Eng Blog 的 AI coding 实践文；
+  - **社区聚合**：lobste.rs（按 tag）、dev.to、Product Hunt 的 AI coding 类、awesome 列表更新；
+  - **中文媒体**：InfoQ 中文、量子位、机器之心、晚点LatePost、雷峰网、腾讯新闻科技、掘金/知乎热榜（区分转述与原文，量化数据尽量回溯官方源）。
 - 限定词：`site:arxiv.org`、`site:infoq.cn`、`公司名 + 官方博客`、`发布时间限定`
 
 ## 紧凑模式（嵌入周报等载体时）

@@ -67,7 +67,7 @@
 
 9）11-24热文《LLM agents为母公司而非为你工作》（HN 1013分）：模型方与用户利益不完全一致；企业应自建策略层与审计，减少对厂商默认行为依赖（来源：https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/ ）
 
-10）11-20开源OpenComputer定位Devin替代（HN 131分）；开源自动化agent持续分流商业产品，可评估其作为底座执行引擎的可行性（来源：https://github.com/diggerhq/opencomputer ）
+10）Anthropic 11-19在纳斯达克上市：发行价83美元、开盘111.5美元（+34.3%），AI板块情绪仍偏谨慎；Claude Code生态资本化节点，建议关注其定价与渠道策略联动（来源：https://www.infoq.cn/article/OPbZhT0OHL4IbZz8exvA ）
 
 ## 五、口径与来源
 

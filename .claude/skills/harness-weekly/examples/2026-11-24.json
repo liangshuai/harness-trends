@@ -94,43 +94,63 @@
   "industry_briefing": [
     {
       "text": "OpenAI 11-17发布GPT-6.2 Astra/Sol（Sol与6.1同价，超窗1天供参考）；本周Codex与pi相继把Sol设为默认，「新模型即默认」成分发惯例",
-      "sources": ["https://openai.com/index/introducing-gpt-6-2-astra-sol"]
+      "sources": [
+        "https://openai.com/index/introducing-gpt-6-2-astra-sol"
+      ]
     },
     {
       "text": "智谱11-23发布GLM-5.4：首个loop transformer路线的通用编码模型（HN 1179分）；推理期循环展开的新架构，建议纳入底座模型评测集跟踪",
-      "sources": ["https://z.ai/blog/glm-5.4"]
+      "sources": [
+        "https://z.ai/blog/glm-5.4"
+      ]
     },
     {
       "text": "GPT-6.2 Astra成为首个打破Google工程师code golf纪录的模型（11-22，HN 358分）；极端代码压缩任务的能力信号，可作自测基准参考",
-      "sources": ["https://bjin.github.io/go-codegolf-benchmark/#leaderboard"]
+      "sources": [
+        "https://bjin.github.io/go-codegolf-benchmark/#leaderboard"
+      ]
     },
     {
       "text": "IEEE Spectrum 11-20报道Epic Games在Unreal Engine开发中引入AI coding；引擎级大厂采纳是agent进入核心产线的信号",
-      "sources": ["https://spectrum.ieee.org/epic-games-unreal-engine-ai"]
+      "sources": [
+        "https://spectrum.ieee.org/epic-games-unreal-engine-ai"
+      ]
     },
     {
       "text": "路透11-24：微软在历史性宕机后内部宣布Code Red；可靠性成AI平台竞争新主战场，底座应把可观测性与降级演练当一等能力",
-      "sources": ["https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/"]
+      "sources": [
+        "https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/"
+      ]
     },
     {
       "text": "Signal 11-20发文限制移动OS上AI agent对其数据的抓取（HN 584分）；数据源方开始主动设墙，agent数据获取合规需前置设计",
-      "sources": ["https://signal.org/blog/protecting-your-privacy/"]
+      "sources": [
+        "https://signal.org/blog/protecting-your-privacy/"
+      ]
     },
     {
       "text": "11-20热文《停止写代码，评审也会变差》（HN 405分）：与Harvard瓶颈研究互证，评审能力随手写减少而退化；建议保留深度编码练习与评审轮换",
-      "sources": ["https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it/"]
+      "sources": [
+        "https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it/"
+      ]
     },
     {
       "text": "11-23 Show HN：以可证伪假设驱动的代码优化agent skill；把科学方法写进agent工作流，质量层新实践，可直接借鉴其假设-验证循环",
-      "sources": ["https://chszlab.github.io/AgenticAlgorithmEngineering/"]
+      "sources": [
+        "https://chszlab.github.io/AgenticAlgorithmEngineering/"
+      ]
     },
     {
       "text": "11-24热文《LLM agents为母公司而非为你工作》（HN 1013分）：模型方与用户利益不完全一致；企业应自建策略层与审计，减少对厂商默认行为依赖",
-      "sources": ["https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/"]
+      "sources": [
+        "https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/"
+      ]
     },
     {
-      "text": "11-20开源OpenComputer定位Devin替代（HN 131分）；开源自动化agent持续分流商业产品，可评估其作为底座执行引擎的可行性",
-      "sources": ["https://github.com/diggerhq/opencomputer"]
+      "text": "Anthropic 11-19在纳斯达克上市：发行价83美元、开盘111.5美元（+34.3%），AI板块情绪仍偏谨慎；Claude Code生态资本化节点，建议关注其定价与渠道策略联动",
+      "sources": [
+        "https://www.infoq.cn/article/OPbZhT0OHL4IbZz8exvA"
+      ]
     }
   ]
 }
