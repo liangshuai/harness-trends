@@ -71,7 +71,8 @@ def prepare():
             'headers':[{'source':'/(.*)','headers':[{'key':'Cache-Control','value':'public, max-age=0, must-revalidate'},
                         {'key':'X-Content-Type-Options','value':'nosniff'}]}]}
     (SITE/'vercel.json').write_text(json.dumps(config,indent=2))
-    (SITE/'.vercelignore').write_text('*\n!index.html\n!latest.html\n!latest.md\n!vercel.json\n!archive/\n!archive/**/report.html\n!archive/**/report.md\n')
+    # site/ is rebuilt from an explicit whitelist each time; only local Vercel metadata stays excluded.
+    (SITE/'.vercelignore').write_text('.vercel\n')
     windows={p.parent.name for p in files if p.parent.parent.name=='archive'}
     print(f'已准备发布目录：首页 + 最新一期 + {len(windows)} 期历史存档。',flush=True)
 

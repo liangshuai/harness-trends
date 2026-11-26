@@ -1,8 +1,1 @@
-*
-!index.html
-!latest.html
-!latest.md
-!vercel.json
-!archive/
-!archive/**/report.html
-!archive/**/report.md
+.vercel
