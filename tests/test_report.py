@@ -9,7 +9,8 @@ from harness_trends.collect import (Client, FetchError, is_human, npm_downloads,
                                     npm_weekly_downloads, openrouter_window)
 from harness_trends.metrics import compute, package_total, ratio_delta, scale_summary
 from harness_trends.render import esc, render
-from run_report import archive_current, archive_dir, load_env, previous_snapshot, rewrite_issue_links, settled_end, METHOD
+from run_report import (archive_current, archive_dir, load_env, npm_weekly_window, previous_snapshot,
+                        rewrite_issue_links, settled_end, METHOD)
 from harness_trends.report_index import collect_windows, render_report_index
 from harness_trends.executive import donut
 from harness_trends.models_v2 import apply as apply_v2, npm_equivalent
@@ -130,6 +131,20 @@ class ReportTests(unittest.TestCase):
     def test_failed_source_not_zero(self):
         self.assertIsNone(package_total([{'status':'missing','total':None}]))
         self.assertIsNone(ratio_delta(2,0))
+
+    def test_npm_weekly_window_keeps_seven_settled_days(self):
+        class Unsettled:
+            def json(self,url,**kwargs):
+                day=url.split('/point/')[1].split('/')[0]
+                return {'start':day,'end':day,'downloads':0 if day=='2026-11-26' else 20}
+        start,end=npm_weekly_window(Unsettled(),date(2026,11,20),date(2026,11,26))
+        self.assertEqual((start,end),(date(2026,11,19),date(2026,11,25)))
+        class Settled:
+            def json(self,url,**kwargs):
+                day=url.split('/point/')[1].split('/')[0]
+                return {'start':day,'end':day,'downloads':7}
+        self.assertEqual(npm_weekly_window(Settled(),date(2026,11,20),date(2026,11,26)),
+                         (date(2026,11,20),date(2026,11,26)))
 
     def test_npm_weekly_uses_range_point_and_fails_closed(self):
         class Range:

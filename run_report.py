@@ -117,6 +117,27 @@ def previous_snapshot(root, end, signature):
     return chosen,chosen.get('collection_signature')==signature
 
 
+def npm_weekly_window(client, start, end):
+    """--npm-weekly 的取数区间必须满7个已结算日：末日哨兵为零时整体前移一天（至多3次）。
+    只影响 npm 周区间的起止，不改变报告窗口标注，也不产生任何报告文案。"""
+    from urllib.parse import quote
+    for _ in range(3):
+        counts=[]
+        for package in ('@openai/codex','@anthropic-ai/claude-code'):
+            url=f'https://api.npmjs.org/downloads/point/{end}/'+quote(package,safe='@')
+            try:
+                data=client.json(url,fresh=True)
+                if data.get('start')!=str(end) or not isinstance(data.get('downloads'),int):
+                    return start,end
+                counts.append(data['downloads'])
+            except FetchError:
+                return start,end
+        if any(v>0 for v in counts):
+            return start,end
+        start-=timedelta(days=1);end-=timedelta(days=1)
+    raise RuntimeError('npm周区间连续三日未结算，无法凑满7天。')
+
+
 def settled_end(client, end):
     """Popular independent packages both zero is a settlement warning, not market collapse."""
     from urllib.parse import quote
@@ -183,6 +204,7 @@ def main():
     run_id=f'{end}_{now.strftime("%Y%m%dT%H%M%SZ")}'
     raw_dir=ROOT/'data/raw'/run_id
     client=Client(ROOT,raw_dir,settings['github_request_budget'],0 if args.refresh else settings['cache_hours'],args.offline)
+    npm_start, npm_end = npm_weekly_window(client, start, end) if args.npm_weekly else (start, end)
     signature=hashlib.sha256(json.dumps({'settings':settings,'queries':[(p['id'],p['query']) for p in config['products']],
         'method':METHOD,'models':config.get('models_v2'),'catalogs':config.get('catalogs')},sort_keys=True).encode()).hexdigest()
     if args.npm_weekly:
@@ -197,7 +219,7 @@ def main():
         p={'name':product['name'], 'npm_current':[], 'npm_previous':[]}
         npm_current_fn = npm_weekly_downloads if args.npm_weekly else npm_downloads
         for package in product['npm']:
-            p['npm_current'].append(npm_current_fn(client,package,start,end))
+            p['npm_current'].append(npm_current_fn(client,package,npm_start,npm_end))
             p['npm_previous'].append(npm_downloads(client,package,previous_start,previous_end))
         if product['id']=='dsh':
             p['npm_anchor']=[npm_downloads(client,package,disclosure_start,disclosure_end) for package in product['npm']]
