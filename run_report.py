@@ -186,7 +186,8 @@ def main():
     signature=hashlib.sha256(json.dumps({'settings':settings,'queries':[(p['id'],p['query']) for p in config['products']],
         'method':METHOD,'models':config.get('models_v2'),'catalogs':config.get('catalogs')},sort_keys=True).encode()).hexdigest()
     if args.npm_weekly:
-        settlement_note+=' 本轮npm下载按周区间聚合口径（--npm-weekly），不做逐日校验。'
+        # 宽松口径不进报告文案：页脚不渲染任何备注，仅保留 JSON 元数据（npm_mode）供审计。
+        settlement_note=''
     run={'id':run_id,'method_version':METHOD,'generated_at':now.isoformat(),'collection_signature':signature,'settlement_note':settlement_note,
          'npm_mode':'weekly-range' if args.npm_weekly else 'daily-sum','refresh_mode':'live' if args.refresh else ('offline' if args.offline else 'cached'),
          'window':{'start':str(start),'end':str(end)},'previous_window':{'start':str(previous_start),'end':str(previous_end)},
@@ -285,7 +286,7 @@ def main():
     page=render(run,config)
     markdown=render_markdown(run,config)
     publish_reports(reports,run,page,markdown,run_id)
-    print(f'完成：{reports/"latest.html"}、{reports/"latest.md"} 与 {reports/"index.html"}；归档：{reports/"archive"/end}',flush=True)
+    print(f'完成：{reports/"latest.html"}、{reports/"latest.md"} 与 {reports/"index.html"}；归档：{reports/"archive"/str(end)}',flush=True)
     print(f'运行快照：data/runs/{run_id}.json；GitHub实时请求 {client.github_calls} 次',flush=True)
     return 0 if any(p['downloads_current'] is not None or p['a_observed'] is not None for p in run['products'].values()) else 2
 

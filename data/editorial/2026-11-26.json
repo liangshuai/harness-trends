@@ -1,0 +1,134 @@
+{
+  "window_end": "2026-11-26",
+  "prepared_at": "2026-11-27",
+  "note": "编辑内容：features（本周新功能要点摘要）、insight（值得同行借鉴的价值点/共性需求）、action（行动：可借鉴到企业级Agent通用底座的点，一句话）+ action_due（时间计划日期，按难易在窗口结束后7~30天内选定，渲染为「（计划 日期 前）」，一次选定不随渲染变化）、industry_briefing（AI Coding行业资讯，按tech-briefing技能检索核实：每条50–100字单句=谁+日期+事件+关键数字+一句指引，来源URL附尾，每期3–10条；新闻限窗口内，方法论取近一月动态）、feature_summary为人工与网络检索观点，仅本文件；报告全部数字由脚本按当轮快照采集，不手工填写。features从官方Releases/CHANGELOG原文总结挑选，insight与action基于新增功能分析、不评述数据波动，feature_summary均已对照官方原文核实。",
+  "general_sources": [
+    "https://github.com/anthropics/claude-code/releases",
+    "https://github.com/openai/codex/releases",
+    "https://github.com/deepseek-ai/deepseek-harness/releases",
+    "https://github.com/earendil-works/pi/releases",
+    "https://pi.dev/changelog"
+  ],
+  "products": {
+    "claude": {
+      "features": [
+        "Skills from MCP servers（beta）：MCP 服务器可随服务分发技能，/ 菜单显示为 server:skill（2.1.332）",
+        "Code Mode 登陆云端终端会话：Amazon Bedrock、Google Agent Platform、Microsoft Foundry 与 Claude Platform on AWS（2.1.331）",
+        "支持 Anthropic 企业管理控制台管理的组织登录（2.1.330）",
+        "内置 easel 绘图 mod：按需绘制图表，Pro 及以上可用（2.1.330）"
+      ],
+      "insight": [
+        "Skills over MCP：工具与技能同源分发，MCP 生态从「连接工具」升级为「交付能力包」",
+        "Code Mode 一周内铺到四大云渠道：代码化工具调用成为跨云标配执行形态"
+      ],
+      "action": "可借鉴 Skills over MCP 的能力包分发型态，底座技能系统支持随 MCP 服务分发并版本同步",
+      "action_due": "2026-12-08",
+      "feature_summary": "网络检索与CHANGELOG.md一致：2.1.332（11-25）新增 Skills from MCP servers（beta，/ 菜单 server:skill）与 PreSkillShellCommand 拒绝钩子，Reddit/@ClaudeCodeLog 证实，公测恰逢 MCP 两周年；2.1.331（11-23）Code Mode 支持 Bedrock/Google Agent Platform/Microsoft Foundry/Claude on AWS；2.1.330（11-20）企业控制台组织登录与内置 easel 绘图 mod。",
+      "sources": [
+        "https://code.claude.com/docs/en/changelog",
+        "https://www.reddit.com/r/ClaudeCode/comments/1y5p5n2/mcp_servers_can_now_ship_their_skills_to",
+        "https://x.com/ClaudeCodeLog"
+      ]
+    },
+    "codex": {
+      "features": [
+        "GPT-6.2 Sol 成为默认模型（0.171.0，11-20）",
+        "TUI 工作区默认开启：文档/图片预览与子 agent 转录（0.171.0）",
+        "codex exec --remote 与 /rc、/remote：接入既有 app server 的远程会话与设备配对（0.171.0）",
+        "0.172.0（11-24）：会话线程跳转、斜杠命令 Tab 补全、MCP 按需启动、按工具设置审批人"
+      ],
+      "insight": [
+        "默认模型与默认工作区一周齐换：CLI 产品把「新模型即默认」当作分发渠道",
+        "MCP 缓存工具列表按首次调用启动：冷启动成本优化的共性做法"
+      ],
+      "action": "可借鉴 Codex 的模型默认化策略与远程会话/设备配对面板，为底座建模型灰度分发与远程托管会话能力",
+      "action_due": "2026-12-15",
+      "feature_summary": "网络检索与GitHub Releases一致：0.171.0（11-20）GPT-6.2 Sol/Astra 入目录并将 Sol 设默认、TUI 工作区默认开启、codex exec --remote、/rc 与 /remote 远程控制；0.172.0（11-24）线程链接跳转、Tab 补全、命令中心任务组跳转、MCP 惰性启动与按工具审批人。@CodexReleases、AI/TLDR 与 vibecoding 周报一致。",
+      "sources": [
+        "https://github.com/openai/codex/releases",
+        "https://x.com/CodexReleases/status/2123610218798194960",
+        "https://ai-tldr.dev/releases/openai-codex-cli-0-171",
+        "https://www.vibecoding.cz/en/codex-weekly-2026-w47"
+      ]
+    },
+    "pi": {
+      "features": [
+        "GPT-6.2 Astra 与 Sol 上线 openai、azure、openai-codex 三个 provider 并默认 Sol（1.6.0，11-20）",
+        "codemode 决策模型：GitHub Copilot gpt-6-luna-decisions 与 Radius 决策模型可用于编码决策（1.6.1，11-25）",
+        "转录级设置提示：缓存未命中、保温、压缩成本与推理丢弃集中展示（1.6.1）"
+      ],
+      "insight": [
+        "决策模型进 codemode：把「用哪个模型」也交给专用小模型，路由本身成能力",
+        "转录级成本提示：把 token 经济学透出到用户界面"
+      ],
+      "action": "可借鉴 pi 的决策模型路由与转录级成本可见性，底座把模型选择与用量成本做成一等可观测面",
+      "action_due": "2026-12-03",
+      "feature_summary": "网络检索与pi.dev官方changelog一致：1.6.1（11-25）新增codemode决策模型（gpt-6-luna-decisions、Radius）、转录级设置提示与扩展对话框状态；1.6.0（11-20）GPT-6.2 Astra/Sol 三provider上线并默认Sol。",
+      "sources": [
+        "https://pi.dev/changelog",
+        "https://github.com/earendil-works/pi/releases"
+      ]
+    },
+    "dsh": {
+      "features": [
+        "插件市场支持把 Git 仓库作为插件源，私有仓库插件可直接浏览安装（0.2.3-alpha.1，11-22）",
+        "实验性时间线插件：查看 agent 任务树、阻塞事项与进展报告（0.2.3-alpha.1）",
+        "代码审阅页面：集中处理本人相关 GitHub PR，页内与 agent 协作审阅并支持 GitLab（0.2.3-alpha.1）",
+        "会话状态区域与已读/未读提醒：工作目录、变更请求、子 agent、任务与插件状态集中展示（0.2.3-alpha.1）"
+      ],
+      "insight": [
+        "Git 仓库即插件源：安装面从市场扩到任意私有 Git，企业内分发插件的低门槛建法",
+        "时间线+代码审阅+会话状态三件套：agent 工作过程可视化成体系"
+      ],
+      "action": "可借鉴「Git 仓库即插件源」与页内协作审阅，底座插件分发支持私有 Git 源、把评审工作流嵌入主界面",
+      "action_due": "2026-12-12",
+      "feature_summary": "网络检索与GitHub Release一致：0.2.3-alpha.1（11-22）新增Git仓库插件源（含私有仓库浏览安装）、实验性时间线插件（任务树/阻塞/进展报告）、代码审阅页（GitHub PR集中处理、插件可扩展审阅视图与行注解、支持GitLab评审合并）、会话状态区与已读未读；0.2.3-alpha.2（11-22）为后续预览版。",
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/releases",
+        "https://m.sohu.com/a/1105250067_610300"
+      ]
+    }
+  },
+  "industry_briefing": [
+    {
+      "text": "OpenAI 11-17发布GPT-6.2 Astra/Sol（超窗1天标注）；本周Codex与pi相继默认Sol，Astra首破Google工程师code golf纪录（11-22，HN 358分）",
+      "sources": ["https://openai.com/index/introducing-gpt-6-2-astra-sol", "https://bjin.github.io/go-codegolf-benchmark/#leaderboard"]
+    },
+    {
+      "text": "智谱11-23发布GLM-5.4：首个loop transformer路线的通用编码模型（HN 1179分）；推理期循环展开的新架构，建议纳入底座模型评测集持续跟踪",
+      "sources": ["https://z.ai/blog/glm-5.4"]
+    },
+    {
+      "text": "Anthropic 11-19在纳斯达克上市（超窗1天标注）：发行价83美元、开盘111.5美元（+34.3%）；Claude Code生态资本化节点，关注定价与渠道策略联动",
+      "sources": ["https://www.infoq.cn/article/OPbZhT0OHL4IbZz8exvA"]
+    },
+    {
+      "text": "路透11-24：微软在历史性宕机后内部宣布Code Red；可靠性成AI平台竞争新主战场，底座应把可观测性与降级演练当一等能力",
+      "sources": ["https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/"]
+    },
+    {
+      "text": "IEEE Spectrum 11-20报道Epic Games在Unreal Engine开发中引入AI coding；引擎级大厂采纳是agent进入核心产线的信号",
+      "sources": ["https://spectrum.ieee.org/epic-games-unreal-engine-ai"]
+    },
+    {
+      "text": "Signal 11-20发文限制移动OS上AI agent对其数据的抓取（HN 584分）；数据源方开始主动设墙，agent数据获取合规需前置设计",
+      "sources": ["https://signal.org/blog/protecting-your-privacy/"]
+    },
+    {
+      "text": "11月arXiv新研究：agent生成代码存活率的结论随度量口径翻转；SpecEngineeringBench把编码agent当规格工程师评测——评测方法论正成焦点",
+      "sources": ["https://arxiv.org/html/2611.21784v1"]
+    },
+    {
+      "text": "11-20热文《停止写代码，评审也会变差》（HN 405分）：与Harvard瓶颈研究互证，评审能力随手写减少而退化；建议保留深度编码练习与评审轮换",
+      "sources": ["https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it/"]
+    },
+    {
+      "text": "X与Reddit本周热议开发者混用Claude Code与Codex而非二选一；同键盘跑双agent的开源工具与CodexHost跨agent任务分发涌现，底座宜支持多引擎编排",
+      "sources": ["https://x.com/AGTPinsights/status/2122200881445634129", "https://www.reddit.com/r/ChatGPTCoding/comments/1vszu75/claude_code_and_codex_on_one_keyboard_every"]
+    },
+    {
+      "text": "11-24热文《LLM agents为母公司而非为你工作》（HN 1013分）：模型方与用户利益不完全一致；企业应自建策略层与审计，减少对厂商默认行为依赖",
+      "sources": ["https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/"]
+    }
+  ]
+}

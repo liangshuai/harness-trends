@@ -1,6 +1,6 @@
 {
   "_note": "编辑维护（Class C）：四家插件榜 Top 10 的中文功能介绍，键为插件详情页 URL（与采集条目对应）。报告优先使用此处中文；未收录的条目回退显示来源原文，核实后补录即可。",
-  "_updated": "2026-11-26",
+  "_updated": "2026-11-27",
   "plugins": {
     "https://claude.com/marketplace/plugins/frontend-design": "面向 UI/UX 实现的前端设计技能包",
     "https://claude.com/marketplace/plugins/superpowers": "Claude Code 核心技能库：TDD、调试、协作模式与成熟实践方法",
@@ -48,6 +48,9 @@
     "https://pi.dev/packages/modern-web-guidance": "让 agent 始终掌握最新 Web 最佳实践的指引包",
     "https://pi.dev/packages/pi-deltabox": "agent 原生沙箱会话扩展，内置 diff 与提交流程",
     "https://awesome-dsh-plugin.com/p/lijiaqi-AI-Product-Manager/dsh-agent-compare/": "在 DSH 桌面端并排对比 2–4 个回答、文件或网页",
-    "https://awesome-dsh-plugin.com/p/WNLUO/dsh-mobile-plugin/": "在手机上使用 DeepSeek Harness 的移动端配套插件"
+    "https://awesome-dsh-plugin.com/p/WNLUO/dsh-mobile-plugin/": "在手机上使用 DeepSeek Harness 的移动端配套插件",
+    "https://mcptop.com/server/openai-jobber": "接入 Jobber：把问答直接转化为业务动作",
+    "https://mcptop.com/server/openai-xero": "接入 Xero：查询企业经营财务数据",
+    "https://mcptop.com/server/openai-attio": "接入 Attio：搭建销售管道、经营客户关系"
   }
 }
