@@ -70,16 +70,24 @@ def rewrite_issue_links(html, archived):
 
 
 def publish_reports(reports, run, page, markdown, run_id):
-    """Write the latest copies, per-window archive copies (links depth-fixed) and the index page."""
+    """Write the latest copies, per-window archive copies (links depth-fixed) and the index page.
+    每窗口只保留规范副本 report.* 与最新一轮时间戳副本；旧时间戳副本自动清理
+    （逐轮完整审计在 data/runs 快照，报告可随时 --render-only 重渲染）。"""
     end = run['window']['end']
     temp = reports/'latest.html.tmp'; temp.write_text(rewrite_issue_links(page, False)); temp.replace(reports/'latest.html')
     temp = reports/'latest.md.tmp'; temp.write_text(markdown); temp.replace(reports/'latest.md')
     folder = archive_dir(reports, end)
     archived = rewrite_issue_links(page, True)
+    if run_id == 'render_only':
+        run_id = 'render_' + datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
     (folder/f'{run_id}.html').write_text(archived)
     (folder/'report.html').write_text(archived)
     (folder/f'{run_id}.md').write_text(markdown)
     (folder/'report.md').write_text(markdown)
+    keep = {f'{run_id}.html', f'{run_id}.md', 'report.html', 'report.md'}
+    for old in folder.iterdir():
+        if old.is_file() and old.suffix in ('.html', '.md') and old.name not in keep:
+            old.unlink()
     render_report_index(reports, run['window'])
 
 

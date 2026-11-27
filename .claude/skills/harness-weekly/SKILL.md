@@ -315,7 +315,7 @@ HTML「Harness Top10 插件观察」的功能介绍列优先用中文：键=插�
 
 ### 5.3 报告归档与目录首页（每轮自动执行）
 
-- 每轮渲染后，两份报告同时写入 `reports/archive/<窗口结束日>/`：本轮副本 `<run_id>.html|.md` 与该窗口最新版 `report.html|.md`；`reports/latest.*` 始终是最近一轮。
+- 每轮渲染后写入 `reports/archive/<窗口结束日>/`：规范副本 `report.html|.md` 与本轮时间戳副本 `<run_id>.html|.md`；**旧时间戳副本自动清理**（每窗口只保留规范副本+最新一轮，避免同窗口反复渲染产生大量近似重复文件；逐轮完整审计在 `data/runs` 快照，可随时 `--render-only` 重渲染）；`reports/latest.*` 始终是最近一轮。
 - 每次开跑前 `run_report.archive_current` 会先把现存 `latest.*` 归档进其所属窗口文件夹（取 `data/latest.json` 的窗口；快照损坏时跳过不阻塞），任何一轮都不会被覆盖丢失。
 - **目录首页 `reports/index.html`**（`harness_trends.report_index`，随发布每轮重建）：最新一期卡片（latest.html/latest.md/存档副本）+ 全部历史期数表（每期 HTML 与 Markdown 链接，早期仅 HTML 的期 MD 列为 —），全部相对链接，`reports/` 目录可直接作为静态站点部署。
 - **期页导航**：每期 HTML 导航尾部有「查看历史」（回首页）与「MD 版」（看该期 Markdown）；根目录 latest 版链接指向 `index.html`/`latest.md`，存档副本由 `run_report.rewrite_issue_links` 自动改写为 `../../index.html`/同目录 `report.md`。
