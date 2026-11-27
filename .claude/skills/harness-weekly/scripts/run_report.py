@@ -138,26 +138,29 @@ def npm_weekly_window(client, start, end):
     raise RuntimeError('npm周区间连续三日未结算，无法凑满7天。')
 
 
-def settled_end(client, end):
-    """Popular independent packages both zero is a settlement warning, not market collapse."""
+def npm_collection_plan(client, start, end, force_weekly=False):
+    """npm 默认取数规则（无需任何提示；两种情形都不产生报告备注，报告窗口标注不变）：
+    末日哨兵已结算 → 逐日加总（daily-sum，严格口径）；
+    末日哨兵未结算 → 周区间聚合并整体前移凑满 7 个已结算日（weekly-range）；
+    force_weekly（--npm-weekly）→ 无条件用周区间。返回 (mode, npm_start, npm_end)。"""
     from urllib.parse import quote
-    original=end
-    for _ in range(3):
-        counts=[]
-        for package in ('@openai/codex','@anthropic-ai/claude-code'):
-            url=f'https://api.npmjs.org/downloads/point/{end}/'+quote(package,safe='@')
-            try:
-                data=client.json(url,fresh=True)
-                if data.get('start')!=str(end) or data.get('end')!=str(end) or not isinstance(data.get('downloads'),int):
-                    return original,'npm结算探测未能确认，按请求窗口取数。'
-                counts.append(data['downloads'])
-            except FetchError:
-                return original,'npm结算探测失败，按请求窗口取数并保留来源状态。'
-        if any(v>0 for v in counts):
-            note=(f'npm在{original}的两个高下载主包均返回零，疑似尚未结算；已统一回退至{end}。' if end!=original else '最新完整UTC日已检测到有效npm下载。')
-            return end,note
-        end-=timedelta(days=1)
-    raise RuntimeError('连续三个UTC日的npm哨兵包均返回零；暂不发布可能不完整的周报。')
+    if force_weekly:
+        window=npm_weekly_window(client,start,end)
+        return ('weekly-range',)+window
+    counts=[]
+    for package in ('@openai/codex','@anthropic-ai/claude-code'):
+        url=f'https://api.npmjs.org/downloads/point/{end}/'+quote(package,safe='@')
+        try:
+            data=client.json(url,fresh=True)
+            if data.get('start')!=str(end) or data.get('end')!=str(end) or not isinstance(data.get('downloads'),int):
+                return 'daily-sum',start,end
+            counts.append(data['downloads'])
+        except FetchError:
+            return 'daily-sum',start,end
+    if any(v>0 for v in counts):
+        return 'daily-sum',start,end
+    window=npm_weekly_window(client,start,end)
+    return ('weekly-range',)+window
 
 
 def main():
@@ -191,11 +194,6 @@ def main():
     end=args.end or datetime.now(timezone.utc).date()-timedelta(days=1)
     if end>=datetime.now(timezone.utc).date():
         parser.error('只能统计已完成的UTC日')
-    settlement_note='用户指定统计日期；未自动回退。'
-    if args.end is None:
-        probe=Client(ROOT,ROOT/'data/preflight'/datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S'),cache_hours=0,offline=args.offline)
-        end,settlement_note=settled_end(probe,end)
-        print(settlement_note,flush=True)
     start=end-timedelta(days=6)
     previous_start, previous_end=start-timedelta(days=7),start-timedelta(days=1)
     disclosure_end=date.fromisoformat(config['disclosure']['as_of'])
@@ -204,20 +202,19 @@ def main():
     run_id=f'{end}_{now.strftime("%Y%m%dT%H%M%SZ")}'
     raw_dir=ROOT/'data/raw'/run_id
     client=Client(ROOT,raw_dir,settings['github_request_budget'],0 if args.refresh else settings['cache_hours'],args.offline)
-    npm_start, npm_end = npm_weekly_window(client, start, end) if args.npm_weekly else (start, end)
+    npm_mode,npm_start,npm_end=npm_collection_plan(client,start,end,args.npm_weekly)
+    print(f'npm取数口径：{npm_mode}（{npm_start} — {npm_end}）',flush=True)
     signature=hashlib.sha256(json.dumps({'settings':settings,'queries':[(p['id'],p['query']) for p in config['products']],
         'method':METHOD,'models':config.get('models_v2'),'catalogs':config.get('catalogs')},sort_keys=True).encode()).hexdigest()
-    if args.npm_weekly:
-        # 宽松口径不进报告文案：页脚不渲染任何备注，仅保留 JSON 元数据（npm_mode）供审计。
-        settlement_note=''
-    run={'id':run_id,'method_version':METHOD,'generated_at':now.isoformat(),'collection_signature':signature,'settlement_note':settlement_note,
-         'npm_mode':'weekly-range' if args.npm_weekly else 'daily-sum','refresh_mode':'live' if args.refresh else ('offline' if args.offline else 'cached'),
+    # 口径信息只进快照元数据，不渲染到报告任何文案。
+    run={'id':run_id,'method_version':METHOD,'generated_at':now.isoformat(),'collection_signature':signature,'settlement_note':'',
+         'npm_mode':npm_mode,'refresh_mode':'live' if args.refresh else ('offline' if args.offline else 'cached'),
          'window':{'start':str(start),'end':str(end)},'previous_window':{'start':str(previous_start),'end':str(previous_end)},
          'anchor_window':{'start':str(disclosure_start),'end':str(disclosure_end)},'configuration':config,'products':{}}
     for product in config['products']:
         print(f'采集 {product["name"]}：npm窗口与公开插件样本…',flush=True)
         p={'name':product['name'], 'npm_current':[], 'npm_previous':[]}
-        npm_current_fn = npm_weekly_downloads if args.npm_weekly else npm_downloads
+        npm_current_fn = npm_weekly_downloads if npm_mode=='weekly-range' else npm_downloads
         for package in product['npm']:
             p['npm_current'].append(npm_current_fn(client,package,npm_start,npm_end))
             p['npm_previous'].append(npm_downloads(client,package,previous_start,previous_end))

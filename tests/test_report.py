@@ -9,8 +9,8 @@ from harness_trends.collect import (Client, FetchError, is_human, npm_downloads,
                                     npm_weekly_downloads, openrouter_window)
 from harness_trends.metrics import compute, package_total, ratio_delta, scale_summary
 from harness_trends.render import esc, render
-from run_report import (archive_current, archive_dir, load_env, npm_weekly_window, previous_snapshot,
-                        rewrite_issue_links, settled_end, METHOD)
+from run_report import (archive_current, archive_dir, load_env, npm_collection_plan, npm_weekly_window,
+                        previous_snapshot, rewrite_issue_links, METHOD)
 from harness_trends.report_index import collect_windows, render_report_index
 from harness_trends.executive import donut
 from harness_trends.models_v2 import apply as apply_v2, npm_equivalent
@@ -225,14 +225,24 @@ class ReportTests(unittest.TestCase):
                 (root/'data/runs'/f'{end}.json').write_text(json.dumps({'window':{'end':end},'method_version':METHOD,'generated_at':end}))
             self.assertEqual(previous_snapshot(root,date(2026,11,5),'x'),(None,False))
 
-    def test_synchronized_zero_npm_day_rolls_back_whole_window(self):
-        class Probe:
+    def test_default_npm_plan_shifts_weekly_when_end_day_unsettled(self):
+        # 末日未结算：默认切到周区间并整体前移凑满7个已结算日；报告窗口不变、零备注。
+        class Unsettled:
             def json(self,url,**kwargs):
                 day=url.split('/point/')[1].split('/')[0]
-                return {'start':day,'end':day,'downloads':0 if day=='2026-11-06' else 20}
-        end,note=settled_end(Probe(),date(2026,11,6))
-        self.assertEqual(end,date(2026,11,5))
-        self.assertIn('回退',note)
+                return {'start':day,'end':day,'downloads':0 if day=='2026-11-26' else 20}
+        mode,s,e=npm_collection_plan(Unsettled(),date(2026,11,20),date(2026,11,26))
+        self.assertEqual((mode,s,e),('weekly-range',date(2026,11,19),date(2026,11,25)))
+        class Settled:
+            def json(self,url,**kwargs):
+                day=url.split('/point/')[1].split('/')[0]
+                return {'start':day,'end':day,'downloads':20}
+        self.assertEqual(npm_collection_plan(Settled(),date(2026,11,20),date(2026,11,26)),
+                         ('daily-sum',date(2026,11,20),date(2026,11,26)))
+        class Broken:
+            def json(self,url,**kwargs):raise FetchError('offline')
+        self.assertEqual(npm_collection_plan(Broken(),date(2026,11,20),date(2026,11,26)),
+                         ('daily-sum',date(2026,11,20),date(2026,11,26)))
 
     def test_donut_segments_have_exact_denominator(self):
         svg=donut([('codex','Codex',1),('claude','Claude Code',3)],'4','Token','sample')
