@@ -1,0 +1,1 @@
+{"url": "https://api.npmjs.org/downloads/point/2026-11-19:2026-11-25/@openai%2Fcodex", "fetched_unix": 1795743447.01471, "status": 200, "body": "{\"downloads\":27967476,\"start\":\"2026-11-19\",\"end\":\"2026-11-25\",\"package\":\"@openai/codex\"}", "has_next": false, "last_page": null}

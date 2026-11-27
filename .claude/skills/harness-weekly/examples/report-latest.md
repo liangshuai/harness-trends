@@ -57,7 +57,7 @@
 
 4）路透11-24：微软在历史性宕机后内部宣布Code Red；可靠性成AI平台竞争新主战场，底座应把可观测性与降级演练当一等能力（来源：https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/ ）
 
-5）IEEE Spectrum 11-20报道Epic Games在Unreal Engine开发中引入AI coding；引擎级大厂采纳是agent进入核心产线的信号（来源：https://spectrum.ieee.org/epic-games-unreal-engine-ai ）
+5）DeepSeek Harness 11-22发布0.2.3-alpha.1：Git仓库即插件源、时间线插件、代码审阅页与七款办公连接器（飞书/钉钉/Notion等）；量子位评「堪比V2升V3」，见专题（来源：https://github.com/deepseek-ai/deepseek-harness/releases ）
 
 6）Signal 11-20发文限制移动OS上AI agent对其数据的抓取（HN 584分）；数据源方开始主动设墙，agent数据获取合规需前置设计（来源：https://signal.org/blog/protecting-your-privacy/ ）
 
@@ -69,7 +69,39 @@
 
 10）11-24热文《LLM agents为母公司而非为你工作》（HN 1013分）：模型方与用户利益不完全一致；企业应自建策略层与审计，减少对厂商默认行为依赖（来源：https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/ ）
 
-## 五、口径与来源
+## 五、DeepSeek Harness 0.2.3 新增功能专题
+
+本期窗口内 DSH 发布 0.2.3-alpha.1 与 alpha.2（11-22），量子位评「小版本更新堪比 V2 升 V3」。以下按能力域梳理主要新增（源自官方 Release 原文，条目与贡献者以原文为准）。
+
+### 插件生态：Git 仓库即插件源
+
+- 插件市场支持把 Git 仓库作为插件来源，私有仓库中的插件也能直接浏览与安装——企业内分发插件不再依赖市场上架
+- 插件页统一管理连接器账号；MCP 支持 OAuth 授权与凭据自动刷新，CLI 应用插件共用账号管理与上游技能下载能力
+
+### 办公与协作连接器
+
+- 新增可选连接器插件：Linear、Notion、腾讯文档、飞书、企业微信、腾讯会议、钉钉——连接或授权后即可在对话中调用相应服务
+- Web 连接模式新增远程登录（独立登录链接或设备配对），并提供标准化连接鉴权 API 供插件注册
+
+### 过程可视化：时间线与代码审阅
+
+- 实验性时间线插件：查看智能体任务树、阻塞事项与进展报告，点击进度条可展开任务树，语言可跟随对话
+- 代码审阅页：集中处理本人相关 GitHub PR、页内与智能体协作审阅；插件可扩展审阅视图与行注解，并支持 GitLab 评审与合并
+
+### 会话与状态管理
+
+- 会话状态区域：集中展示工作目录、变更请求、子智能体、任务与插件状态，支持窄窗口停靠与拖拽调整分区
+- 会话已读/未读状态与完成后未读提醒；压缩记录可在右侧栏预览上下文压缩摘要
+
+### 其他值得注意
+
+- Office 技能统一为 /office（Word/PowerPoint/Excel），内置 pypdf 处理已有 PDF
+- 0.2.3-alpha.2：Node.js 版本要求调整为 24.22.3+（24.x 系）或 26.13.1+
+- 长会话流式输出、轮次导航与大型 Markdown 表格/列表渲染的性能优化
+
+- 来源：https://github.com/deepseek-ai/deepseek-harness/releases
+
+## 六、口径与来源
 
 - **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 2026-11-20 — 2026-11-26；只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.
 - **OpenRouter市场份额**：该应用周Token ÷ 榜单全部应用周Token合计，非四家内部占比（本轮已取得 200 个应用）。

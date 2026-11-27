@@ -92,43 +92,112 @@
   "industry_briefing": [
     {
       "text": "OpenAI 11-17发布GPT-6.2 Astra/Sol（超窗1天标注）；本周Codex与pi相继默认Sol，Astra首破Google工程师code golf纪录（11-22，HN 358分）",
-      "sources": ["https://openai.com/index/introducing-gpt-6-2-astra-sol", "https://bjin.github.io/go-codegolf-benchmark/#leaderboard"]
+      "sources": [
+        "https://openai.com/index/introducing-gpt-6-2-astra-sol",
+        "https://bjin.github.io/go-codegolf-benchmark/#leaderboard"
+      ]
     },
     {
       "text": "智谱11-23发布GLM-5.4：首个loop transformer路线的通用编码模型（HN 1179分）；推理期循环展开的新架构，建议纳入底座模型评测集持续跟踪",
-      "sources": ["https://z.ai/blog/glm-5.4"]
+      "sources": [
+        "https://z.ai/blog/glm-5.4"
+      ]
     },
     {
       "text": "Anthropic 11-19在纳斯达克上市（超窗1天标注）：发行价83美元、开盘111.5美元（+34.3%）；Claude Code生态资本化节点，关注定价与渠道策略联动",
-      "sources": ["https://www.infoq.cn/article/OPbZhT0OHL4IbZz8exvA"]
+      "sources": [
+        "https://www.infoq.cn/article/OPbZhT0OHL4IbZz8exvA"
+      ]
     },
     {
       "text": "路透11-24：微软在历史性宕机后内部宣布Code Red；可靠性成AI平台竞争新主战场，底座应把可观测性与降级演练当一等能力",
-      "sources": ["https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/"]
+      "sources": [
+        "https://www.reuters.com/business/microsoft-declares-code-red-after-historic-outage-internal-memos-show-2026-11-24/"
+      ]
     },
     {
-      "text": "IEEE Spectrum 11-20报道Epic Games在Unreal Engine开发中引入AI coding；引擎级大厂采纳是agent进入核心产线的信号",
-      "sources": ["https://spectrum.ieee.org/epic-games-unreal-engine-ai"]
+      "text": "DeepSeek Harness 11-22发布0.2.3-alpha.1：Git仓库即插件源、时间线插件、代码审阅页与七款办公连接器（飞书/钉钉/Notion等）；量子位评「堪比V2升V3」，见专题",
+      "sources": [
+        "https://github.com/deepseek-ai/deepseek-harness/releases",
+        "https://m.sohu.com/a/1105250067_610300"
+      ]
     },
     {
       "text": "Signal 11-20发文限制移动OS上AI agent对其数据的抓取（HN 584分）；数据源方开始主动设墙，agent数据获取合规需前置设计",
-      "sources": ["https://signal.org/blog/protecting-your-privacy/"]
+      "sources": [
+        "https://signal.org/blog/protecting-your-privacy/"
+      ]
     },
     {
       "text": "11月arXiv新研究：agent生成代码存活率的结论随度量口径翻转；SpecEngineeringBench把编码agent当规格工程师评测——评测方法论正成焦点",
-      "sources": ["https://arxiv.org/html/2611.21784v1"]
+      "sources": [
+        "https://arxiv.org/html/2611.21784v1"
+      ]
     },
     {
       "text": "11-20热文《停止写代码，评审也会变差》（HN 405分）：与Harvard瓶颈研究互证，评审能力随手写减少而退化；建议保留深度编码练习与评审轮换",
-      "sources": ["https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it/"]
+      "sources": [
+        "https://cekrem.github.io/posts/if-you-stop-writing-code-you-also-get-worse-at-reviewing-it/"
+      ]
     },
     {
       "text": "X与Reddit本周热议开发者混用Claude Code与Codex而非二选一；同键盘跑双agent的开源工具与CodexHost跨agent任务分发涌现，底座宜支持多引擎编排",
-      "sources": ["https://x.com/AGTPinsights/status/2122200881445634129", "https://www.reddit.com/r/ChatGPTCoding/comments/1vszu75/claude_code_and_codex_on_one_keyboard_every"]
+      "sources": [
+        "https://x.com/AGTPinsights/status/2122200881445634129",
+        "https://www.reddit.com/r/ChatGPTCoding/comments/1vszu75/claude_code_and_codex_on_one_keyboard_every"
+      ]
     },
     {
       "text": "11-24热文《LLM agents为母公司而非为你工作》（HN 1013分）：模型方与用户利益不完全一致；企业应自建策略层与审计，减少对厂商默认行为依赖",
-      "sources": ["https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/"]
+      "sources": [
+        "https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/"
+      ]
     }
-  ]
+  ],
+  "special_report": {
+    "kicker": "SPECIAL / DSH 0.2.3",
+    "title": "DeepSeek Harness 0.2.3 新增功能专题",
+    "intro": "本期窗口内 DSH 发布 0.2.3-alpha.1 与 alpha.2（11-22），量子位评「小版本更新堪比 V2 升 V3」。以下按能力域梳理主要新增（源自官方 Release 原文，条目与贡献者以原文为准）。",
+    "sections": [
+      {
+        "name": "插件生态：Git 仓库即插件源",
+        "points": [
+          "插件市场支持把 Git 仓库作为插件来源，私有仓库中的插件也能直接浏览与安装——企业内分发插件不再依赖市场上架",
+          "插件页统一管理连接器账号；MCP 支持 OAuth 授权与凭据自动刷新，CLI 应用插件共用账号管理与上游技能下载能力"
+        ]
+      },
+      {
+        "name": "办公与协作连接器",
+        "points": [
+          "新增可选连接器插件：Linear、Notion、腾讯文档、飞书、企业微信、腾讯会议、钉钉——连接或授权后即可在对话中调用相应服务",
+          "Web 连接模式新增远程登录（独立登录链接或设备配对），并提供标准化连接鉴权 API 供插件注册"
+        ]
+      },
+      {
+        "name": "过程可视化：时间线与代码审阅",
+        "points": [
+          "实验性时间线插件：查看智能体任务树、阻塞事项与进展报告，点击进度条可展开任务树，语言可跟随对话",
+          "代码审阅页：集中处理本人相关 GitHub PR、页内与智能体协作审阅；插件可扩展审阅视图与行注解，并支持 GitLab 评审与合并"
+        ]
+      },
+      {
+        "name": "会话与状态管理",
+        "points": [
+          "会话状态区域：集中展示工作目录、变更请求、子智能体、任务与插件状态，支持窄窗口停靠与拖拽调整分区",
+          "会话已读/未读状态与完成后未读提醒；压缩记录可在右侧栏预览上下文压缩摘要"
+        ]
+      },
+      {
+        "name": "其他值得注意",
+        "points": [
+          "Office 技能统一为 /office（Word/PowerPoint/Excel），内置 pypdf 处理已有 PDF",
+          "0.2.3-alpha.2：Node.js 版本要求调整为 24.22.3+（24.x 系）或 26.13.1+",
+          "长会话流式输出、轮次导航与大型 Markdown 表格/列表渲染的性能优化"
+        ]
+      }
+    ],
+    "sources": [
+      "https://github.com/deepseek-ai/deepseek-harness/releases"
+    ]
+  }
 }

@@ -165,6 +165,27 @@ def industry_section(run):
     return lines
 
 
+def special_section(run):
+    """一次性专题模块：仅当本期编辑笔记带 special_report 字段时渲染（临时性，无手册规则）。
+    字段结构：{kicker,title,intro,sections:[{name,points[]}],sources}"""
+    special = (run.get('editorial') or {}).get('special_report')
+    if not special:
+        return []
+    lines = [f'## 五、{cell(special.get("title", "专题"))}', '']
+    if special.get('intro'):
+        lines += [cell(special['intro']), '']
+    for section in special.get('sections') or []:
+        lines.append(f'### {cell(section.get("name", ""))}')
+        lines.append('')
+        for point in section.get('points') or []:
+            lines.append(f'- {cell(point)}')
+        lines.append('')
+    for source in special.get('sources') or []:
+        lines.append(f'- 来源：{cell(source)}')
+    lines.append('')
+    return lines
+
+
 def metrics_digest(run, config):
     """Markdown mirror of the HTML report's core metric sections."""
     products = run['products']
@@ -238,9 +259,22 @@ def render_markdown(run, config):
     lines += ['', *metrics_digest(run, config)]
     lines += top10_section(run)
     industry = industry_section(run)
-    lines += industry
-    # 口径与来源编号跟随前文小节（行业资讯有则五、无则四）
-    lines.append('## 五、口径与来源' if industry else '## 四、口径与来源')
+    special = special_section(run)
+    # 编号跟随前文小节数：行业资讯/专题存在则顺延（专题固定为「五」仅在行业资讯存在时成立，
+    # 无行业资讯时专题为「四」，口径相应顺延）。
+    if industry and special:
+        special[0] = special[0].replace('## 五、', '## 五、')
+        lines += industry + special
+        lines.append('## 六、口径与来源')
+    elif industry:
+        lines += industry
+        lines.append('## 五、口径与来源')
+    elif special:
+        special[0] = special[0].replace('## 五、', '## 四、')
+        lines += special
+        lines.append('## 五、口径与来源')
+    else:
+        lines.append('## 四、口径与来源')
     lines.append('')
     lines.append(f'- **周 Token 使用量**：OpenRouter app-rankings 数据集，canonical app ID，窗口 {start} — {end}；'
                  '只含OpenRouter可归因渠道，不代表全市场用量。Source: OpenRouter (openrouter.ai/apps), CC BY 4.0.')
